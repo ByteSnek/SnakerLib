@@ -1,0 +1,87 @@
+buildscript {
+    dependencies { classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT' }
+}
+
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+}
+
+apply plugin: 'org.spongepowered.mixin'
+
+version = mc_version + "-" + mod_version
+group = maven_group
+archivesBaseName = mod_id
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+repositories {
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven' }
+    maven { url 'https://maven.covers1624.net' }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.deprecation(false)
+    options.warnings(false)
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.40')
+    implementation fg.deobf('codechicken:CodeChickenLib:1.19.2-4.3.1.+:universal')
+}
+
+minecraft {
+    mappings channel: 'parchment', version: '2022.08.14-1.19.2'
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'snakerbone'
+            property 'geckolib.disable_examples', 'true'
+            mods {
+                snakerbone { source sourceSets.main }
+            }
+        }
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'geckolib.disable_examples', 'true'
+            args '--mod', 'snakerbone', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            mods {
+                snakerbone { source sourceSets.main }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+jar {
+    manifest {
+        attributes(["Specification-Title": mod_title, "Specification-Vendor": mod_author, "Specification-Version": mod_version])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "https://mymavenrepo.com/repo/${maven_auth}/"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }

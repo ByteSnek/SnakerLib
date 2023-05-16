@@ -1,0 +1,38 @@
+modLoader = "javafml"
+loaderVersion = "[43,)"
+license = "All rights reserved"
+
+[[mods]]
+modId = "snakerlib"
+version = "${file.jarVersion}"
+displayName = "SnakerLib"
+authors = "SnakerBone"
+description = "SnakerLib"
+
+[[dependencies.snakerbone]]
+modId = "forge"
+mandatory = true
+versionRange = "[43,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.snakerbone]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19.2]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.snakerbone]]
+modId = "codechickenlib"
+mandatory = true
+versionRange = "4.3.1.481"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.snakerbone]]
+modId = "geckolib3"
+mandatory = true
+versionRange = "[1.19,)"
+ordering = "NONE"
+side = "BOTH"
