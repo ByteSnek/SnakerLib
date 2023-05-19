@@ -18,7 +18,6 @@ archivesBaseName = mod_id
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 repositories {
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven' }
     maven { url 'https://maven.covers1624.net' }
 }
 
@@ -30,8 +29,7 @@ tasks.withType(JavaCompile).configureEach {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.40')
-    implementation fg.deobf('codechicken:CodeChickenLib:1.19.2-4.3.1.+:universal')
+    implementation fg.deobf("codechicken:CodeChickenLib:${mc_version}-${ccl_version}:universal")
 }
 
 minecraft {
@@ -63,6 +61,12 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+tasks.register('srcJar', Jar) {
+    build.dependsOn it
+    from sourceSets.main.allSource
+    classifier = 'universal'
+}
+
 jar {
     manifest {
         attributes(["Specification-Title": mod_title, "Specification-Vendor": mod_author, "Specification-Version": mod_version])
@@ -74,6 +78,7 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifact srcJar
             artifact jar
         }
     }

@@ -22,9 +22,6 @@ import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 import snaker.snakerlib.shader.Shader;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import java.awt.*;
 import java.util.Random;
@@ -96,7 +93,7 @@ public class SnakerUtil
 
     public static void accept(RegisterShadersEvent event, String name, Consumer<ShaderInstance> shader, int i)
     {
-        event.registerShader(CCShaderInstance.create(event.getResourceManager(), new ResourceLocation(SnakerLib.DEPENDANTS[i], name), DefaultVertexFormat.POSITION_TEX), shader);
+        event.registerShader(CCShaderInstance.create(event.getResourceManager(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(i), name), DefaultVertexFormat.POSITION_TEX), shader);
     }
 
     public static Shader createObjectShader(Supplier<ShaderInstance> shader)
@@ -116,12 +113,12 @@ public class SnakerUtil
 
     public static <X> DeferredRegister<X> createDeferredRegistry(IForgeRegistry<X> type, int i)
     {
-        return DeferredRegister.create(type, SnakerLib.DEPENDANTS[i]);
+        return DeferredRegister.create(type, SnakerLib.DEFAULT_DEPENDANTS.get(i));
     }
 
     public static <X> DeferredRegister<X> createDeferredRegistry(ResourceKey<? extends Registry<X>> key, int i)
     {
-        return DeferredRegister.create(key, SnakerLib.DEPENDANTS[i]);
+        return DeferredRegister.create(key, SnakerLib.DEFAULT_DEPENDANTS.get(i));
     }
 
     public static boolean generateFlag(int fract)
@@ -218,38 +215,33 @@ public class SnakerUtil
     public static float hexToFloat(String hexCode)
     {
         hexCode = hexCode.replace("#", "");
-        
-        return Float.parseFloat(hexCode);
-    }
 
-    public static <X extends IAnimatable> PlayState noPlaystate(AnimationEvent<X> entity)
-    {
-        return PlayState.CONTINUE;
+        return Float.parseFloat(hexCode);
     }
 
     public static ResourceLocation noModel(int i)
     {
-        return new ResourceLocation(SnakerLib.DEPENDANTS[i], "geo/nil.geo.json");
+        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(i), "geo/nil.geo.json");
     }
 
     public static ResourceLocation noAnimation(int i)
     {
-        return new ResourceLocation(SnakerLib.DEPENDANTS[i], "animations/nil.animation.json");
+        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(i), "animations/nil.animation.json");
     }
 
     public static ResourceLocation noTexture(int i)
     {
-        return new ResourceLocation(SnakerLib.DEPENDANTS[i], "textures/clear.png");
+        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(i), "textures/clear.png");
     }
 
     public static ResourceLocation soildTexture(int i)
     {
-        return new ResourceLocation(SnakerLib.DEPENDANTS[i], "textures/solid.png");
+        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(i), "textures/solid.png");
     }
 
     public static ResourceLocation blockModel(int i)
     {
-        return new ResourceLocation(SnakerLib.DEPENDANTS[i], "geo/block.geo.json");
+        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(i), "geo/block.geo.json");
     }
 
     private static String generatePlaceholder(int limit)

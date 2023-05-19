@@ -4,10 +4,10 @@ license = "All rights reserved"
 
 [[mods]]
 modId = "snakerlib"
-version = "${file.jarVersion}"
+version = "1.1"
 displayName = "SnakerLib"
 authors = "SnakerBone"
-description = "SnakerLib"
+description = "SnakerLib is a modding library for SnakerBone's mods"
 
 [[dependencies.snakerlib]]
 modId = "forge"
@@ -26,13 +26,6 @@ side = "BOTH"
 [[dependencies.snakerlib]]
 modId = "codechickenlib"
 mandatory = true
-versionRange = "4.3.1.481"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.snakerlib]]
-modId = "geckolib3"
-mandatory = true
-versionRange = "[1.19,)"
+versionRange = "${ccl_version}"
 ordering = "NONE"
 side = "BOTH"

@@ -1,11 +1,16 @@
 package snaker.snakerlib.network;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import snaker.snakerlib.SnakerLib;
 
+import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +22,42 @@ import java.util.concurrent.atomic.AtomicInteger;
 @SuppressWarnings("unused")
 public class Watchdog
 {
+    private static final HashMap<Integer, String> defaultDependants = SnakerLib.DEFAULT_DEPENDANTS;
+    private static final HashMap<Integer, String> externalDependants = SnakerLib.EXTERNAL_DEPENDANTS;
+
+    private static int size = externalDependants.size();
+
     private static long tickCount = 0;
+
+    private static void onAddedExternalDependants(FMLCommonSetupEvent event)
+    {
+        putDefaultDependants();
+
+        for (int i = 0; i < size; i++)
+        {
+            SnakerLib.LOGGER.info("Added " + externalDependants.get(i) + " to external dependants");
+        }
+    }
+
+    private static void putDefaultDependants()
+    {
+        defaultDependants.putIfAbsent(0, "azcray");
+        defaultDependants.putIfAbsent(1, "snakerbone");
+        defaultDependants.putIfAbsent(2, "forge");
+    }
+
+    public static void addExternalDependant(String modId)
+    {
+        if (ResourceLocation.isValidNamespace(modId))
+        {
+            externalDependants.putIfAbsent(size, modId);
+            size++;
+
+        } else
+        {
+            SnakerLib.LOGGER.error("Dependant: [ " + modId + " ] could not not be added because it is not a valid namespace");
+        }
+    }
 
     public static synchronized void testThread(int a)
     {
@@ -53,17 +93,27 @@ public class Watchdog
             task.run();
         }, 0, delay, TimeUnit.MILLISECONDS);
     }
-    
+
     @SubscribeEvent
     public void clientTick(TickEvent.ClientTickEvent event)
     {
-        if (event.phase != TickEvent.Phase.END) return;
-        if (Minecraft.getInstance().isPaused()) return;
+        if (event.phase != TickEvent.Phase.END)
+        {
+            return;
+        }
+
+        if (Minecraft.getInstance().isPaused())
+        {
+            return;
+        }
+
         tickCount++;
     }
 
     public static void initialize()
     {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.register(new Watchdog());
+        bus.addListener(Watchdog::onAddedExternalDependants);
     }
 }
