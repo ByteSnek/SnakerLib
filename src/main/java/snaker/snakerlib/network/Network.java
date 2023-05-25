@@ -109,7 +109,7 @@ public class Network
     @SubscribeEvent
     protected void clientTick(TickEvent.ClientTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.END || Minecraft.getInstance().isPaused())
+        if (event.phase == TickEvent.Phase.END || !Minecraft.getInstance().isPaused())
         {
             clientTickCount++;
         }

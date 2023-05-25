@@ -16,6 +16,7 @@ group = maven_group
 archivesBaseName = mod_id
 
 String current_date = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+String mvn_auth = System.getenv("MVN_AUTH")
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -90,7 +91,7 @@ tasks.register('srcJar', Jar) {
 publishing {
     repositories {
         maven {
-            url "https://mymavenrepo.com/repo/${maven_auth}/"
+            url "https://mymavenrepo.com/repo/${mvn_auth}/"
         }
     }
     publications {

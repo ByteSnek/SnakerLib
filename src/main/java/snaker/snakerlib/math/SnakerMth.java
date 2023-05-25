@@ -12,7 +12,7 @@ public class SnakerMth
     public static final float RADIANS_TO_DEGREES = 57.29577951308232F;
     public static final float DEGREES_TO_RADIANS = 0.017453292519943F;
     public static final float PI_HALF = (float) Math.PI / 2;
-    public static final float PI = (float) Math.PI / 2;
+    public static final float PI = (float) Math.PI;
 
     public static final float PIE_ADD = (float) (Math.PI + Math.E);
     public static final float PIE_SUB = (float) (Math.PI - Math.E);

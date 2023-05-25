@@ -19,41 +19,22 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public abstract class SnakerBoss extends PathfinderMob
 {
-    private final BossEvent.BossBarColor colour;
-    private final BossEvent.BossBarOverlay overlay;
-    private final ServerBossEvent event = new ServerBossEvent(getDisplayName(), getColour(), getOverlay());
-
-    public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level, BossEvent.BossBarOverlay overlay, BossEvent.BossBarColor colour, int xpReward)
-    {
-        super(type, level);
-        this.colour = colour;
-        this.overlay = overlay;
-        this.xpReward = xpReward;
-    }
-
-    public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level, BossEvent.BossBarOverlay overlay, BossEvent.BossBarColor colour)
-    {
-        this(type, level, overlay, colour, SnakerConstants.BOSS_XP_REWARD.asInt());
-    }
+    private final ServerBossEvent BOSS_INFO = new ServerBossEvent(getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
 
     public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level, int xpReward)
     {
-        this(type, level, BossEvent.BossBarOverlay.PROGRESS, BossEvent.BossBarColor.BLUE, xpReward);
+        super(type, level);
+        this.xpReward = xpReward;
     }
 
     public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level)
     {
-        this(type, level, BossEvent.BossBarOverlay.PROGRESS, BossEvent.BossBarColor.BLUE, 8000);
+        this(type, level, SnakerConstants.BOSS_XP_REWARD.asInt());
     }
 
-    public BossEvent.BossBarColor getColour()
+    public BossEvent.BossBarColor getBarColour()
     {
-        return colour;
-    }
-
-    public BossEvent.BossBarOverlay getOverlay()
-    {
-        return overlay;
+        return BossEvent.BossBarColor.BLUE;
     }
 
     public void extraHealth(int amount, AttributeModifier.Operation operation)
@@ -96,27 +77,21 @@ public abstract class SnakerBoss extends PathfinderMob
     public void startSeenByPlayer(@NotNull ServerPlayer player)
     {
         super.startSeenByPlayer(player);
-        event.setColor(getColour());
-        event.addPlayer(player);
+        BOSS_INFO.setColor(getBarColour());
+        BOSS_INFO.addPlayer(player);
     }
 
     @Override
     public void stopSeenByPlayer(@NotNull ServerPlayer player)
     {
         super.stopSeenByPlayer(player);
-        event.removePlayer(player);
+        BOSS_INFO.removePlayer(player);
     }
 
     @Override
     public void tick()
     {
         super.tick();
-        event.setProgress(getHealth() / getMaxHealth());
-    }
-
-    @Override
-    protected boolean shouldDespawnInPeaceful()
-    {
-        return true;
+        BOSS_INFO.setProgress(this.getHealth() / this.getMaxHealth());
     }
 }
