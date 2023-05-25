@@ -188,7 +188,7 @@ public class Vec3A implements Copyable<Vec3A>
 
     public static Vec3A dir(Vec3A vec1, Vec3A vec2)
     {
-        double distance = Maths.dist(vec1, vec2);
+        double distance = SnakerMth.dist(vec1, vec2);
         if (distance == 0)
         {
             distance = 0.1;
@@ -200,7 +200,7 @@ public class Vec3A implements Copyable<Vec3A>
 
     public static Vector3 dir(Vector3 vec1, Vector3 vec2)
     {
-        double distance = Maths.dist(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
+        double distance = SnakerMth.dist(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
         if (distance == 0)
         {
             distance = 0.1;
@@ -222,22 +222,22 @@ public class Vec3A implements Copyable<Vec3A>
 
     public double distXZ(Vec3A vec)
     {
-        return Maths.distXZ(x, z, vec.x, vec.z);
+        return SnakerMth.distXZ(x, z, vec.x, vec.z);
     }
 
     public double dist(Vec3A vec)
     {
-        return Maths.dist(this, vec);
+        return SnakerMth.dist(this, vec);
     }
 
     public double dist(Entity entity)
     {
-        return Maths.dist(this, new Vec3A(entity));
+        return SnakerMth.dist(this, new Vec3A(entity));
     }
 
     public double distSq(Vec3A vec)
     {
-        return Maths.distSq(x, y, z, vec.x, vec.y, vec.z);
+        return SnakerMth.distSq(x, y, z, vec.x, vec.y, vec.z);
     }
 
     public int floorX()

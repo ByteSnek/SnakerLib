@@ -6,7 +6,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import snaker.snakerlib.math.Maths;
+import snaker.snakerlib.math.SnakerMth;
 
 /**
  * Created by SnakerBone on 2/01/2023
@@ -42,7 +42,7 @@ public class FlyControl extends MoveControl
                 return;
             }
 
-            float zx = Maths.atan2RotPos(z, x) - 90;
+            float zx = SnakerMth.atan2RotPos(z, x) - 90;
             float newSpeed;
 
             mob.setYRot(rotlerp(mob.getYRot(), zx, 90));
@@ -58,7 +58,7 @@ public class FlyControl extends MoveControl
             mob.setSpeed(newSpeed);
 
             double xz = Mth.sqrt((float) (x * x + z * z));
-            float yxz = Maths.atan2RotNeg(y, xz);
+            float yxz = SnakerMth.atan2RotNeg(y, xz);
 
             mob.setXRot(rotlerp(mob.getXRot(), yxz, (float) 20));
             mob.setYya(y > 0 ? newSpeed : -newSpeed);
