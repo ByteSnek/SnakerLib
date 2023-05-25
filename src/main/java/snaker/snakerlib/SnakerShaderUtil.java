@@ -67,7 +67,7 @@ public class SnakerShaderUtil
         return vec;
     }
 
-    public static void accept(RegisterShadersEvent event, String name, Consumer<ShaderInstance> shader, int key)
+    public static void accept(RegisterShadersEvent event, Integer key, String name, Consumer<ShaderInstance> shader)
     {
         event.registerShader(CCShaderInstance.create(event.getResourceManager(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), name), DefaultVertexFormat.POSITION_TEX), shader);
     }
