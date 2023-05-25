@@ -16,9 +16,9 @@ public enum SnakerConstants
     MOB_XP_REWARD(16),
     BOSS_XP_REWARD(8000);
 
-    final Number value;
+    final double value;
 
-    SnakerConstants(Number value)
+    SnakerConstants(double value)
     {
         this.value = value;
     }
@@ -35,6 +35,6 @@ public enum SnakerConstants
 
     public double asDouble()
     {
-        return (double) value;
+        return value;
     }
 }
