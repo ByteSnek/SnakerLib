@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -66,9 +67,9 @@ public class SnakerShaderUtil
         return vec;
     }
 
-    public static void accept(RegisterShadersEvent event, String name, Consumer<ShaderInstance> shader)
+    public static void accept(RegisterShadersEvent event, String name, Consumer<ShaderInstance> shader, int key)
     {
-        event.registerShader(CCShaderInstance.create(event.getResourceManager(), new SnakerBoneResourceLocation(name), DefaultVertexFormat.POSITION_TEX), shader);
+        event.registerShader(CCShaderInstance.create(event.getResourceManager(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), name), DefaultVertexFormat.POSITION_TEX), shader);
     }
 
     public static Shader createObjectShader(Supplier<ShaderInstance> shader)

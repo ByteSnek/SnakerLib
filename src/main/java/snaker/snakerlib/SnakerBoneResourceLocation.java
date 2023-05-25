@@ -10,6 +10,6 @@ public class SnakerBoneResourceLocation extends ResourceLocation
 {
     public SnakerBoneResourceLocation(String path)
     {
-        super(SnakerLib.DEFAULT_DEPENDANTS.get(2), path);
+        super(SnakerLib.DEFAULT_DEPENDANTS.get(1), path);
     }
 }

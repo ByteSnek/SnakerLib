@@ -1,13 +1,9 @@
 package snaker.snakerlib;
 
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Rarity;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Random;
@@ -24,16 +20,6 @@ public class SnakerUtil
 {
     public static final String PLACEHOLDER = MODID + ":" + PlaceHolders.PH8;
     public static final String PLACEHOLDER_NO_MODID = PlaceHolders.PH8;
-
-    public static <T> DeferredRegister<T> createDeferredRegistry(IForgeRegistry<T> type, int i)
-    {
-        return DeferredRegister.create(type, SnakerLib.DEFAULT_DEPENDANTS.get(i));
-    }
-
-    public static <T> DeferredRegister<T> createDeferredRegistry(ResourceKey<? extends Registry<T>> key, int i)
-    {
-        return DeferredRegister.create(key, SnakerLib.DEFAULT_DEPENDANTS.get(i));
-    }
 
     public static boolean generateFlag(int fract)
     {

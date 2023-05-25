@@ -10,6 +10,6 @@ public class AzcrayResourceLocation extends ResourceLocation
 {
     public AzcrayResourceLocation(String path)
     {
-        super(SnakerLib.DEFAULT_DEPENDANTS.get(1), path);
+        super(SnakerLib.DEFAULT_DEPENDANTS.get(0), path);
     }
 }
