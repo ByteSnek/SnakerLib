@@ -15,6 +15,8 @@ version = mc_version + "-" + mod_version
 group = maven_group
 archivesBaseName = mod_id
 
+String current_date = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 repositories {
@@ -65,7 +67,17 @@ jar.finalizedBy('reobfJar')
 
 jar {
     manifest {
-        attributes(["Specification-Title": mod_title, "Specification-Vendor": mod_author, "Specification-Version": mod_version])
+        attributes(
+                [
+                        "Specification-Title"     : mod_title,
+                        "Specification-Vendor"    : mod_author,
+                        "Specification-Version"   : mod_version,
+                        "Implementation-Title"    : mod_title,
+                        "Implementation-Vendor"   : mod_author,
+                        "Implementation-Version"  : mod_version,
+                        "Implementation-Timestamp": current_date
+                ]
+        )
     }
 }
 

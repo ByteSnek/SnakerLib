@@ -4,7 +4,7 @@ license = "All rights reserved"
 
 [[mods]]
 modId = "snakerlib"
-version = "1.1"
+version = "${file.jarVersion}"
 displayName = "SnakerLib"
 authors = "SnakerBone"
 description = "SnakerLib is a modding library for SnakerBone's mods"
