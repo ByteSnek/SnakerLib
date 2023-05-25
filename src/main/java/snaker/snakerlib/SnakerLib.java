@@ -4,7 +4,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import snaker.snakerlib.network.Watchdog;
+import snaker.snakerlib.network.Network;
 
 import java.util.HashMap;
 
@@ -19,6 +19,6 @@ public class SnakerLib
     public SnakerLib()
     {
         MinecraftForge.EVENT_BUS.register(this);
-        Watchdog.initialize();
+        Network.initialize();
     }
 }

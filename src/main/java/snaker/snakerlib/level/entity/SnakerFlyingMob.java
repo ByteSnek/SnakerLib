@@ -1,4 +1,4 @@
-package snaker.snakerlib.entity;
+package snaker.snakerlib.level.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
@@ -11,21 +11,28 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
-import snaker.snakerlib.entity.ai.FlyControl;
-import snaker.snakerlib.entity.ai.LookAroundGoal;
-import snaker.snakerlib.entity.ai.RandomFlyGoal;
-import snaker.snakerlib.entity.ai.SwitchPlayerGameModeGoal;
+import snaker.snakerlib.data.SnakerConstants;
+import snaker.snakerlib.level.entity.ai.FlyControl;
+import snaker.snakerlib.level.entity.ai.LookAroundGoal;
+import snaker.snakerlib.level.entity.ai.RandomFlyGoal;
+import snaker.snakerlib.level.entity.ai.SwitchPlayerGameModeGoal;
 
 /**
  * Created by SnakerBone on 2/01/2023
  **/
 @SuppressWarnings("unused")
-public class SnakerFlyingMob extends FlyingMob implements Enemy
+public abstract class SnakerFlyingMob extends FlyingMob implements Enemy
 {
-    protected SnakerFlyingMob(EntityType<? extends SnakerFlyingMob> type, Level level)
+    public SnakerFlyingMob(EntityType<? extends SnakerFlyingMob> type, Level level, int xpReward)
     {
         super(type, level);
-        moveControl = new FlyControl(this);
+        this.moveControl = new FlyControl(this);
+        this.xpReward = xpReward;
+    }
+
+    public SnakerFlyingMob(EntityType<? extends SnakerFlyingMob> type, Level level)
+    {
+        this(type, level, SnakerConstants.MOB_XP_REWARD.asInt());
     }
 
     @Override

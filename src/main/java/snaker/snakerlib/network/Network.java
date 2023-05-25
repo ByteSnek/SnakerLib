@@ -1,6 +1,7 @@
 package snaker.snakerlib.network;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -20,16 +21,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by SnakerBone on 5/05/2023
  **/
 @SuppressWarnings("unused")
-public class Watchdog
+public class Network
 {
     private static final HashMap<Integer, String> defaultDependants = SnakerLib.DEFAULT_DEPENDANTS;
     private static final HashMap<Integer, String> externalDependants = SnakerLib.EXTERNAL_DEPENDANTS;
 
     private static int size = externalDependants.size();
 
-    private static long tickCount = 0;
+    private static long clientTickCount = 0;
+    private static long serverTickCount = 0;
 
-    private static void onAddedExternalDependants(FMLCommonSetupEvent event)
+    public static BlockPos explosionPos = null;
+    public static double explosionAnimation = 0;
+    public static int explosionTime = 0;
+    public static boolean explosionRetreating = false;
+
+    protected static void onAddedExternalDependants(FMLCommonSetupEvent event)
     {
         putDefaultDependants();
 
@@ -73,9 +80,14 @@ public class Watchdog
         }
     }
 
-    public static long getTickCount()
+    public static long getClientTickCount()
     {
-        return tickCount;
+        return clientTickCount;
+    }
+
+    public static long getServerTickCount()
+    {
+        return serverTickCount;
     }
 
     public static synchronized void scheduleTask(Runnable task, int bound, int add, int delay)
@@ -95,25 +107,27 @@ public class Watchdog
     }
 
     @SubscribeEvent
-    public void clientTick(TickEvent.ClientTickEvent event)
+    protected void clientTick(TickEvent.ClientTickEvent event)
     {
-        if (event.phase != TickEvent.Phase.END)
+        if (event.phase == TickEvent.Phase.END || Minecraft.getInstance().isPaused())
         {
-            return;
+            clientTickCount++;
         }
+    }
 
-        if (Minecraft.getInstance().isPaused())
+    @SubscribeEvent
+    protected void serverTick(TickEvent.ServerTickEvent event)
+    {
+        if (event.phase == TickEvent.Phase.END)
         {
-            return;
+            serverTickCount++;
         }
-
-        tickCount++;
     }
 
     public static void initialize()
     {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        MinecraftForge.EVENT_BUS.register(new Watchdog());
-        bus.addListener(Watchdog::onAddedExternalDependants);
+        MinecraftForge.EVENT_BUS.register(new Network());
+        bus.addListener(Network::onAddedExternalDependants);
     }
 }

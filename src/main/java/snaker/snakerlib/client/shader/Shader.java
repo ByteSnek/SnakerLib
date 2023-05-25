@@ -1,10 +1,9 @@
-package snaker.snakerlib.shader;
+package snaker.snakerlib.client.shader;
 
 import codechicken.lib.render.shader.CCShaderInstance;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderType;
-import org.apache.commons.lang3.NotImplementedException;
 import snaker.snakerlib.SnakerUtil;
 
 import javax.annotation.Nullable;
@@ -18,21 +17,6 @@ import static net.minecraft.client.renderer.RenderStateShard.*;
 public class Shader
 {
     private final RenderType type;
-
-    public Shader(Category category, @Nullable String name, VertexFormat format, VertexFormat.Mode mode, @Nullable Integer bufferSize, CCShaderInstance instance, boolean outline)
-    {
-        throw new NotImplementedException("Not Implemented");
-    }
-
-    public Shader(Category category, @Nullable String name, CCShaderInstance instance)
-    {
-        throw new NotImplementedException("Not Implemented");
-    }
-
-    public Shader(Category category, CCShaderInstance instance)
-    {
-        throw new NotImplementedException("Not Implemented");
-    }
 
     public Shader(@Nullable String name, VertexFormat format, VertexFormat.Mode mode, @Nullable Integer bufferSize, RenderType.CompositeState shard)
     {

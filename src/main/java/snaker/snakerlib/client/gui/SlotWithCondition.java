@@ -1,4 +1,4 @@
-package snaker.snakerlib.gui;
+package snaker.snakerlib.client.gui;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

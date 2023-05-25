@@ -1,4 +1,4 @@
-package snaker.snakerlib.entity;
+package snaker.snakerlib.level.entity;
 
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import snaker.snakerlib.data.SnakerConstants;
 
 import java.util.Objects;
 
@@ -16,26 +17,31 @@ import java.util.Objects;
  * Created by SnakerBone on 4/01/2023
  **/
 @SuppressWarnings("unused")
-public class BossMob extends PathfinderMob
+public abstract class SnakerBoss extends PathfinderMob
 {
     private final BossEvent.BossBarColor colour;
     private final BossEvent.BossBarOverlay overlay;
     private final ServerBossEvent event = new ServerBossEvent(getDisplayName(), getColour(), getOverlay());
 
-    public BossMob(EntityType<? extends PathfinderMob> type, Level level, BossEvent.BossBarOverlay overlay, BossEvent.BossBarColor colour, int xpReward)
+    public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level, BossEvent.BossBarOverlay overlay, BossEvent.BossBarColor colour, int xpReward)
     {
         super(type, level);
-        this.xpReward = xpReward;
         this.colour = colour;
         this.overlay = overlay;
+        this.xpReward = xpReward;
     }
 
-    public BossMob(EntityType<? extends PathfinderMob> type, Level level, int xpReward)
+    public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level, BossEvent.BossBarOverlay overlay, BossEvent.BossBarColor colour)
+    {
+        this(type, level, overlay, colour, SnakerConstants.BOSS_XP_REWARD.asInt());
+    }
+
+    public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level, int xpReward)
     {
         this(type, level, BossEvent.BossBarOverlay.PROGRESS, BossEvent.BossBarColor.BLUE, xpReward);
     }
 
-    public BossMob(EntityType<? extends PathfinderMob> type, Level level)
+    public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level)
     {
         this(type, level, BossEvent.BossBarOverlay.PROGRESS, BossEvent.BossBarColor.BLUE, 8000);
     }

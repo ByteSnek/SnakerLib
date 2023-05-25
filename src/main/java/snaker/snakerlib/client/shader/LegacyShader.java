@@ -1,4 +1,4 @@
-package snaker.snakerlib.shader;
+package snaker.snakerlib.client.shader;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;

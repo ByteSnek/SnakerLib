@@ -1,4 +1,4 @@
-package snaker.snakerlib.entity.ai;
+package snaker.snakerlib.level.entity.ai;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -16,39 +16,43 @@ import java.util.EnumSet;
 @SuppressWarnings("unused")
 public class RandomWanderGoal extends Goal
 {
-    private final Animal entity;
+    private final Animal owner;
 
     public RandomWanderGoal(Animal owner)
     {
         this.setFlags(EnumSet.of(Flag.MOVE));
-        entity = owner;
+        this.owner = owner;
     }
 
     public boolean canUse()
     {
-        RandomSource random = entity.getRandom();
-        return entity.getNavigation().isDone() && random.nextInt(3) == 0;
+        RandomSource random = owner.getRandom();
+        return owner.getNavigation().isDone() && random.nextInt(3) == 0;
     }
 
     public boolean canContinueToUse()
     {
-        return entity.getNavigation().isInProgress();
+        return owner.getNavigation().isInProgress();
     }
 
     public void start()
     {
         Vec3 randomPos = this.getRandom();
+
         if (randomPos != null)
         {
-            entity.getNavigation().moveTo(entity.getNavigation().createPath(new BlockPos(randomPos), 1), 1);
+            owner.getNavigation().moveTo(owner.getNavigation().createPath(new BlockPos(randomPos), 1), 1);
         }
     }
 
     private Vec3 getRandom()
     {
         Vec3 vec3;
-        vec3 = entity.getViewVector(0);
-        Vec3 randomPos = HoverRandomPos.getPos(entity, 8, 7, vec3.x, vec3.z, ((float) Math.PI / 2), 3, 1);
-        return randomPos != null ? randomPos : AirAndWaterRandomPos.getPos(entity, 8, 4, -2, vec3.x, vec3.z, (float) Math.PI / 2);
+
+        vec3 = owner.getViewVector(0);
+
+        Vec3 randomPos = HoverRandomPos.getPos(owner, 8, 7, vec3.x, vec3.z, ((float) Math.PI / 2), 3, 1);
+
+        return randomPos != null ? randomPos : AirAndWaterRandomPos.getPos(owner, 8, 4, -2, vec3.x, vec3.z, (float) Math.PI / 2);
     }
 }

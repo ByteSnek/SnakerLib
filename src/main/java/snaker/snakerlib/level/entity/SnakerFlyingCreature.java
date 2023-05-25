@@ -1,4 +1,4 @@
-package snaker.snakerlib.entity;
+package snaker.snakerlib.level.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -18,8 +18,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import org.jetbrains.annotations.NotNull;
-import snaker.snakerlib.entity.ai.LookAroundGoal;
-import snaker.snakerlib.entity.ai.RandomWanderGoal;
+import snaker.snakerlib.data.SnakerConstants;
+import snaker.snakerlib.level.entity.ai.LookAroundGoal;
+import snaker.snakerlib.level.entity.ai.RandomWanderGoal;
 
 import javax.annotation.Nullable;
 
@@ -27,17 +28,23 @@ import javax.annotation.Nullable;
  * Created by SnakerBone on 2/01/2023
  **/
 @SuppressWarnings("unused")
-public class SnakerFlyingCreature extends Animal implements FlyingAnimal
+public abstract class SnakerFlyingCreature extends Animal implements FlyingAnimal
 {
-    public SnakerFlyingCreature(EntityType<? extends Animal> type, Level world)
+    public SnakerFlyingCreature(EntityType<? extends Animal> type, Level level, int xpReward)
     {
-        super(type, world);
-        moveControl = new FlyingMoveControl(this, 20, true);
+        super(type, level);
+        this.moveControl = new FlyingMoveControl(this, 20, true);
+        this.xpReward = xpReward;
         setPathfindingMalus(BlockPathTypes.WATER_BORDER, 16);
         setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1);
         setPathfindingMalus(BlockPathTypes.COCOA, -1);
         setPathfindingMalus(BlockPathTypes.WATER, -1);
         setPathfindingMalus(BlockPathTypes.FENCE, -1);
+    }
+
+    public SnakerFlyingCreature(EntityType<? extends Animal> type, Level level)
+    {
+        this(type, level, SnakerConstants.CREATURE_XP_REWARD.asInt());
     }
 
     @Override
@@ -53,7 +60,7 @@ public class SnakerFlyingCreature extends Animal implements FlyingAnimal
     @Override
     protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState state)
     {
-        
+
     }
 
     @Override

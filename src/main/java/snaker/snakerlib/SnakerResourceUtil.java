@@ -44,8 +44,6 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class SnakerResourceUtil
 {
-    // ========== ItemStack ========== //
-
     public static ResourceLocation getResourceLocation(ItemStack key)
     {
         return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(key.getItem()));

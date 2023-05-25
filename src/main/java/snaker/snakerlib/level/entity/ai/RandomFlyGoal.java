@@ -1,4 +1,4 @@
-package snaker.snakerlib.entity.ai;
+package snaker.snakerlib.level.entity.ai;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
@@ -13,26 +13,28 @@ import java.util.EnumSet;
 @SuppressWarnings("unused")
 public class RandomFlyGoal extends Goal
 {
-    private final Mob mob;
+    private final Mob owner;
 
     public RandomFlyGoal(Mob owner)
     {
-        mob = owner;
+        this.owner = owner;
         setFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean canUse()
     {
-        MoveControl controller = mob.getMoveControl();
+        MoveControl controller = owner.getMoveControl();
         if (!controller.hasWanted())
         {
             return true;
         } else
         {
-            double x = controller.getWantedX() - mob.getX();
-            double y = controller.getWantedY() - mob.getY();
-            double z = controller.getWantedZ() - mob.getZ();
+            double x = controller.getWantedX() - owner.getX();
+            double y = controller.getWantedY() - owner.getY();
+            double z = controller.getWantedZ() - owner.getZ();
+
             double xyz = x * x + y * y + z * z;
+
             return xyz < 1 || xyz > 3600;
         }
     }
@@ -44,10 +46,12 @@ public class RandomFlyGoal extends Goal
 
     public void start()
     {
-        RandomSource random = mob.getRandom();
-        double x = mob.getX() + (double) ((random.nextFloat() * 2 - 1) * 16);
-        double y = mob.getY() + (double) ((random.nextFloat() * 2 - 1) * 16);
-        double z = mob.getZ() + (double) ((random.nextFloat() * 2 - 1) * 16);
-        mob.getMoveControl().setWantedPosition(x, y, z, 1);
+        RandomSource random = owner.getRandom();
+
+        double x = owner.getX() + (double) ((random.nextFloat() * 2 - 1) * 16);
+        double y = owner.getY() + (double) ((random.nextFloat() * 2 - 1) * 16);
+        double z = owner.getZ() + (double) ((random.nextFloat() * 2 - 1) * 16);
+
+        owner.getMoveControl().setWantedPosition(x, y, z, 1);
     }
 }

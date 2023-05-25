@@ -40,10 +40,10 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'snakerbone'
+            property 'forge.enabledGameTestNamespaces', 'snakerlib'
             property 'geckolib.disable_examples', 'true'
             mods {
-                snakerbone { source sourceSets.main }
+                snakerlib { source sourceSets.main }
             }
         }
         data {
@@ -51,9 +51,9 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'geckolib.disable_examples', 'true'
-            args '--mod', 'snakerbone', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'snakerlib', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
-                snakerbone { source sourceSets.main }
+                snakerlib { source sourceSets.main }
             }
         }
     }
@@ -61,11 +61,7 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-tasks.register('srcJar', Jar) {
-    build.dependsOn it
-    from sourceSets.main.allSource
-    classifier = 'universal'
-}
+jar.finalizedBy('reobfJar')
 
 jar {
     manifest {
@@ -73,18 +69,22 @@ jar {
     }
 }
 
-jar.finalizedBy('reobfJar')
+tasks.register('srcJar', Jar) {
+    build.dependsOn it
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
 
 publishing {
+    repositories {
+        maven {
+            url "https://mymavenrepo.com/repo/${maven_auth}/"
+        }
+    }
     publications {
         mavenJava(MavenPublication) {
             artifact srcJar
             artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "https://mymavenrepo.com/repo/${maven_auth}/"
         }
     }
 }
