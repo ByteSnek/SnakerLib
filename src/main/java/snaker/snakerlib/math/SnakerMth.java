@@ -23,7 +23,7 @@ public class SnakerMth
 
     // distance
 
-    public double clampAbsolute(double a)
+    public static double clampAbsolute(double a)
     {
         if (Math.abs(a) > SnakerMth.PI_HALF)
         {
@@ -39,7 +39,7 @@ public class SnakerMth
         return a;
     }
 
-    public double angleBetween(Vec3 a, Vec3 b)
+    public static double angleBetween(Vec3 a, Vec3 b)
     {
         double angle = a.dot(b) / (a.length() * b.length());
 
@@ -55,7 +55,7 @@ public class SnakerMth
         return SnakerMth.acos(angle);
     }
 
-    public double wrapRadian(double a)
+    public static double wrapRadian(double a)
     {
         a %= 2 * SnakerMth.PI;
 
@@ -72,7 +72,7 @@ public class SnakerMth
         return a;
     }
 
-    public Vec3 transform(Vec3 axis, Vec3 normal, double angle)
+    public static Vec3 transform(Vec3 axis, Vec3 normal, double angle)
     {
         double[] x = {1, 0, 0};
         double[] y = {0, 1, 0};
