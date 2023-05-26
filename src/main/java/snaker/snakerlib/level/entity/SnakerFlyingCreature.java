@@ -19,8 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import org.jetbrains.annotations.NotNull;
 import snaker.snakerlib.data.SnakerConstants;
-import snaker.snakerlib.level.entity.ai.LookAroundGoal;
-import snaker.snakerlib.level.entity.ai.RandomWanderGoal;
+import snaker.snakerlib.level.entity.ai.SnakerLookGoal;
+import snaker.snakerlib.level.entity.ai.SnakerWanderGoal;
 
 import javax.annotation.Nullable;
 
@@ -50,8 +50,8 @@ public abstract class SnakerFlyingCreature extends Animal implements FlyingAnima
     @Override
     protected void registerGoals()
     {
-        goalSelector.addGoal(0, new RandomWanderGoal(this));
-        goalSelector.addGoal(0, new LookAroundGoal(this));
+        goalSelector.addGoal(0, new SnakerWanderGoal(this));
+        goalSelector.addGoal(0, new SnakerLookGoal(this));
         goalSelector.addGoal(7, new WaterAvoidingRandomFlyingGoal(this, 1));
         goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8));
         goalSelector.addGoal(0, new FloatGoal(this));

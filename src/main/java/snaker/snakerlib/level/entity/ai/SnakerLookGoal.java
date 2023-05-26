@@ -12,29 +12,37 @@ import java.util.EnumSet;
  * Created by SnakerBone on 2/01/2023
  **/
 @SuppressWarnings("unused")
-public class LookAroundGoal extends Goal
+public class SnakerLookGoal extends Goal
 {
     private final Mob owner;
 
-    public LookAroundGoal(Mob owner)
+    public SnakerLookGoal(Mob owner)
     {
         this.owner = owner;
-        setFlags(EnumSet.of(Flag.LOOK));
+        setFlags(EnumSet.of(Goal.Flag.LOOK));
     }
 
+    @Override
     public boolean canUse()
     {
         return true;
     }
 
+    @Override
+    public boolean requiresUpdateEveryTick()
+    {
+        return true;
+    }
+
+    @Override
     public void tick()
     {
         if (owner.getTarget() == null)
         {
             Vec3 movement = owner.getDeltaMovement();
 
-            owner.setXRot(SnakerMth.atan2RotNeg(movement.x, movement.z));
-            owner.xRotO = owner.getXRot();
+            owner.setYRot(SnakerMth.atan2RotNeg(movement.x, movement.z));
+            owner.yBodyRot = owner.getYRot();
 
         } else
         {
@@ -45,8 +53,8 @@ public class LookAroundGoal extends Goal
                 double x = target.getX() - owner.getX();
                 double z = target.getZ() - owner.getZ();
 
-                owner.setXRot(SnakerMth.atan2RotNeg(x, z));
-                owner.xRotO = owner.getXRot();
+                owner.setYRot(SnakerMth.atan2RotNeg(x, z));
+                owner.yBodyRot = owner.getYRot();
             }
         }
     }

@@ -10,7 +10,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import snaker.snakerlib.data.SnakerConstants;
-import snaker.snakerlib.level.entity.ai.SwitchPlayerGameModeGoal;
+import snaker.snakerlib.level.entity.ai.SnakerSwitchGameModeGoal;
 
 import java.util.Objects;
 
@@ -64,7 +64,7 @@ public abstract class SnakerMob extends Monster
     @Override
     protected void registerGoals()
     {
-        goalSelector.addGoal(1, new SwitchPlayerGameModeGoal(this));
+        goalSelector.addGoal(1, new SnakerSwitchGameModeGoal(this));
         goalSelector.addGoal(6, new RandomStrollGoal(this, 1));
         goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.3, false));
         goalSelector.addGoal(0, new FloatGoal(this));

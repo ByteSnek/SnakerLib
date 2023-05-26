@@ -11,27 +11,29 @@ import java.util.EnumSet;
  * Created by SnakerBone on 2/01/2023
  **/
 @SuppressWarnings("unused")
-public class RandomFlyGoal extends Goal
+public class SnakerFlyGoal extends Goal
 {
     private final Mob owner;
 
-    public RandomFlyGoal(Mob owner)
+    public SnakerFlyGoal(Mob owner)
     {
         this.owner = owner;
-        setFlags(EnumSet.of(Flag.MOVE));
+        setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
+    @Override
     public boolean canUse()
     {
-        MoveControl controller = owner.getMoveControl();
-        if (!controller.hasWanted())
+        MoveControl control = owner.getMoveControl();
+
+        if (!control.hasWanted())
         {
             return true;
         } else
         {
-            double x = controller.getWantedX() - owner.getX();
-            double y = controller.getWantedY() - owner.getY();
-            double z = controller.getWantedZ() - owner.getZ();
+            double x = control.getWantedX() - owner.getX();
+            double y = control.getWantedY() - owner.getY();
+            double z = control.getWantedZ() - owner.getZ();
 
             double xyz = x * x + y * y + z * z;
 
@@ -39,18 +41,20 @@ public class RandomFlyGoal extends Goal
         }
     }
 
+    @Override
     public boolean canContinueToUse()
     {
         return false;
     }
 
+    @Override
     public void start()
     {
         RandomSource random = owner.getRandom();
 
-        double x = owner.getX() + (double) ((random.nextFloat() * 2 - 1) * 16);
-        double y = owner.getY() + (double) ((random.nextFloat() * 2 - 1) * 16);
-        double z = owner.getZ() + (double) ((random.nextFloat() * 2 - 1) * 16);
+        double x = owner.getX() + ((random.nextFloat() * 2 - 1) * 16);
+        double y = owner.getY() + ((random.nextFloat() * 2 - 1) * 16);
+        double z = owner.getZ() + ((random.nextFloat() * 2 - 1) * 16);
 
         owner.getMoveControl().setWantedPosition(x, y, z, 1);
     }

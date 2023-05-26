@@ -12,10 +12,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import snaker.snakerlib.data.SnakerConstants;
-import snaker.snakerlib.level.entity.ai.FlyControl;
-import snaker.snakerlib.level.entity.ai.LookAroundGoal;
-import snaker.snakerlib.level.entity.ai.RandomFlyGoal;
-import snaker.snakerlib.level.entity.ai.SwitchPlayerGameModeGoal;
+import snaker.snakerlib.level.entity.ai.SnakerFlyControl;
+import snaker.snakerlib.level.entity.ai.SnakerFlyGoal;
+import snaker.snakerlib.level.entity.ai.SnakerLookGoal;
+import snaker.snakerlib.level.entity.ai.SnakerSwitchGameModeGoal;
 
 /**
  * Created by SnakerBone on 2/01/2023
@@ -26,7 +26,7 @@ public abstract class SnakerFlyingMob extends FlyingMob implements Enemy
     public SnakerFlyingMob(EntityType<? extends SnakerFlyingMob> type, Level level, int xpReward)
     {
         super(type, level);
-        this.moveControl = new FlyControl(this);
+        this.moveControl = new SnakerFlyControl(this);
         this.xpReward = xpReward;
     }
 
@@ -55,9 +55,9 @@ public abstract class SnakerFlyingMob extends FlyingMob implements Enemy
 
     protected void registerGoals()
     {
-        goalSelector.addGoal(4, new RandomFlyGoal(this));
-        goalSelector.addGoal(6, new LookAroundGoal(this));
-        goalSelector.addGoal(1, new SwitchPlayerGameModeGoal(this));
+        goalSelector.addGoal(4, new SnakerFlyGoal(this));
+        goalSelector.addGoal(6, new SnakerLookGoal(this));
+        goalSelector.addGoal(1, new SnakerSwitchGameModeGoal(this));
         goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6));
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }

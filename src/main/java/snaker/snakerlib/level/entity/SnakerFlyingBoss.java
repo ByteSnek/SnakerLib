@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import snaker.snakerlib.data.SnakerConstants;
+import snaker.snakerlib.level.entity.ai.SnakerFlyControl;
 
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ public class SnakerFlyingBoss extends FlyingMob
     {
         super(type, level);
         this.xpReward = xpReward;
+        this.moveControl = new SnakerFlyControl(this);
     }
 
     public SnakerFlyingBoss(EntityType<? extends FlyingMob> type, Level level)

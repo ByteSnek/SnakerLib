@@ -12,11 +12,11 @@ import java.util.List;
  * Created by SnakerBone on 28/02/2023
  **/
 @SuppressWarnings("unused")
-public class SwitchPlayerGameModeGoal extends Goal
+public class SnakerSwitchGameModeGoal extends Goal
 {
     private final Mob owner;
 
-    public SwitchPlayerGameModeGoal(Mob owner)
+    public SnakerSwitchGameModeGoal(Mob owner)
     {
         this.owner = owner;
     }

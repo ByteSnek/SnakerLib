@@ -7,6 +7,7 @@ import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
 import net.minecraft.world.entity.ai.util.HoverRandomPos;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.phys.Vec3;
+import snaker.snakerlib.math.SnakerMth;
 
 import java.util.EnumSet;
 
@@ -14,45 +15,46 @@ import java.util.EnumSet;
  * Created by SnakerBone on 21/02/2023
  **/
 @SuppressWarnings("unused")
-public class RandomWanderGoal extends Goal
+public class SnakerWanderGoal extends Goal
 {
     private final Animal owner;
 
-    public RandomWanderGoal(Animal owner)
+    public SnakerWanderGoal(Animal owner)
     {
-        this.setFlags(EnumSet.of(Flag.MOVE));
         this.owner = owner;
+        setFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean canUse()
     {
         RandomSource random = owner.getRandom();
+
         return owner.getNavigation().isDone() && random.nextInt(3) == 0;
     }
 
+    @Override
     public boolean canContinueToUse()
     {
         return owner.getNavigation().isInProgress();
     }
 
+    @Override
     public void start()
     {
-        Vec3 randomPos = this.getRandom();
+        Vec3 pos = getRandom();
 
-        if (randomPos != null)
+        if (pos != null)
         {
-            owner.getNavigation().moveTo(owner.getNavigation().createPath(new BlockPos(randomPos), 1), 1);
+            owner.getNavigation().moveTo(owner.getNavigation().createPath(new BlockPos(pos), 1), 1);
         }
     }
 
     private Vec3 getRandom()
     {
-        Vec3 vec3;
+        Vec3 view = owner.getViewVector(0);
+        Vec3 pos = HoverRandomPos.getPos(owner, 8, 7, view.x, view.z, (SnakerMth.PI / 2), 3, 1);
 
-        vec3 = owner.getViewVector(0);
-
-        Vec3 randomPos = HoverRandomPos.getPos(owner, 8, 7, vec3.x, vec3.z, ((float) Math.PI / 2), 3, 1);
-
-        return randomPos != null ? randomPos : AirAndWaterRandomPos.getPos(owner, 8, 4, -2, vec3.x, vec3.z, (float) Math.PI / 2);
+        return pos != null ? pos : AirAndWaterRandomPos.getPos(owner, 8, 4, -2, view.x, view.z, SnakerMth.PI / 2);
     }
 }
