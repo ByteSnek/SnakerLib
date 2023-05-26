@@ -1,5 +1,7 @@
 package snaker.snakerlib.math;
 
+import net.minecraft.world.phys.Vec3;
+
 import java.math.BigInteger;
 
 /**
@@ -20,6 +22,96 @@ public class SnakerMth
     public static final float PIE_DIV = (float) (Math.PI / Math.E);
 
     // distance
+
+    public double clampAbsolute(double a)
+    {
+        if (Math.abs(a) > SnakerMth.PI_HALF)
+        {
+            if (a < 0)
+            {
+                a = -Math.abs(SnakerMth.PI_HALF);
+            } else
+            {
+                a = Math.abs(SnakerMth.PI_HALF);
+            }
+        }
+
+        return a;
+    }
+
+    public double angleBetween(Vec3 a, Vec3 b)
+    {
+        double angle = a.dot(b) / (a.length() * b.length());
+
+        if (angle < -1)
+        {
+            angle = -1;
+        }
+        if (angle > 1)
+        {
+            angle = 1;
+        }
+
+        return SnakerMth.acos(angle);
+    }
+
+    public double wrapRadian(double a)
+    {
+        a %= 2 * SnakerMth.PI;
+
+        while (a >= SnakerMth.PI)
+        {
+            a -= 2 * SnakerMth.PI;
+        }
+
+        while (a < -SnakerMth.PI)
+        {
+            a += 2 * SnakerMth.PI;
+        }
+
+        return a;
+    }
+
+    public Vec3 transform(Vec3 axis, Vec3 normal, double angle)
+    {
+        double[] x = {1, 0, 0};
+        double[] y = {0, 1, 0};
+        double[] z = {0, 0, 1};
+
+        double magnitude = Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
+
+        if (magnitude >= 1.0E-10)
+        {
+            magnitude = 1.0 / magnitude;
+
+            double ax = axis.x * magnitude;
+            double ay = axis.y * magnitude;
+            double az = axis.z * magnitude;
+
+            double sin = SnakerMth.sin(angle);
+            double cos = SnakerMth.cos(angle);
+
+            double t = 1 - cos;
+
+            double xz = ax * az;
+            double xy = ax * ay;
+            double yz = ay * az;
+
+            x[0] = t * ax * ax + cos;
+            x[1] = t * xy - sin * az;
+            x[2] = t * xz + sin * ay;
+
+            y[0] = t * xy + sin * az;
+            y[1] = t * ay * ay + cos;
+            y[2] = t * yz - sin * ax;
+
+            z[0] = t * xz - sin * ay;
+            z[1] = t * yz + sin * ax;
+            z[2] = t * az * az + cos;
+        }
+
+        return new Vec3(x[0] * normal.x + x[1] * normal.y + x[2] * normal.z, y[0] * normal.x + y[1] * normal.y + y[2] * normal.z, z[0] * normal.x + z[1] * normal.y + z[2] * normal.z);
+    }
 
     public static float dist(double x1, double y1, double z1, double x2, double y2, double z2)
     {
