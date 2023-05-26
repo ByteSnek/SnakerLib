@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -14,20 +14,20 @@ import snaker.snakerlib.data.SnakerConstants;
 import java.util.Objects;
 
 /**
- * Created by SnakerBone on 4/01/2023
+ * Created by SnakerBone on 26/05/2023
  **/
 @SuppressWarnings("unused")
-public abstract class SnakerBoss extends PathfinderMob
+public class SnakerFlyingBoss extends FlyingMob
 {
     private final ServerBossEvent BOSS_INFO = new ServerBossEvent(getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
 
-    public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level, int xpReward)
+    public SnakerFlyingBoss(EntityType<? extends FlyingMob> type, Level level, int xpReward)
     {
         super(type, level);
         this.xpReward = xpReward;
     }
 
-    public SnakerBoss(EntityType<? extends PathfinderMob> type, Level level)
+    public SnakerFlyingBoss(EntityType<? extends FlyingMob> type, Level level)
     {
         this(type, level, SnakerConstants.BOSS_XP_REWARD.asInt());
     }
