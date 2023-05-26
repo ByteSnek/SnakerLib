@@ -26,8 +26,8 @@ public abstract class SnakerFlyingMob extends FlyingMob implements Enemy
     public SnakerFlyingMob(EntityType<? extends SnakerFlyingMob> type, Level level, int xpReward)
     {
         super(type, level);
-        this.moveControl = new SnakerFlyControl(this);
         this.xpReward = xpReward;
+        this.moveControl = new SnakerFlyControl(this);
     }
 
     public SnakerFlyingMob(EntityType<? extends SnakerFlyingMob> type, Level level)
