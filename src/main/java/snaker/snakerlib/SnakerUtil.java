@@ -2,10 +2,10 @@ package snaker.snakerlib;
 
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Rarity;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -22,50 +22,17 @@ public class SnakerUtil
     public static final String PLACEHOLDER = MODID + ":" + PlaceHolders.PH8;
     public static final String PLACEHOLDER_NO_MODID = PlaceHolders.PH8;
 
-    public static <T extends Entity> boolean isEntityMoving(T entity)
+    public static <T extends Entity> boolean isEntityMoving(@NotNull T entity)
     {
-        if (entity != null) {
-            double x = entity.getDeltaMovement().x;
-            double z = entity.getDeltaMovement().z;
-            double xz = Math.abs(x + z);
-            return xz != 0;
-        } else {
-            SnakerLib.LOGGER.info("Entity is null");
-            return false;
-        }
-    }
+        double currentX = entity.getX();
+        double currentY = entity.getY();
+        double currentZ = entity.getZ();
 
-    // Not sure why I would need this but just in case?
-    public static <T extends Entity> boolean isEntityMovingXYZ(T entity)
-    {
-        if (entity != null) {
-            double x = entity.getDeltaMovement().x;
-            double y = entity.getDeltaMovement().y;
-            double z = entity.getDeltaMovement().z;
-            double xyz = Math.abs(x + y + z);
-            return xyz != 0;
-        } else {
-            SnakerLib.LOGGER.error("Entity is null");
-            return false;
-        }
-    }
+        double prevX = entity.xo;
+        double prevY = entity.yo;
+        double prevZ = entity.zo;
 
-    public static boolean generateFlag(int fract)
-    {
-        RandomSource random = RandomSource.create();
-        return random.nextInt(100) < fract;
-    }
-
-    public static boolean generateFlag(int bound, int fract)
-    {
-        RandomSource random = RandomSource.create();
-        return random.nextInt(bound) < fract;
-    }
-
-    public static boolean getRandom()
-    {
-        RandomSource random = RandomSource.create();
-        return random.nextBoolean();
+        return currentX != prevX || currentY != prevY || currentZ != prevZ;
     }
 
     public static String untranslate(String text)
