@@ -7,7 +7,6 @@ import java.math.BigInteger;
 /**
  * Created by SnakerBone on 14/02/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerMth
 {
     public static final int LEVEL_AABB_RADIUS = 0x989680;

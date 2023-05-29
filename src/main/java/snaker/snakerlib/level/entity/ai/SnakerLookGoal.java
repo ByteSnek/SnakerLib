@@ -11,7 +11,6 @@ import java.util.EnumSet;
 /**
  * Created by SnakerBone on 2/01/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerLookGoal extends Goal
 {
     private final Mob owner;
@@ -37,19 +36,16 @@ public class SnakerLookGoal extends Goal
     @Override
     public void tick()
     {
-        if (owner.getTarget() == null)
-        {
+        if (owner.getTarget() == null) {
             Vec3 movement = owner.getDeltaMovement();
 
             owner.setYRot(SnakerMth.atan2RotNeg(movement.x, movement.z));
             owner.yBodyRot = owner.getYRot();
 
-        } else
-        {
+        } else {
             LivingEntity target = owner.getTarget();
 
-            if (target.distanceToSqr(owner) < 4096)
-            {
+            if (target.distanceToSqr(owner) < 4096) {
                 double x = target.getX() - owner.getX();
                 double z = target.getZ() - owner.getZ();
 

@@ -17,7 +17,6 @@ import java.util.Objects;
 /**
  * Created by SnakerBone on 26/05/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerFlyingBoss extends FlyingMob
 {
     private final ServerBossEvent BOSS_INFO = new ServerBossEvent(getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);

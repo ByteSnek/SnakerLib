@@ -15,7 +15,6 @@ import snaker.snakerlib.data.SnakerConstants;
 /**
  * Created by SnakerBone on 23/05/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerCreature extends Animal
 {
     private final SnakerCreature offspring;

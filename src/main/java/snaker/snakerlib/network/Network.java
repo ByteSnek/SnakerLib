@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by SnakerBone on 5/05/2023
  **/
-@SuppressWarnings("unused")
 public class Network
 {
     private static final HashMap<Integer, String> defaultDependants = SnakerLib.DEFAULT_DEPENDANTS;
@@ -40,8 +39,7 @@ public class Network
     {
         putDefaultDependants();
 
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             SnakerLib.LOGGER.info("Added " + externalDependants.get(i) + " to external dependants");
         }
     }
@@ -55,25 +53,20 @@ public class Network
 
     public static void addExternalDependant(String modId)
     {
-        if (ResourceLocation.isValidNamespace(modId))
-        {
+        if (ResourceLocation.isValidNamespace(modId)) {
             externalDependants.putIfAbsent(size, modId);
             size++;
 
-        } else
-        {
+        } else {
             SnakerLib.LOGGER.error("Dependant: [ " + modId + " ] could not not be added because it is not a valid namespace");
         }
     }
 
     public static synchronized void testThread(int a)
     {
-        for (int x = 0; x < a; x++)
-        {
-            for (int y = 0; y < a + 1; y++)
-            {
-                for (int z = 0; z < a + 2; z++)
-                {
+        for (int x = 0; x < a; x++) {
+            for (int y = 0; y < a + 1; y++) {
+                for (int z = 0; z < a + 2; z++) {
                     SnakerLib.LOGGER.info("Running!\n" + a + " : " + x + "\n" + a + " : " + y + "\n" + a + " : " + z);
                 }
             }
@@ -97,8 +90,7 @@ public class Network
         service.scheduleAtFixedRate(() ->
         {
             int amount = integer.getAndAdd(add);
-            if (amount > bound)
-            {
+            if (amount > bound) {
                 service.shutdownNow();
                 return;
             }
@@ -109,8 +101,7 @@ public class Network
     @SubscribeEvent
     protected void clientTick(TickEvent.ClientTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.END || !Minecraft.getInstance().isPaused())
-        {
+        if (event.phase == TickEvent.Phase.END || !Minecraft.getInstance().isPaused()) {
             clientTickCount++;
         }
     }
@@ -118,8 +109,7 @@ public class Network
     @SubscribeEvent
     protected void serverTick(TickEvent.ServerTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.END)
-        {
+        if (event.phase == TickEvent.Phase.END) {
             serverTickCount++;
         }
     }

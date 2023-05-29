@@ -10,7 +10,6 @@ import java.util.function.Predicate;
 /**
  * Created by SnakerBone on 26/04/2023
  **/
-@SuppressWarnings("unused")
 public class SlotWithCondition extends SlotItemHandler
 {
     private final Predicate<ItemStack> condition;

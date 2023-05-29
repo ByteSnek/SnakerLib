@@ -11,7 +11,6 @@ import java.util.function.Supplier;
 /**
  * Created by SnakerBone on 12/05/2023
  **/
-@SuppressWarnings("unused")
 public class LegacyShader
 {
     private final boolean enableBlend, depthMask;
@@ -32,8 +31,7 @@ public class LegacyShader
     public void createStandardParticle(GlStateManager.SourceFactor blendSrcFactor, GlStateManager.DestFactor blendDestFactor, Supplier<ShaderInstance> primaryShader, Supplier<ShaderInstance> secondaryShader, ResourceLocation shaderTexLoc)
     {
         RenderSystem.depthMask(depthMask);
-        if (enableBlend)
-        {
+        if (enableBlend) {
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(blendSrcFactor, blendDestFactor);
         }

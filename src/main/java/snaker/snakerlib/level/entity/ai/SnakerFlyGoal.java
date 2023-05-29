@@ -10,7 +10,6 @@ import java.util.EnumSet;
 /**
  * Created by SnakerBone on 2/01/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerFlyGoal extends Goal
 {
     private final Mob owner;
@@ -26,11 +25,9 @@ public class SnakerFlyGoal extends Goal
     {
         MoveControl control = owner.getMoveControl();
 
-        if (!control.hasWanted())
-        {
+        if (!control.hasWanted()) {
             return true;
-        } else
-        {
+        } else {
             double x = control.getWantedX() - owner.getX();
             double y = control.getWantedY() - owner.getY();
             double z = control.getWantedZ() - owner.getZ();

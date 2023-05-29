@@ -20,7 +20,6 @@ import snaker.snakerlib.level.entity.ai.SnakerSwitchGameModeGoal;
 /**
  * Created by SnakerBone on 2/01/2023
  **/
-@SuppressWarnings("unused")
 public abstract class SnakerFlyingMob extends FlyingMob implements Enemy
 {
     public SnakerFlyingMob(EntityType<? extends SnakerFlyingMob> type, Level level, int xpReward)

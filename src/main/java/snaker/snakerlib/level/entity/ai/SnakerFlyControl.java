@@ -9,7 +9,6 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Created by SnakerBone on 2/01/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerFlyControl extends MoveControl
 {
     private final Mob owner;
@@ -24,10 +23,8 @@ public class SnakerFlyControl extends MoveControl
     @Override
     public void tick()
     {
-        if (operation == MoveControl.Operation.MOVE_TO)
-        {
-            if (duration-- <= 0)
-            {
+        if (operation == MoveControl.Operation.MOVE_TO) {
+            if (duration-- <= 0) {
 
                 duration += owner.getRandom().nextInt(5) + 2;
 
@@ -37,11 +34,9 @@ public class SnakerFlyControl extends MoveControl
 
                 pos = pos.normalize();
 
-                if (canReach(pos, Mth.ceil(length)))
-                {
+                if (canReach(pos, Mth.ceil(length))) {
                     owner.setDeltaMovement(owner.getDeltaMovement().add(pos.scale(0.1D)));
-                } else
-                {
+                } else {
                     operation = MoveControl.Operation.WAIT;
                 }
             }
@@ -52,12 +47,10 @@ public class SnakerFlyControl extends MoveControl
     {
         AABB aabb = owner.getBoundingBox();
 
-        for (int i = 1; i < length; ++i)
-        {
+        for (int i = 1; i < length; ++i) {
             aabb = aabb.move(pos);
 
-            if (!owner.level.noCollision(owner, aabb))
-            {
+            if (!owner.level.noCollision(owner, aabb)) {
                 return false;
             }
         }

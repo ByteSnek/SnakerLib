@@ -27,7 +27,6 @@ import javax.annotation.Nullable;
 /**
  * Created by SnakerBone on 2/01/2023
  **/
-@SuppressWarnings("unused")
 public abstract class SnakerFlyingCreature extends Animal implements FlyingAnimal
 {
     public SnakerFlyingCreature(EntityType<? extends Animal> type, Level level, int xpReward)

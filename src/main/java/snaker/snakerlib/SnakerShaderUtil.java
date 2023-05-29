@@ -23,16 +23,13 @@ import static net.minecraft.client.renderer.RenderStateShard.*;
 /**
  * Created by SnakerBone on 28/04/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerShaderUtil
 {
     public static <X extends BlockEntity> BlockEntity createBlockEntity(RegistryObject<BlockEntityType<X>> type, @NotNull BlockPos pos, BlockState state)
     {
-        if (type != null && type.isPresent())
-        {
+        if (type != null && type.isPresent()) {
             return type.get().create(pos, state);
-        } else
-        {
+        } else {
             SnakerLib.LOGGER.error("The shader block placed at [ " + pos.toShortString() + " ] is null");
             return null;
         }
@@ -40,8 +37,7 @@ public class SnakerShaderUtil
 
     public static float[] hexToVec3(String hexCode)
     {
-        if (!hexCode.startsWith("#"))
-        {
+        if (!hexCode.startsWith("#")) {
             hexCode = "#" + hexCode;
         }
         Color colour = Color.decode(hexCode);
@@ -54,8 +50,7 @@ public class SnakerShaderUtil
 
     public static float[] hexToVec4(String hexCode)
     {
-        if (!hexCode.startsWith("#"))
-        {
+        if (!hexCode.startsWith("#")) {
             hexCode = "#" + hexCode;
         }
         Color colour = Color.decode(hexCode);

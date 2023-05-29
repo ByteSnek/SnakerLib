@@ -14,7 +14,6 @@ import java.util.EnumSet;
 /**
  * Created by SnakerBone on 21/02/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerWanderGoal extends Goal
 {
     private final Animal owner;
@@ -44,8 +43,7 @@ public class SnakerWanderGoal extends Goal
     {
         Vec3 pos = getRandom();
 
-        if (pos != null)
-        {
+        if (pos != null) {
             owner.getNavigation().moveTo(owner.getNavigation().createPath(new BlockPos(pos), 1), 1);
         }
     }

@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /**
  * Created by SnakerBone on 12/05/2023
  **/
-@SuppressWarnings("unused")
 public class Vec3A implements Copyable<Vec3A>
 {
     public double x;
@@ -189,8 +188,7 @@ public class Vec3A implements Copyable<Vec3A>
     public static Vec3A dir(Vec3A vec1, Vec3A vec2)
     {
         double distance = SnakerMth.dist(vec1, vec2);
-        if (distance == 0)
-        {
+        if (distance == 0) {
             distance = 0.1;
         }
         Vec3A offset = vec2.copy();
@@ -201,8 +199,7 @@ public class Vec3A implements Copyable<Vec3A>
     public static Vector3 dir(Vector3 vec1, Vector3 vec2)
     {
         double distance = SnakerMth.dist(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-        if (distance == 0)
-        {
+        if (distance == 0) {
             distance = 0.1;
         }
         Vector3 offset = vec2.copy();

@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * Created by SnakerBone on 28/02/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerSwitchGameModeGoal extends Goal
 {
     private final Mob owner;
@@ -28,10 +27,8 @@ public class SnakerSwitchGameModeGoal extends Goal
         Level world = owner.level;
         List<ServerPlayer> players = world.getEntitiesOfClass(ServerPlayer.class, owner.getBoundingBox().inflate(8));
 
-        if (players.stream().anyMatch(ServerPlayer::isCreative))
-        {
-            for (ServerPlayer player : players)
-            {
+        if (players.stream().anyMatch(ServerPlayer::isCreative)) {
+            for (ServerPlayer player : players) {
                 player.setGameMode(GameType.SURVIVAL);
                 owner.setTarget(player);
             }

@@ -13,7 +13,6 @@ import static net.minecraft.client.renderer.RenderStateShard.*;
 /**
  * Created by SnakerBone on 29/04/2023
  **/
-@SuppressWarnings("unused")
 public class Shader
 {
     private final RenderType type;
@@ -50,8 +49,7 @@ public class Shader
         RenderType.CompositeState type;
         RenderType.CompositeState itemAndBlockShard = RenderType.CompositeState.builder().setShaderState(new ShaderStateShard(() -> instance)).setLightmapState(LIGHTMAP).setCullState(NO_CULL).setOverlayState(OVERLAY).createCompositeState(outline);
         RenderType.CompositeState entityShard = RenderType.CompositeState.builder().setShaderState(new ShaderStateShard(() -> instance)).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST).setLightmapState(LIGHTMAP).createCompositeState(outline);
-        switch (category)
-        {
+        switch (category) {
             case OBJECT -> type = itemAndBlockShard;
             case ENTITY -> type = entityShard;
             default -> throw new RuntimeException("Category must be either OBJECT or ENTITY");

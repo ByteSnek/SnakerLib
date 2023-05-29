@@ -16,7 +16,6 @@ import java.util.Objects;
 /**
  * Created by SnakerBone on 4/01/2023
  **/
-@SuppressWarnings("unused")
 public abstract class SnakerBoss extends PathfinderMob
 {
     private final ServerBossEvent BOSS_INFO = new ServerBossEvent(getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);

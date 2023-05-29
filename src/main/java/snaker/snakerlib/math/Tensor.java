@@ -9,7 +9,6 @@ import com.mojang.math.Quaternion;
 /**
  * Created by SnakerBone on 30/03/2023
  **/
-@SuppressWarnings("unused")
 public class Tensor extends PoseStack implements Copyable<Tensor>
 {
     private PoseStack stack;

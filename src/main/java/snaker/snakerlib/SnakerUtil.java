@@ -16,7 +16,6 @@ import static snaker.snakerlib.SnakerLib.MODID;
 /**
  * Created by SnakerBone on 20/02/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerUtil
 {
     public static final String PLACEHOLDER = MODID + ":" + PlaceHolders.PH8;
