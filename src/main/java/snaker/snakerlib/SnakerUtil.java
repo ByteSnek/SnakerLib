@@ -3,6 +3,7 @@ package snaker.snakerlib;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Rarity;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -20,6 +21,34 @@ public class SnakerUtil
 {
     public static final String PLACEHOLDER = MODID + ":" + PlaceHolders.PH8;
     public static final String PLACEHOLDER_NO_MODID = PlaceHolders.PH8;
+
+    public static <T extends Entity> boolean isEntityMoving(T entity)
+    {
+        if (entity != null) {
+            double x = entity.getDeltaMovement().x;
+            double z = entity.getDeltaMovement().z;
+            double xz = Math.abs(x + z);
+            return xz != 0;
+        } else {
+            SnakerLib.LOGGER.info("Entity is null");
+            return false;
+        }
+    }
+
+    // Not sure why I would need this but just in case?
+    public static <T extends Entity> boolean isEntityMovingXYZ(T entity)
+    {
+        if (entity != null) {
+            double x = entity.getDeltaMovement().x;
+            double y = entity.getDeltaMovement().y;
+            double z = entity.getDeltaMovement().z;
+            double xyz = Math.abs(x + y + z);
+            return xyz != 0;
+        } else {
+            SnakerLib.LOGGER.error("Entity is null");
+            return false;
+        }
+    }
 
     public static boolean generateFlag(int fract)
     {
@@ -46,33 +75,26 @@ public class SnakerUtil
 
     public static String translate(String text)
     {
-        if (!text.isEmpty())
-        {
+        if (!text.isEmpty()) {
             return Stream.of(text.trim().split("\\s|\\p{Pc}")).filter(word -> word.length() > 0).map(word -> word.substring(0, 1).toUpperCase() + word.substring(1)).collect(Collectors.joining(" "));
-        } else
-        {
+        } else {
             return text;
         }
     }
 
     public static String translate(String text, Rarity rarity)
     {
-        switch (rarity)
-        {
-            case UNCOMMON ->
-            {
+        switch (rarity) {
+            case UNCOMMON -> {
                 return "§e" + translate(text);
             }
-            case RARE ->
-            {
+            case RARE -> {
                 return "§b" + translate(text);
             }
-            case EPIC ->
-            {
+            case EPIC -> {
                 return "§d" + translate(text);
             }
-            default ->
-            {
+            default -> {
                 return translate(text);
             }
         }
@@ -81,8 +103,7 @@ public class SnakerUtil
     public static String untranslateComponent(MutableComponent component, boolean leaveCaps)
     {
         String string = component.getString();
-        if (!string.isEmpty())
-        {
+        if (!string.isEmpty()) {
             string = string.replaceAll("\\p{P}", "");
         }
         return leaveCaps ? string : string.toLowerCase();
