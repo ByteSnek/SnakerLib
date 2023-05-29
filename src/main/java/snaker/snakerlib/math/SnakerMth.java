@@ -11,28 +11,29 @@ import java.math.BigInteger;
 public class SnakerMth
 {
     public static final int LEVEL_AABB_RADIUS = 0x989680;
+
     public static final float RADIANS_TO_DEGREES = 57.29577951308232F;
     public static final float DEGREES_TO_RADIANS = 0.017453292519943F;
-    public static final float PI_HALF = (float) Math.PI / 2;
-    public static final float PI = (float) Math.PI;
 
-    public static final float PIE_ADD = (float) (Math.PI + Math.E);
-    public static final float PIE_SUB = (float) (Math.PI - Math.E);
-    public static final float PIE_MUL = (float) (Math.PI * Math.E);
-    public static final float PIE_DIV = (float) (Math.PI / Math.E);
+    public static final float PI = (float) Math.PI;
+    public static final float E = (float) Math.E;
+
+    public static final float HALF_PI = SnakerMth.PI / 2;
+
+    public static final float PIE_ADD = SnakerMth.PI + SnakerMth.E;
+    public static final float PIE_SUB = SnakerMth.PI - SnakerMth.E;
+    public static final float PIE_MUL = SnakerMth.PI * SnakerMth.E;
+    public static final float PIE_DIV = SnakerMth.PI / SnakerMth.E;
 
     // distance
 
     public static double clampAbsolute(double a)
     {
-        if (Math.abs(a) > SnakerMth.PI_HALF)
-        {
-            if (a < 0)
-            {
-                a = -Math.abs(SnakerMth.PI_HALF);
-            } else
-            {
-                a = Math.abs(SnakerMth.PI_HALF);
+        if (Math.abs(a) > SnakerMth.HALF_PI) {
+            if (a < 0) {
+                a = -Math.abs(SnakerMth.HALF_PI);
+            } else {
+                a = Math.abs(SnakerMth.HALF_PI);
             }
         }
 
@@ -43,12 +44,10 @@ public class SnakerMth
     {
         double angle = a.dot(b) / (a.length() * b.length());
 
-        if (angle < -1)
-        {
+        if (angle < -1) {
             angle = -1;
         }
-        if (angle > 1)
-        {
+        if (angle > 1) {
             angle = 1;
         }
 
@@ -59,13 +58,11 @@ public class SnakerMth
     {
         a %= 2 * SnakerMth.PI;
 
-        while (a >= SnakerMth.PI)
-        {
+        while (a >= SnakerMth.PI) {
             a -= 2 * SnakerMth.PI;
         }
 
-        while (a < -SnakerMth.PI)
-        {
+        while (a < -SnakerMth.PI) {
             a += 2 * SnakerMth.PI;
         }
 
@@ -80,8 +77,7 @@ public class SnakerMth
 
         double magnitude = Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
 
-        if (magnitude >= 1.0E-10)
-        {
+        if (magnitude >= 1.0E-10) {
             magnitude = 1.0 / magnitude;
 
             double ax = axis.x * magnitude;
@@ -162,12 +158,12 @@ public class SnakerMth
 
     // clamping
 
-    public static int clamp(int value, int lower, int upper)
+    public static float clamp(int value, int lower, int upper)
     {
         return Math.max(Math.min(value, upper), lower);
     }
 
-    public static long clamp(long value, long lower, long upper)
+    public static float clamp(long value, long lower, long upper)
     {
         return Math.max(Math.min(value, upper), lower);
     }
@@ -177,21 +173,55 @@ public class SnakerMth
         return Math.max(Math.min(value, upper), lower);
     }
 
-    public static double clamp(double value, double lower, double upper)
+    public static float clamp(double value, double lower, double upper)
     {
-        return Math.max(Math.min(value, upper), lower);
+        return (float) Math.max(Math.min(value, upper), lower);
     }
 
-    public static double round(double value, double multiplier)
+    // gaussian rounding
+
+    public static float round(double value, float mul)
     {
-        return Math.round(value * multiplier) / multiplier;
+        return (float) Math.round(value * mul) / mul;
     }
 
-    // pow2
+    // uniform rounding
 
-    public static int pow2(int exponent)
+    public static float round(float value, double mul)
+    {
+        return (float) mul * Math.round(value / mul);
+    }
+
+    // power of
+
+    public static int powSq(int value)
+    {
+        return (int) Math.pow(value, value);
+    }
+
+    public static float powSq(double value)
+    {
+        return (float) Math.pow(value, value);
+    }
+
+    public static int pow2e(int exponent)
     {
         return (int) Math.pow(2, exponent);
+    }
+
+    public static double pow2e(double exponent)
+    {
+        return (int) Math.pow(2, exponent);
+    }
+
+    public static int pow2b(int base)
+    {
+        return (int) Math.pow(base, 2);
+    }
+
+    public static double pow2b(double base)
+    {
+        return (int) Math.pow(base, 2);
     }
 
     // sine, cosine, tangent, etc
@@ -501,13 +531,11 @@ public class SnakerMth
     {
         float value = (float) a % 360;
 
-        if (value >= 180)
-        {
+        if (value >= 180) {
             value -= 360;
         }
 
-        if (value < -180)
-        {
+        if (value < -180) {
             value += 360;
         }
 
@@ -519,8 +547,7 @@ public class SnakerMth
     public static BigInteger factorial(int value)
     {
         BigInteger factorial = BigInteger.ONE;
-        for (int i = value; i > 0; i--)
-        {
+        for (int i = value; i > 0; i--) {
             factorial = factorial.multiply(BigInteger.valueOf(i));
         }
         return factorial;
@@ -529,8 +556,7 @@ public class SnakerMth
     public static BigInteger factorial(long value)
     {
         BigInteger factorial = BigInteger.ONE;
-        for (long i = value; i > 0; i--)
-        {
+        for (long i = value; i > 0; i--) {
             factorial = factorial.multiply(BigInteger.valueOf(i));
         }
         return factorial;
@@ -539,8 +565,7 @@ public class SnakerMth
     public static BigInteger additorial(int value)
     {
         BigInteger additorial = BigInteger.ONE;
-        for (int i = value; i > 0; i--)
-        {
+        for (int i = value; i > 0; i--) {
             additorial = additorial.add(BigInteger.valueOf(i));
         }
         return additorial;
@@ -549,8 +574,7 @@ public class SnakerMth
     public static BigInteger additorial(long value)
     {
         BigInteger additorial = BigInteger.ONE;
-        for (long i = value; i > 0; i--)
-        {
+        for (long i = value; i > 0; i--) {
             additorial = additorial.add(BigInteger.valueOf(i));
         }
         return additorial;
