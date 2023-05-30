@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import snaker.snakerlib.data.SnakerConstants;
 import snaker.snakerlib.level.entity.ai.SnakerFlyControl;
+import snaker.snakerlib.level.entity.ai.SnakerSwitchGameModeGoal;
 
 import java.util.Objects;
 
@@ -66,6 +67,12 @@ public class SnakerFlyingBoss extends FlyingMob
     public void extraFollowRange(int amount, AttributeModifier.Operation operation)
     {
         Objects.requireNonNull(getAttribute(Attributes.FOLLOW_RANGE)).addTransientModifier(new AttributeModifier("ExtraFollowRange", amount, operation));
+    }
+
+    @Override
+    protected void registerGoals()
+    {
+        goalSelector.addGoal(1, new SnakerSwitchGameModeGoal(this));
     }
 
     @Override
