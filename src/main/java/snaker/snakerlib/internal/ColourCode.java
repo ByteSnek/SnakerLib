@@ -1,4 +1,4 @@
-package snaker.snakerlib.data;
+package snaker.snakerlib.internal;
 
 /**
  * Created by SnakerBone on 29/05/2023
@@ -12,7 +12,7 @@ public enum ColourCode
     BLUE("\u001B[34m"),
     PURPLE("\u001B[35m"),
     CYAN("\u001B[36m"),
-    WHITE("\u001B[39m");
+    WHITE("\u001B[0m");
 
     final String code;
 

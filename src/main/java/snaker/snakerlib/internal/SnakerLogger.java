@@ -1,7 +1,4 @@
-package snaker.snakerlib.network;
-
-import snaker.snakerlib.data.ColourCode;
-import snaker.snakerlib.data.MarkerType;
+package snaker.snakerlib.internal;
 
 /**
  * Created by SnakerBone on 29/05/2023
@@ -15,7 +12,7 @@ public class SnakerLogger
 
     public static <V> void msg(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void info(V message)
@@ -25,7 +22,7 @@ public class SnakerLogger
 
     public static <V> void info(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void debug(V message)
@@ -35,7 +32,7 @@ public class SnakerLogger
 
     public static <V> void debug(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void catching(V message)
@@ -45,7 +42,7 @@ public class SnakerLogger
 
     public static <V> void catching(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void system(V message)
@@ -55,7 +52,7 @@ public class SnakerLogger
 
     public static <V> void system(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void thread(V message)
@@ -65,7 +62,7 @@ public class SnakerLogger
 
     public static <V> void thread(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void worker(V message)
@@ -75,7 +72,7 @@ public class SnakerLogger
 
     public static <V> void worker(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void trace(V message)
@@ -85,7 +82,7 @@ public class SnakerLogger
 
     public static <V> void trace(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void dev(V message)
@@ -95,7 +92,7 @@ public class SnakerLogger
 
     public static <V> void dev(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void warn(V message)
@@ -105,7 +102,7 @@ public class SnakerLogger
 
     public static <V> void warn(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void error(V message)
@@ -115,7 +112,7 @@ public class SnakerLogger
 
     public static <V> void error(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
     }
 
     public static <V> void fatal(V message)
@@ -125,6 +122,11 @@ public class SnakerLogger
 
     public static <V> void fatal(V message, ColourCode colour, MarkerType type)
     {
-        System.out.println(colour.get() + type.get() + message);
+        print(colour.get() + type.get() + message);
+    }
+
+    private static <V> void print(V message)
+    {
+        System.out.println(message + ColourCode.WHITE.get());
     }
 }

@@ -1,7 +1,6 @@
 package snaker.snakerlib.network;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -29,11 +28,6 @@ public class Network
 
     private static long clientTickCount = 0;
     private static long serverTickCount = 0;
-
-    public static BlockPos explosionPos = null;
-    public static double explosionAnimation = 0;
-    public static int explosionTime = 0;
-    public static boolean explosionRetreating = false;
 
     protected static void onAddedExternalDependants(FMLCommonSetupEvent event)
     {

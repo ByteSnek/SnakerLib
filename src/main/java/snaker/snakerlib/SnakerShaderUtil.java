@@ -4,8 +4,10 @@ import codechicken.lib.render.shader.CCShaderInstance;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,6 +35,16 @@ public class SnakerShaderUtil
             SnakerLib.LOGGER.error("The shader block placed at [ " + pos.toShortString() + " ] is null");
             return null;
         }
+    }
+
+    public static <T extends LivingEntity> int packOverlay(T entity, int u)
+    {
+        return LivingEntityRenderer.getOverlayCoords(entity, u);
+    }
+
+    public static <T extends LivingEntity> int packOverlay(T entity)
+    {
+        return packOverlay(entity, 0);
     }
 
     public static float[] hexToVec3(String hexCode)

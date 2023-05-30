@@ -1,11 +1,12 @@
-package snaker.snakerlib.data;
+package snaker.snakerlib.internal;
 
 /**
  * Created by SnakerBone on 29/05/2023
  **/
 public enum MarkerType
 {
-    MESSAGE(null),
+    NONE(null),
+    MESSAGE("[MESSAGE]: "),
     INFO("[INFO]: "),
     DEBUG("[DEBUG]: "),
     CATCHING("[CATCHING]: "),
