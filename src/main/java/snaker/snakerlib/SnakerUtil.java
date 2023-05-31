@@ -3,6 +3,7 @@ package snaker.snakerlib;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Rarity;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -21,17 +22,59 @@ public class SnakerUtil
     public static final String PLACEHOLDER = MODID + ":" + PlaceHolders.PH8;
     public static final String PLACEHOLDER_NO_MODID = PlaceHolders.PH8;
 
+    public static <T extends LivingEntity> boolean isEntityRotating(@NotNull T entity)
+    {
+        return entity.yRot != entity.yRotO || entity.yBodyRot != entity.yBodyRotO || entity.yHeadRot != entity.yHeadRotO;
+    }
+
+    public static <T extends LivingEntity> boolean isEntityYRotating(@NotNull T entity)
+    {
+        return entity.yRot != entity.yRotO;
+    }
+
+    public static <T extends LivingEntity> boolean isEntityYBodyRotating(@NotNull T entity)
+    {
+        return entity.yBodyRot != entity.yBodyRotO;
+    }
+
+    public static <T extends LivingEntity> boolean isEntityYHeadRotating(@NotNull T entity)
+    {
+        return entity.yHeadRot != entity.yHeadRotO;
+    }
+
     public static <T extends Entity> boolean isEntityMoving(@NotNull T entity)
     {
-        double currentX = entity.getX();
-        double currentY = entity.getY();
-        double currentZ = entity.getZ();
+        return entity.getX() != entity.xo || entity.getY() != entity.yo || entity.getZ() != entity.zo;
+    }
 
-        double prevX = entity.xo;
-        double prevY = entity.yo;
-        double prevZ = entity.zo;
+    public static <T extends Entity> boolean isEntityMovingX(@NotNull T entity)
+    {
+        return entity.getX() != entity.xo;
+    }
 
-        return currentX != prevX || currentY != prevY || currentZ != prevZ;
+    public static <T extends Entity> boolean isEntityMovingY(@NotNull T entity)
+    {
+        return entity.getY() != entity.yo;
+    }
+
+    public static <T extends Entity> boolean isEntityMovingZ(@NotNull T entity)
+    {
+        return entity.getZ() != entity.zo;
+    }
+
+    public static <T extends Entity> boolean isEntityMovingXZ(@NotNull T entity)
+    {
+        return entity.getX() != entity.xo || entity.getZ() != entity.zo;
+    }
+
+    public static <T extends Entity> boolean isEntityMovingXY(@NotNull T entity)
+    {
+        return entity.getX() != entity.xo || entity.getY() != entity.yo;
+    }
+
+    public static <T extends Entity> boolean isEntityMovingYZ(@NotNull T entity)
+    {
+        return entity.getY() != entity.yo || entity.getZ() != entity.zo;
     }
 
     public static String untranslate(String text)
