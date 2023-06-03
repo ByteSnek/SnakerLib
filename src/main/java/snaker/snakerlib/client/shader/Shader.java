@@ -1,9 +1,9 @@
 package snaker.snakerlib.client.shader;
 
-import codechicken.lib.render.shader.CCShaderInstance;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.ShaderInstance;
 import snaker.snakerlib.SnakerUtil;
 
 import javax.annotation.Nullable;
@@ -44,7 +44,7 @@ public class Shader
         return RenderType.create(name, format, mode, size, shard);
     }
 
-    protected RenderType create(Category category, @Nullable String shaderName, VertexFormat format, VertexFormat.Mode mode, @Nullable Integer bufferSize, CCShaderInstance instance, boolean outline)
+    protected RenderType create(Category category, @Nullable String shaderName, VertexFormat format, VertexFormat.Mode mode, @Nullable Integer bufferSize, ShaderInstance instance, boolean outline)
     {
         RenderType.CompositeState type;
         RenderType.CompositeState itemAndBlockShard = RenderType.CompositeState.builder().setShaderState(new ShaderStateShard(() -> instance)).setLightmapState(LIGHTMAP).setCullState(NO_CULL).setOverlayState(OVERLAY).createCompositeState(outline);

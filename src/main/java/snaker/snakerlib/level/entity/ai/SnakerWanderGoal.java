@@ -1,6 +1,7 @@
 package snaker.snakerlib.level.entity.ai;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
@@ -41,11 +42,9 @@ public class SnakerWanderGoal extends Goal
     @Override
     public void start()
     {
-        Vec3 pos = getRandom();
+        Vec3i pos = new Vec3i((int) getRandom().x, (int) getRandom().y, (int) getRandom().z);
 
-        if (pos != null) {
-            owner.getNavigation().moveTo(owner.getNavigation().createPath(new BlockPos(pos), 1), 1);
-        }
+        owner.getNavigation().moveTo(owner.getNavigation().createPath(new BlockPos(pos), 1), 1);
     }
 
     private Vec3 getRandom()

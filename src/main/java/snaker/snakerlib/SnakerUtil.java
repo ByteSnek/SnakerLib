@@ -24,12 +24,12 @@ public class SnakerUtil
 
     public static <T extends LivingEntity> boolean isEntityRotating(@NotNull T entity)
     {
-        return entity.yRot != entity.yRotO || entity.yBodyRot != entity.yBodyRotO || entity.yHeadRot != entity.yHeadRotO;
+        return entity.getYRot() != entity.yRotO || entity.yBodyRot != entity.yBodyRotO || entity.yHeadRot != entity.yHeadRotO;
     }
 
     public static <T extends LivingEntity> boolean isEntityYRotating(@NotNull T entity)
     {
-        return entity.yRot != entity.yRotO;
+        return entity.getYRot() != entity.yRotO;
     }
 
     public static <T extends LivingEntity> boolean isEntityYBodyRotating(@NotNull T entity)

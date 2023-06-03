@@ -1,15 +1,13 @@
 package snaker.snakerlib.math;
 
-import codechicken.lib.util.Copyable;
-import codechicken.lib.vec.Matrix4;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
 /**
  * Created by SnakerBone on 30/03/2023
  **/
-public class Tensor extends PoseStack implements Copyable<Tensor>
+public class Tensor extends PoseStack
 {
     private PoseStack stack;
 
@@ -33,12 +31,7 @@ public class Tensor extends PoseStack implements Copyable<Tensor>
         stack.translate(vec, vec, vec);
     }
 
-    public void rotVec3(float x, float y, float z)
-    {
-        stack.mulPose(Quaternion.fromXYZ(x, y, z));
-    }
-
-    public void rotQuat(Quaternion quaternion)
+    public void rotQuat(Quaternionf quaternion)
     {
         stack.mulPose(quaternion);
     }
@@ -53,19 +46,8 @@ public class Tensor extends PoseStack implements Copyable<Tensor>
         stack.popPose();
     }
 
-    public Matrix4 toMatrix4()
-    {
-        return new Matrix4(stack);
-    }
-
     public Matrix4f toMatrix4f()
     {
         return stack.last().pose();
-    }
-
-    @Override
-    public Tensor copy()
-    {
-        return stack == null ? new Tensor() : new Tensor(stack);
     }
 }
