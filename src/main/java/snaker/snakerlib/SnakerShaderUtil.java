@@ -14,9 +14,9 @@ import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import snaker.snakerlib.client.shader.Shader;
+import snaker.snakerlib.internal.SnakerLogger;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -74,9 +74,13 @@ public class SnakerShaderUtil
         return vec;
     }
 
-    public static void accept(RegisterShadersEvent event, Integer key, String name, Consumer<ShaderInstance> shader) throws IOException
+    public static void accept(RegisterShadersEvent event, Integer key, String name, Consumer<ShaderInstance> shader)
     {
-        event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), name), DefaultVertexFormat.POSITION_TEX), shader);
+        try {
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), name), DefaultVertexFormat.POSITION_TEX), shader);
+        } catch (Exception e) {
+            SnakerLogger.logError(e);
+        }
     }
 
     public static Shader createObjectShader(Supplier<ShaderInstance> shader)
