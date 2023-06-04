@@ -1,5 +1,6 @@
 package snaker.snakerlib.utility;
 
+import codechicken.lib.render.shader.CCShaderInstance;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -15,7 +16,6 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import snaker.snakerlib.SnakerLib;
 import snaker.snakerlib.client.shader.Shader;
-import snaker.snakerlib.internal.SnakerLogger;
 
 import java.awt.*;
 import java.util.function.Consumer;
@@ -77,11 +77,7 @@ public class ShaderUtil
 
     public static void accept(RegisterShadersEvent event, Integer key, String name, Consumer<ShaderInstance> shader)
     {
-        try {
-            event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), name), DefaultVertexFormat.POSITION_TEX), shader);
-        } catch (Exception e) {
-            SnakerLogger.logError(e);
-        }
+        event.registerShader(CCShaderInstance.create(event.getResourceManager(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), name), DefaultVertexFormat.POSITION_TEX), shader);
     }
 
     public static Shader createObjectShader(Supplier<ShaderInstance> shader)
