@@ -1,4 +1,4 @@
-package snaker.snakerlib;
+package snaker.snakerlib.utility;
 
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.particles.ParticleType;
@@ -41,7 +41,7 @@ import java.util.Objects;
  * <p>
  * Used for getting the ResourceLocation / namespace / path / registry name of most game objects
  **/
-public class SnakerResourceUtil
+public class ResourceUtil
 {
     public static ResourceLocation getResourceLocation(ItemStack key)
     {

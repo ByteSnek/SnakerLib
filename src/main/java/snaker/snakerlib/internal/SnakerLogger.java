@@ -3,7 +3,7 @@ package snaker.snakerlib.internal;
 /**
  * Created by SnakerBone on 29/05/2023
  * <p>
- * Simple Log helper
+ * Log helper
  **/
 public class SnakerLogger
 {

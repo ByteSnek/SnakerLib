@@ -1,4 +1,4 @@
-package snaker.snakerlib;
+package snaker.snakerlib.utility;
 
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -6,7 +6,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Rarity;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import snaker.snakerlib.SnakerLib;
 
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -172,6 +175,14 @@ public class SnakerUtil
     public static ResourceLocation blockModel(int key)
     {
         return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), "geo/block.geo.json");
+    }
+
+    @Nullable
+    @SuppressWarnings("unchecked")
+    @Contract("null->null;!null->!null")
+    public static <Anything> Anything unsafeCast(@Nullable Object object) // todo use until quack gets updated
+    {
+        return (Anything) object;
     }
 
     private static String generatePlaceholder(int limit)

@@ -1,8 +1,8 @@
 package snaker.snakerlib.math;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
 
 /**
  * Created by SnakerBone on 30/03/2023
@@ -31,7 +31,7 @@ public class Tensor extends PoseStack
         stack.translate(vec, vec, vec);
     }
 
-    public void rotQuat(Quaternionf quaternion)
+    public void rotQuat(Quaternion quaternion)
     {
         stack.mulPose(quaternion);
     }

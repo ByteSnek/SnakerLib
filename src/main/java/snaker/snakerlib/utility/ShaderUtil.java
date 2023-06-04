@@ -1,4 +1,4 @@
-package snaker.snakerlib;
+package snaker.snakerlib.utility;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.RenderType;
@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
+import snaker.snakerlib.SnakerLib;
 import snaker.snakerlib.client.shader.Shader;
 import snaker.snakerlib.internal.SnakerLogger;
 
@@ -25,7 +26,7 @@ import static net.minecraft.client.renderer.RenderStateShard.*;
 /**
  * Created by SnakerBone on 28/04/2023
  **/
-public class SnakerShaderUtil
+public class ShaderUtil
 {
     public static <X extends BlockEntity> BlockEntity createBlockEntity(RegistryObject<BlockEntityType<X>> type, @NotNull BlockPos pos, BlockState state)
     {
@@ -77,7 +78,7 @@ public class SnakerShaderUtil
     public static void accept(RegisterShadersEvent event, Integer key, String name, Consumer<ShaderInstance> shader)
     {
         try {
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), name), DefaultVertexFormat.POSITION_TEX), shader);
+            event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), name), DefaultVertexFormat.POSITION_TEX), shader);
         } catch (Exception e) {
             SnakerLogger.logError(e);
         }
