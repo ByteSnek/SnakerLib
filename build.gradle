@@ -1,15 +1,8 @@
-buildscript {
-    dependencies { classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT' }
-}
-
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.+'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
-
-apply plugin: 'org.spongepowered.mixin'
 
 version = mc_version + "-" + mod_version
 group = maven_group
@@ -30,13 +23,11 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf("codechicken:CodeChickenLib:${mc_version}-${ccl_version}:universal")
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 }
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.08.14-1.19.2'
+    mappings channel: 'official', version: '1.20'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -44,7 +35,6 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'snakerlib'
-            property 'geckolib.disable_examples', 'true'
             mods {
                 snakerlib { source sourceSets.main }
             }
@@ -53,7 +43,6 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'geckolib.disable_examples', 'true'
             args '--mod', 'snakerlib', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
                 snakerlib { source sourceSets.main }
@@ -85,7 +74,7 @@ jar {
 tasks.register('srcJar', Jar) {
     build.dependsOn it
     from sourceSets.main.allSource
-    classifier = 'sources'
+    archiveClassifier = 'sources'
 }
 
 publishing {
@@ -96,8 +85,8 @@ publishing {
     }
     publications {
         mavenJava(MavenPublication) {
-            artifact srcJar
             artifact jar
+            srcJar
         }
     }
 }

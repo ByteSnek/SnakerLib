@@ -50,7 +50,7 @@ public class SnakerFlyControl extends MoveControl
         for (int i = 1; i < length; ++i) {
             aabb = aabb.move(pos);
 
-            if (!owner.level.noCollision(owner, aabb)) {
+            if (!owner.level().noCollision(owner, aabb)) {
                 return false;
             }
         }

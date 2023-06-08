@@ -18,6 +18,7 @@ public class SnakerMth
     public static final float E = (float) Math.E;
 
     public static final float HALF_PI = SnakerMth.PI / 2;
+    public static final float TWO_PI = SnakerMth.PI * 2;
 
     public static final float PIE_ADD = SnakerMth.PI + SnakerMth.E;
     public static final float PIE_SUB = SnakerMth.PI - SnakerMth.E;

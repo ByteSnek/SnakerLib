@@ -1,7 +1,5 @@
 package snaker.snakerlib.math;
 
-import codechicken.lib.util.Copyable;
-import codechicken.lib.vec.Vector3;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -11,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /**
  * Created by SnakerBone on 12/05/2023
  **/
-public class Vec3A implements Copyable<Vec3A>
+public class Vec3A
 {
     public double x;
     public double y;
@@ -37,13 +35,6 @@ public class Vec3A implements Copyable<Vec3A>
     }
 
     public Vec3A(Vec3A vec)
-    {
-        this.x = vec.x;
-        this.y = vec.y;
-        this.z = vec.z;
-    }
-
-    public Vec3A(Vector3 vec)
     {
         this.x = vec.x;
         this.y = vec.y;
@@ -145,7 +136,6 @@ public class Vec3A implements Copyable<Vec3A>
         return this;
     }
 
-    @Override
     public Vec3A copy()
     {
         return new Vec3A(this);
@@ -153,12 +143,7 @@ public class Vec3A implements Copyable<Vec3A>
 
     public BlockPos getPos()
     {
-        return new BlockPos(x, y, z);
-    }
-
-    public Vector3 toVector3()
-    {
-        return new Vector3(x, y, z);
+        return new BlockPos((int) x, (int) y, (int) z);
     }
 
     public Vec3A offset(Direction direction, double offset)
@@ -194,17 +179,6 @@ public class Vec3A implements Copyable<Vec3A>
         Vec3A offset = vec2.copy();
         offset.sub(vec1);
         return new Vec3A((offset.x / distance), (offset.y / distance), (offset.z / distance));
-    }
-
-    public static Vector3 dir(Vector3 vec1, Vector3 vec2)
-    {
-        double distance = SnakerMth.dist(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-        if (distance == 0) {
-            distance = 0.1;
-        }
-        Vector3 offset = vec2.copy();
-        offset.subtract(vec1);
-        return new Vector3(offset.x / distance, offset.y / distance, offset.z / distance);
     }
 
     public static Vec3A centre(BlockPos pos)
