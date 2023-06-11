@@ -86,7 +86,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
-            srcJar
+            artifact srcJar
         }
     }
 }

@@ -12,6 +12,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import snaker.snakerlib.SnakerLib;
 import snaker.snakerlib.client.shader.Shader;
 
@@ -44,6 +46,31 @@ public class ShaderUtil
     public static <T extends LivingEntity> int packOverlay(T entity)
     {
         return packOverlay(entity, 0);
+    }
+
+    public static Vector3f hexToVec3f(String hexCode)
+    {
+        if (!hexCode.startsWith("#")) {
+            hexCode = "#" + hexCode;
+        }
+        Color colour = Color.decode(hexCode);
+        float x = colour.getRed() / 255F;
+        float y = colour.getGreen() / 255F;
+        float z = colour.getBlue() / 255F;
+        return new Vector3f(x, y, z);
+    }
+
+    public static Vector4f hexToVec4f(String hexCode)
+    {
+        if (!hexCode.startsWith("#")) {
+            hexCode = "#" + hexCode;
+        }
+        Color colour = Color.decode(hexCode);
+        float x = colour.getRed() / 255F;
+        float y = colour.getGreen() / 255F;
+        float z = colour.getBlue() / 255F;
+        float w = colour.getAlpha();
+        return new Vector4f(x, y, z, w);
     }
 
     public static float[] hexToVec3(String hexCode)
