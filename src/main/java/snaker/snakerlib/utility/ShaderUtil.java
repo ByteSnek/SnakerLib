@@ -1,24 +1,16 @@
 package snaker.snakerlib.utility;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import snaker.snakerlib.SnakerLib;
-import snaker.snakerlib.client.shader.Shader;
+import snaker.snakerlib.client.shader.RTB;
 
 import java.awt.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static net.minecraft.client.renderer.RenderStateShard.*;
@@ -28,16 +20,6 @@ import static net.minecraft.client.renderer.RenderStateShard.*;
  **/
 public class ShaderUtil
 {
-    public static <X extends BlockEntity> BlockEntity createBlockEntity(RegistryObject<BlockEntityType<X>> type, @NotNull BlockPos pos, BlockState state)
-    {
-        if (type != null && type.isPresent()) {
-            return type.get().create(pos, state);
-        } else {
-            SnakerLib.LOGGER.error("The shader block placed at [ " + pos.toShortString() + " ] is null");
-            return null;
-        }
-    }
-
     public static <T extends LivingEntity> int packOverlay(T entity, int u)
     {
         return LivingEntityRenderer.getOverlayCoords(entity, u);
@@ -100,23 +82,56 @@ public class ShaderUtil
         return vec;
     }
 
-    public static void accept(RegisterShadersEvent event, Integer key, String name, Consumer<ShaderInstance> shader)
+    public static class RenderTypeBuffers
     {
-        // event.registerShader(CCShaderInstance.create(event.getResourceManager(), new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), name), DefaultVertexFormat.POSITION_TEX), shader);
-    }
+        public static RTB gameObject(Supplier<ShaderInstance> shader)
+        {
+            return new RTB(RenderType.CompositeState.builder()
+                    .setShaderState(new ShaderStateShard(shader))
+                    .setLightmapState(LIGHTMAP).setCullState(NO_CULL)
+                    .setOverlayState(OVERLAY)
+                    .createCompositeState(false));
+        }
 
-    public static Shader createObjectShader(Supplier<ShaderInstance> shader)
-    {
-        return new Shader(RenderType.CompositeState.builder().setShaderState(new ShaderStateShard(shader)).setLightmapState(LIGHTMAP).setCullState(NO_CULL).setOverlayState(OVERLAY).createCompositeState(false));
-    }
+        public static RTB entityNormal(Supplier<ShaderInstance> shader)
+        {
+            return new RTB(RenderType.CompositeState.builder()
+                    .setShaderState(new ShaderStateShard(shader))
+                    .setCullState(NO_CULL)
+                    .setDepthTestState(EQUAL_DEPTH_TEST)
+                    .setLightmapState(LIGHTMAP)
+                    .createCompositeState(false));
+        }
 
-    public static Shader createEntityShader(Supplier<ShaderInstance> shader)
-    {
-        return new Shader(RenderType.CompositeState.builder().setShaderState(new ShaderStateShard(shader)).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST).setLightmapState(LIGHTMAP).createCompositeState(false));
-    }
+        public static RTB entityTranslucent(Supplier<ShaderInstance> shader)
+        {
+            return new RTB(DefaultVertexFormat.POSITION_TEX, RenderType.CompositeState.builder()
+                    .setShaderState(new ShaderStateShard(shader))
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setLightmapState(LIGHTMAP).setCullState(NO_CULL)
+                    .setDepthTestState(EQUAL_DEPTH_TEST)
+                    .createCompositeState(false));
+        }
 
-    public static Shader createTranslucentEntityShader(Supplier<ShaderInstance> shader)
-    {
-        return new Shader(DefaultVertexFormat.POSITION_TEX, RenderType.CompositeState.builder().setShaderState(new ShaderStateShard(shader)).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setLightmapState(LIGHTMAP).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST).createCompositeState(false));
+        public static RTB guiNormal(Supplier<ShaderInstance> shader)
+        {
+            return new RTB(DefaultVertexFormat.POSITION_TEX, RenderType.CompositeState.builder()
+                    .setShaderState(new RenderStateShard.ShaderStateShard(shader))
+                    .setLightmapState(RenderStateShard.LIGHTMAP)
+                    .setCullState(RenderStateShard.NO_CULL)
+                    .setDepthTestState(RenderStateShard.EQUAL_DEPTH_TEST)
+                    .createCompositeState(false));
+        }
+
+        public static RTB guiTranslucent(Supplier<ShaderInstance> shader)
+        {
+            return new RTB(DefaultVertexFormat.POSITION_TEX, RenderType.CompositeState.builder()
+                    .setShaderState(new RenderStateShard.ShaderStateShard(shader))
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .setLightmapState(RenderStateShard.LIGHTMAP)
+                    .setCullState(RenderStateShard.NO_CULL)
+                    .setDepthTestState(RenderStateShard.EQUAL_DEPTH_TEST)
+                    .createCompositeState(false));
+        }
     }
 }

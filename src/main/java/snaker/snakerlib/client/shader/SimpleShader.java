@@ -11,19 +11,19 @@ import java.util.function.Supplier;
 /**
  * Created by SnakerBone on 12/05/2023
  **/
-public class LegacyShader
+public class SimpleShader
 {
     private final boolean enableBlend, depthMask;
     private final int shaderTexture;
 
-    public LegacyShader(boolean enableBlend, boolean depthMask, int shaderTexture)
+    public SimpleShader(boolean enableBlend, boolean depthMask, int shaderTexture)
     {
         this.enableBlend = enableBlend;
         this.depthMask = depthMask;
         this.shaderTexture = shaderTexture;
     }
 
-    public LegacyShader(boolean enableBlend, boolean depthMask)
+    public SimpleShader(boolean enableBlend, boolean depthMask)
     {
         this(enableBlend, depthMask, 0);
     }
