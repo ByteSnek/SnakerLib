@@ -5,6 +5,7 @@ package snaker.snakerlib.internal;
  * <p>
  * Log helper
  **/
+@SuppressWarnings("unused")
 public class SnakerLogger
 {
     public static <Exception extends Throwable> void logError(Exception exception)

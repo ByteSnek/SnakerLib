@@ -10,6 +10,7 @@ package snaker.snakerlib.internal;
  * @param <T> Third object
  * @param <Q> Fourth object
  **/
+@SuppressWarnings("unused")
 public interface QuadConsumer<U, D, T, Q>
 {
     void accept(U u, D d, T t, Q q);

@@ -13,6 +13,7 @@ import java.util.function.Supplier;
  * <p>
  * Utilities to help keep code somewhat tidy
  **/
+@SuppressWarnings("unused")
 public class AestheticUtil
 {
     // @NoFormat

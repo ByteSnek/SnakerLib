@@ -8,8 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.*;
+import snaker.snakerlib.SnakerLib;
 import snaker.snakerlib.internal.SnakerLogger;
-import snaker.snakerlib.network.Network;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * Created by SnakerBone on 9/06/2023
  **/
+@SuppressWarnings("unused")
 public class Shader extends ShaderInstance
 {
     private final List<Runnable> tasks = new LinkedList<>();
@@ -68,7 +69,7 @@ public class Shader extends ShaderInstance
     @ApiStatus.Experimental
     public void setTime(Uniform uniform, float delay)
     {
-        uniform.set((Network.getClientTickCount() + Minecraft.getInstance().getFrameTime()) / delay);
+        uniform.set((SnakerLib.getClientTickCount() + Minecraft.getInstance().getFrameTime()) / delay);
     }
 
     @ApiStatus.Experimental

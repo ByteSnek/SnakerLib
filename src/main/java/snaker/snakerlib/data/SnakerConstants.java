@@ -3,6 +3,7 @@ package snaker.snakerlib.data;
 /**
  * Created by SnakerBone on 25/05/2023
  **/
+@SuppressWarnings("unused")
 public enum SnakerConstants
 {
     MOVE_SPEED(0.25),

@@ -41,6 +41,7 @@ import java.util.Objects;
  * <p>
  * Used for getting the ResourceLocation / namespace / path / registry name of most game objects
  **/
+@SuppressWarnings("unused")
 public class ResourceUtil
 {
     public static ResourceLocation getResourceLocation(ItemStack key)

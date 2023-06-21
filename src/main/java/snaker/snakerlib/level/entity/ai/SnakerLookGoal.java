@@ -4,7 +4,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-import snaker.snakerlib.math.SnakerMth;
+import snaker.snakerlib.math.Mh;
 
 import java.util.EnumSet;
 
@@ -18,7 +18,7 @@ public class SnakerLookGoal extends Goal
     public SnakerLookGoal(Mob owner)
     {
         this.owner = owner;
-        setFlags(EnumSet.of(Goal.Flag.LOOK));
+        setFlags(EnumSet.of(Flag.LOOK));
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SnakerLookGoal extends Goal
         if (owner.getTarget() == null) {
             Vec3 movement = owner.getDeltaMovement();
 
-            owner.setYRot(SnakerMth.atan2RotNeg(movement.x, movement.z));
+            owner.setYRot(Mh.atan2RotNeg(movement.x, movement.z));
             owner.yBodyRot = owner.getYRot();
 
         } else {
@@ -49,7 +49,7 @@ public class SnakerLookGoal extends Goal
                 double x = target.getX() - owner.getX();
                 double z = target.getZ() - owner.getZ();
 
-                owner.setYRot(SnakerMth.atan2RotNeg(x, z));
+                owner.setYRot(Mh.atan2RotNeg(x, z));
                 owner.yBodyRot = owner.getYRot();
             }
         }

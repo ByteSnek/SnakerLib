@@ -2,6 +2,7 @@ package snaker.snakerlib.utility;
 
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Rarity;
@@ -10,20 +11,72 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snaker.snakerlib.SnakerLib;
+import snaker.snakerlib.internal.SnakerLogger;
+import snaker.snakerlib.internal.StringNuker;
 
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static snaker.snakerlib.SnakerLib.MODID;
 
 /**
  * Created by SnakerBone on 20/02/2023
  **/
+@SuppressWarnings("unused")
 public class SnakerUtil
 {
-    public static final String PLACEHOLDER = MODID + ":" + PlaceHolders.PH8;
+    public static final String PLACEHOLDER = SnakerLib.MODID + ":" + PlaceHolders.PH8;
     public static final String PLACEHOLDER_NO_MODID = PlaceHolders.PH8;
+
+    @SafeVarargs
+    public static <V> V randomFromObjects(final RandomSource random, V... values)
+    {
+        return random.nextBoolean() ? values[random.nextInt(1, values.length) % values.length] : values[random.nextInt(values.length)];
+    }
+
+    @SafeVarargs
+    public static <V> V randomFromObjects(final RandomSource random, boolean copy, V... values)
+    {
+        if (copy) {
+            return random.nextBoolean() ? randomFromObjects(random, values) : random.nextBoolean() ? values[random.nextInt(1, values.length) % values.length] : values[random.nextInt(values.length)];
+        } else {
+            return randomFromObjects(random, values);
+        }
+    }
+
+    public static <V> V[] filterEnumValues(V[] values, Predicate<? super V> filter, IntFunction<V[]> function)
+    {
+        if (values != null && values.length > 0) {
+            return Arrays.stream(values).filter(filter).toArray(function);
+        } else {
+            SnakerLogger.error("Invalid enum or enum values");
+            return null;
+        }
+    }
+
+    public static <S extends AbstractSet<V>, V> void populateSet(S set, V value)
+    {
+        if (set.isEmpty()) {
+            set.add(value);
+        } else {
+            set.clear();
+            set.add(value);
+        }
+    }
+
+    public static <M extends AbstractMap<K, V>, K, V> void populateMap(M map, K key, V value)
+    {
+        if (map.isEmpty()) {
+            map.put(key, value);
+        } else {
+            map.clear();
+            map.put(key, value);
+        }
+    }
 
     public static <T extends LivingEntity> boolean isEntityRotating(@NotNull T entity)
     {
@@ -114,11 +167,9 @@ public class SnakerUtil
 
     public static String untranslateComponent(MutableComponent component, boolean leaveCaps)
     {
-        String string = component.getString();
-        if (!string.isEmpty()) {
-            string = string.replaceAll("\\p{P}", "");
-        }
-        return leaveCaps ? string : string.toLowerCase();
+        StringNuker nuker = new StringNuker(component.getString());
+        nuker.replaceAllAndDestroy("\\p{P}");
+        return leaveCaps ? nuker.result() : nuker.result().toLowerCase();
     }
 
     public static String untranslateComponent(MutableComponent component)
@@ -134,53 +185,52 @@ public class SnakerUtil
     public static int randomHex()
     {
         Random random = new Random();
-
         return random.nextInt(0xffffff + 1);
     }
 
     public static int hexToInt(String hexCode)
     {
-        hexCode = hexCode.replace("#", "");
-
-        return Integer.parseInt(hexCode, 16);
+        StringNuker nuker = new StringNuker(hexCode);
+        nuker.replaceAllAndDestroy("#");
+        return Integer.parseInt(nuker.result(), 16);
     }
 
     public static float hexToFloat(String hexCode)
     {
-        hexCode = hexCode.replace("#", "");
-
-        return Float.parseFloat(hexCode);
+        StringNuker nuker = new StringNuker(hexCode);
+        nuker.replaceAllAndDestroy("#");
+        return Float.parseFloat(nuker.result());
     }
 
-    public static ResourceLocation noModel(int key)
+    public static ResourceLocation noModel()
     {
-        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), "geo/nil.geo.json");
+        return new SnakerBoneResourceLocation("geo/nil.geo.json");
     }
 
-    public static ResourceLocation noAnimation(int key)
+    public static ResourceLocation noAnimation()
     {
-        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), "animations/nil.animation.json");
+        return new SnakerBoneResourceLocation("animations/nil.animation.json");
     }
 
-    public static ResourceLocation noTexture(int key)
+    public static ResourceLocation noTexture()
     {
-        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), "textures/clear.png");
+        return new SnakerBoneResourceLocation("textures/clear.png");
     }
 
-    public static ResourceLocation soildTexture(int key)
+    public static ResourceLocation soildTexture()
     {
-        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), "textures/solid.png");
+        return new SnakerBoneResourceLocation("textures/solid.png");
     }
 
-    public static ResourceLocation blockModel(int key)
+    public static ResourceLocation blockModel()
     {
-        return new ResourceLocation(SnakerLib.DEFAULT_DEPENDANTS.get(key), "geo/block.geo.json");
+        return new SnakerBoneResourceLocation("geo/block.geo.json");
     }
 
     @Nullable
     @SuppressWarnings("unchecked")
     @Contract("null->null;!null->!null")
-    public static <Anything> Anything unsafeCast(@Nullable Object object) // todo use until quack gets updated
+    public static <Anything> Anything cast(@Nullable Object object)
     {
         return (Anything) object;
     }

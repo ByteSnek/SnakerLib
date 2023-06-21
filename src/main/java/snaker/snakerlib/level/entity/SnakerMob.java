@@ -17,6 +17,7 @@ import java.util.Objects;
 /**
  * Created by SnakerBone on 2/01/2023
  **/
+@SuppressWarnings("unused")
 public abstract class SnakerMob extends Monster
 {
     public SnakerMob(EntityType<? extends Monster> type, Level level, int xpReward)

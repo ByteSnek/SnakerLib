@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 /**
  * Created by SnakerBone on 12/05/2023
  **/
+@SuppressWarnings("unused")
 public class SimpleShader
 {
     private final boolean enableBlend, depthMask;
@@ -34,6 +35,8 @@ public class SimpleShader
         if (enableBlend) {
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(blendSrcFactor, blendDestFactor);
+        } else {
+            RenderSystem.disableBlend();
         }
         RenderSystem.setShader(primaryShader);
         RenderSystem.setShader(secondaryShader);

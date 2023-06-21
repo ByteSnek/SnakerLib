@@ -7,7 +7,8 @@ import java.math.BigInteger;
 /**
  * Created by SnakerBone on 14/02/2023
  **/
-public class SnakerMth
+@SuppressWarnings("unused")
+public class Mh
 {
     public static final int LEVEL_AABB_RADIUS = 0x989680;
 
@@ -17,23 +18,40 @@ public class SnakerMth
     public static final float PI = (float) Math.PI;
     public static final float E = (float) Math.E;
 
-    public static final float HALF_PI = SnakerMth.PI / 2;
-    public static final float TWO_PI = SnakerMth.PI * 2;
+    public static final float HALF_PI = Mh.PI / 2;
+    public static final float TWO_PI = Mh.PI * 2;
 
-    public static final float PIE_ADD = SnakerMth.PI + SnakerMth.E;
-    public static final float PIE_SUB = SnakerMth.PI - SnakerMth.E;
-    public static final float PIE_MUL = SnakerMth.PI * SnakerMth.E;
-    public static final float PIE_DIV = SnakerMth.PI / SnakerMth.E;
+    public static final float PIE_ADD = Mh.PI + Mh.E;
+    public static final float PIE_SUB = Mh.PI - Mh.E;
+    public static final float PIE_MUL = Mh.PI * Mh.E;
+    public static final float PIE_DIV = Mh.PI / Mh.E;
+
+    public static float sqrt(double a)
+    {
+        return (float) Math.sqrt(a);
+    }
+
+    public static int floor(double a)
+    {
+        int value = (int) a;
+        return a < (double) value ? value - 1 : value;
+    }
+
+    public static int ceil(double a)
+    {
+        int value = (int) a;
+        return a > (double) value ? value + 1 : value;
+    }
 
     // distance
 
     public static double clampAbsolute(double a)
     {
-        if (Math.abs(a) > SnakerMth.HALF_PI) {
+        if (Math.abs(a) > Mh.HALF_PI) {
             if (a < 0) {
-                a = -Math.abs(SnakerMth.HALF_PI);
+                a = -Math.abs(Mh.HALF_PI);
             } else {
-                a = Math.abs(SnakerMth.HALF_PI);
+                a = Math.abs(Mh.HALF_PI);
             }
         }
 
@@ -51,19 +69,19 @@ public class SnakerMth
             angle = 1;
         }
 
-        return SnakerMth.acos(angle);
+        return Mh.acos(angle);
     }
 
     public static double wrapRadian(double a)
     {
-        a %= 2 * SnakerMth.PI;
+        a %= 2 * Mh.PI;
 
-        while (a >= SnakerMth.PI) {
-            a -= 2 * SnakerMth.PI;
+        while (a >= Mh.PI) {
+            a -= 2 * Mh.PI;
         }
 
-        while (a < -SnakerMth.PI) {
-            a += 2 * SnakerMth.PI;
+        while (a < -Mh.PI) {
+            a += 2 * Mh.PI;
         }
 
         return a;
@@ -84,8 +102,8 @@ public class SnakerMth
             double ay = axis.y * magnitude;
             double az = axis.z * magnitude;
 
-            double sin = SnakerMth.sin(angle);
-            double cos = SnakerMth.cos(angle);
+            double sin = Mh.sin(angle);
+            double cos = Mh.cos(angle);
 
             double t = 1 - cos;
 
@@ -226,6 +244,11 @@ public class SnakerMth
 
     // sine, cosine, tangent, etc
 
+    public static float lerp(double a, double b, double c)
+    {
+        return (float) b + (float) a * ((float) c - (float) b);
+    }
+
     public static float sin(double a)
     {
         return (float) Math.sin(a);
@@ -261,268 +284,280 @@ public class SnakerMth
         return (float) Math.atan2(y, x);
     }
 
+    public static float atan2RotPosHalf(double y, double x)
+    {
+        float angle = HALF_PI - Mh.atan2(y, x);
+        return (angle * RADIANS_TO_DEGREES);
+    }
+
+    public static float atan2RotNegHalf(double y, double x)
+    {
+        float angle = HALF_PI - Mh.atan2(y, x);
+        return -(angle * RADIANS_TO_DEGREES);
+    }
+
     // rotation towards point
 
     public static float sinRotNeg(double a)
     {
-        float angle = SnakerMth.sin(a);
-        return -(angle * (180 / SnakerMth.PI));
+        float angle = Mh.sin(a);
+        return -(angle * RADIANS_TO_DEGREES);
     }
 
     public static float cosRotNeg(double a)
     {
-        float angle = SnakerMth.cos(a);
-        return -(angle * (180 / SnakerMth.PI));
+        float angle = Mh.cos(a);
+        return -(angle * RADIANS_TO_DEGREES);
     }
 
     public static float tanRotNeg(double a)
     {
-        float angle = SnakerMth.tan(a);
-        return -(angle * (180 / SnakerMth.PI));
+        float angle = Mh.tan(a);
+        return -(angle * RADIANS_TO_DEGREES);
     }
 
     public static float asinRotNeg(double a)
     {
-        float angle = SnakerMth.asin(a);
-        return -(angle * (180 / SnakerMth.PI));
+        float angle = Mh.asin(a);
+        return -(angle * RADIANS_TO_DEGREES);
     }
 
     public static float acosRotNeg(double a)
     {
-        float angle = SnakerMth.acos(a);
-        return -(angle * (180 / SnakerMth.PI));
+        float angle = Mh.acos(a);
+        return -(angle * RADIANS_TO_DEGREES);
     }
 
     public static float atanRotNeg(double a)
     {
-        float angle = SnakerMth.atan(a);
-        return -(angle * (180 / SnakerMth.PI));
+        float angle = Mh.atan(a);
+        return -(angle * RADIANS_TO_DEGREES);
     }
 
     public static float atan2RotNeg(double a, double b)
     {
-        float angle = SnakerMth.atan2(a, b);
-        return -(angle * (180 / SnakerMth.PI));
+        float angle = Mh.atan2(a, b);
+        return -(angle * RADIANS_TO_DEGREES);
     }
 
     // rotation away point
 
     public static float sinRotPos(double a)
     {
-        float angle = SnakerMth.sin(a);
-        return (angle * (180 / SnakerMth.PI));
+        float angle = Mh.sin(a);
+        return (angle * RADIANS_TO_DEGREES);
     }
 
     public static float cosRotPos(double a)
     {
-        float angle = SnakerMth.cos(a);
-        return (angle * (180 / SnakerMth.PI));
+        float angle = Mh.cos(a);
+        return (angle * RADIANS_TO_DEGREES);
     }
 
     public static float tanRotPos(double a)
     {
-        float angle = SnakerMth.tan(a);
-        return (angle * (180 / SnakerMth.PI));
+        float angle = Mh.tan(a);
+        return (angle * RADIANS_TO_DEGREES);
     }
 
     public static float asinRotPos(double a)
     {
-        float angle = SnakerMth.asin(a);
-        return (angle * (180 / SnakerMth.PI));
+        float angle = Mh.asin(a);
+        return (angle * RADIANS_TO_DEGREES);
     }
 
     public static float acosRotPos(double a)
     {
-        float angle = SnakerMth.acos(a);
-        return (angle * (180 / SnakerMth.PI));
+        float angle = Mh.acos(a);
+        return (angle * RADIANS_TO_DEGREES);
     }
 
     public static float atanRotPos(double a)
     {
-        float angle = SnakerMth.atan(a);
-        return (angle * (180 / SnakerMth.PI));
+        float angle = Mh.atan(a);
+        return (angle * RADIANS_TO_DEGREES);
     }
 
     public static float atan2RotPos(double a, double b)
     {
-        float angle = SnakerMth.atan2(a, b);
-        return (angle * (180 / SnakerMth.PI));
+        float angle = Mh.atan2(a, b);
+        return (angle * RADIANS_TO_DEGREES);
     }
 
     // rotation towards radians to degrees
 
     public static float sinRotNegRadToDeg(double a)
     {
-        float angle = SnakerMth.sin(a);
-        return -(angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.sin(a);
+        return -(angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float cosRotNegRadToDeg(double a)
     {
-        float angle = SnakerMth.cos(a);
-        return -(angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.cos(a);
+        return -(angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float tanRotNegRadToDeg(double a)
     {
-        float angle = SnakerMth.tan(a);
-        return -(angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.tan(a);
+        return -(angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float asinRotNegRadToDeg(double a)
     {
-        float angle = SnakerMth.asin(a);
-        return -(angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.asin(a);
+        return -(angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float acosRotNegRadToDeg(double a)
     {
-        float angle = SnakerMth.acos(a);
-        return -(angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.acos(a);
+        return -(angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float atanRotNegRadToDeg(double a)
     {
-        float angle = SnakerMth.atan(a);
-        return -(angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.atan(a);
+        return -(angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float atan2RotNegRadToDeg(double a, double b)
     {
-        float angle = SnakerMth.atan2(a, b);
-        return -(angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.atan2(a, b);
+        return -(angle * Mh.RADIANS_TO_DEGREES);
     }
 
     // rotation towards degrees to radians
 
     public static float sinRotNegDegToRad(double a)
     {
-        float angle = SnakerMth.sin(a);
-        return -(angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.sin(a);
+        return -(angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float cosRotNegDegToRad(double a)
     {
-        float angle = SnakerMth.cos(a);
-        return -(angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.cos(a);
+        return -(angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float tanRotNegDegToRad(double a)
     {
-        float angle = SnakerMth.tan(a);
-        return -(angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.tan(a);
+        return -(angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float asinRotNegDegToRad(double a)
     {
-        float angle = SnakerMth.asin(a);
-        return -(angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.asin(a);
+        return -(angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float acosRotNegDegToRad(double a)
     {
-        float angle = SnakerMth.acos(a);
-        return -(angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.acos(a);
+        return -(angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float atanRotNegDegToRad(double a)
     {
-        float angle = SnakerMth.atan(a);
-        return -(angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.atan(a);
+        return -(angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float atan2RotNegDegToRad(double a, double b)
     {
-        float angle = SnakerMth.atan2(a, b);
-        return -(angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.atan2(a, b);
+        return -(angle * Mh.DEGREES_TO_RADIANS);
     }
 
     // rotation away radians to degrees
 
     public static float sinRotPosRadToDeg(double a)
     {
-        float angle = SnakerMth.sin(a);
-        return (angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.sin(a);
+        return (angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float cosRotPosRadToDeg(double a)
     {
-        float angle = SnakerMth.cos(a);
-        return (angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.cos(a);
+        return (angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float tanRotPosRadToDeg(double a)
     {
-        float angle = SnakerMth.tan(a);
-        return (angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.tan(a);
+        return (angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float asinRotPosRadToDeg(double a)
     {
-        float angle = SnakerMth.asin(a);
-        return (angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.asin(a);
+        return (angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float acosRotPosRadToDeg(double a)
     {
-        float angle = SnakerMth.acos(a);
-        return (angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.acos(a);
+        return (angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float atanRotPosRadToDeg(double a)
     {
-        float angle = SnakerMth.atan(a);
-        return (angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.atan(a);
+        return (angle * Mh.RADIANS_TO_DEGREES);
     }
 
     public static float atan2RotPosRadToDeg(double a, double b)
     {
-        float angle = SnakerMth.atan2(a, b);
-        return (angle * SnakerMth.RADIANS_TO_DEGREES);
+        float angle = Mh.atan2(a, b);
+        return (angle * Mh.RADIANS_TO_DEGREES);
     }
 
     // rotation away degrees to radians
 
     public static float sinRotPosDegToRad(double a)
     {
-        float angle = SnakerMth.sin(a);
-        return (angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.sin(a);
+        return (angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float cosRotPosDegToRad(double a)
     {
-        float angle = SnakerMth.cos(a);
-        return (angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.cos(a);
+        return (angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float tanRotPosDegToRad(double a)
     {
-        float angle = SnakerMth.tan(a);
-        return (angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.tan(a);
+        return (angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float asinRotPosDegToRad(double a)
     {
-        float angle = SnakerMth.asin(a);
-        return (angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.asin(a);
+        return (angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float acosRotPosDegToRad(double a)
     {
-        float angle = SnakerMth.acos(a);
-        return (angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.acos(a);
+        return (angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float atanRotPosDegToRad(double a)
     {
-        float angle = SnakerMth.atan(a);
-        return (angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.atan(a);
+        return (angle * Mh.DEGREES_TO_RADIANS);
     }
 
     public static float atan2RotPosDegToRad(double a, double b)
     {
-        float angle = SnakerMth.atan2(a, b);
-        return (angle * SnakerMth.DEGREES_TO_RADIANS);
+        float angle = Mh.atan2(a, b);
+        return (angle * Mh.DEGREES_TO_RADIANS);
     }
 
     // wrapping to degrees

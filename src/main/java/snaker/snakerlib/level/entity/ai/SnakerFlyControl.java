@@ -23,7 +23,7 @@ public class SnakerFlyControl extends MoveControl
     @Override
     public void tick()
     {
-        if (operation == MoveControl.Operation.MOVE_TO) {
+        if (operation == Operation.MOVE_TO) {
             if (duration-- <= 0) {
 
                 duration += owner.getRandom().nextInt(5) + 2;
@@ -37,7 +37,7 @@ public class SnakerFlyControl extends MoveControl
                 if (canReach(pos, Mth.ceil(length))) {
                     owner.setDeltaMovement(owner.getDeltaMovement().add(pos.scale(0.1D)));
                 } else {
-                    operation = MoveControl.Operation.WAIT;
+                    operation = Operation.WAIT;
                 }
             }
         }

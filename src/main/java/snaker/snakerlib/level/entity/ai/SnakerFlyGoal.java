@@ -17,7 +17,7 @@ public class SnakerFlyGoal extends Goal
     public SnakerFlyGoal(Mob owner)
     {
         this.owner = owner;
-        setFlags(EnumSet.of(Goal.Flag.MOVE));
+        setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
