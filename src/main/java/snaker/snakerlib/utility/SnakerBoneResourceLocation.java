@@ -17,4 +17,9 @@ public class SnakerBoneResourceLocation extends ResourceLocation
     {
         super(SnakerLib.MODID, path);
     }
+
+    public <T> SnakerBoneResourceLocation(Class<T> clazz)
+    {
+        super(SnakerLib.MODID, clazz.getSimpleName().toLowerCase());
+    }
 }

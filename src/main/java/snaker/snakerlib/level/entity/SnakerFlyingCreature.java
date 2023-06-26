@@ -49,8 +49,8 @@ public abstract class SnakerFlyingCreature extends Animal implements FlyingAnima
     @Override
     protected void registerGoals()
     {
-        goalSelector.addGoal(0, new SnakerWanderGoal(this));
-        goalSelector.addGoal(0, new SnakerLookGoal(this));
+        goalSelector.addGoal(5, new SnakerWanderGoal(this));
+        goalSelector.addGoal(5, new SnakerLookGoal(this));
         goalSelector.addGoal(7, new WaterAvoidingRandomFlyingGoal(this, 1));
         goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8));
         goalSelector.addGoal(0, new FloatGoal(this));
@@ -82,7 +82,7 @@ public abstract class SnakerFlyingCreature extends Animal implements FlyingAnima
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(@NotNull ServerLevel server, @NotNull AgeableMob mate)
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob mate)
     {
         return this;
     }

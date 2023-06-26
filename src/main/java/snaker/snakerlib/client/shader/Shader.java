@@ -17,7 +17,6 @@ import java.util.List;
 /**
  * Created by SnakerBone on 9/06/2023
  **/
-@SuppressWarnings("unused")
 public class Shader extends ShaderInstance
 {
     private final List<Runnable> tasks = new LinkedList<>();

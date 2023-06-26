@@ -7,10 +7,9 @@ import java.math.BigInteger;
 /**
  * Created by SnakerBone on 14/02/2023
  **/
-@SuppressWarnings("unused")
 public class Mh
 {
-    public static final int LEVEL_AABB_RADIUS = 0x989680;
+    public static final long LEVEL_AABB_RADIUS = 0x989680;
 
     public static final float RADIANS_TO_DEGREES = 57.29577951308232F;
     public static final float DEGREES_TO_RADIANS = 0.017453292519943F;
@@ -26,20 +25,30 @@ public class Mh
     public static final float PIE_MUL = Mh.PI * Mh.E;
     public static final float PIE_DIV = Mh.PI / Mh.E;
 
+    public static float toDeg(double radians)
+    {
+        return (float) radians * RADIANS_TO_DEGREES;
+    }
+
+    public static float toRad(double degrees)
+    {
+        return (float) degrees * DEGREES_TO_RADIANS;
+    }
+
     public static float sqrt(double a)
     {
         return (float) Math.sqrt(a);
     }
 
-    public static int floor(double a)
+    public static long floor(double a)
     {
-        int value = (int) a;
+        long value = (long) a;
         return a < (double) value ? value - 1 : value;
     }
 
-    public static int ceil(double a)
+    public static long ceil(double a)
     {
-        int value = (int) a;
+        long value = (long) a;
         return a > (double) value ? value + 1 : value;
     }
 
@@ -135,7 +144,7 @@ public class Mh
         return (float) Math.sqrt((x * x + y * y + z * z));
     }
 
-    public static float dist(Vec3A a, Vec3A b)
+    public static float dist(Vec3D a, Vec3D b)
     {
         return dist(a.x, a.y, a.z, b.x, b.y, b.z);
     }
@@ -212,9 +221,9 @@ public class Mh
 
     // power of
 
-    public static int powSq(int value)
+    public static long powSq(long value)
     {
-        return (int) Math.pow(value, value);
+        return (long) Math.pow(value, value);
     }
 
     public static float powSq(double value)
@@ -222,24 +231,24 @@ public class Mh
         return (float) Math.pow(value, value);
     }
 
-    public static int pow2e(int exponent)
+    public static long pow2e(long exponent)
     {
-        return (int) Math.pow(2, exponent);
+        return (long) Math.pow(2, exponent);
     }
 
     public static double pow2e(double exponent)
     {
-        return (int) Math.pow(2, exponent);
+        return (long) Math.pow(2, exponent);
     }
 
-    public static int pow2b(int base)
+    public static long pow2b(long base)
     {
-        return (int) Math.pow(base, 2);
+        return (long) Math.pow(base, 2);
     }
 
     public static double pow2b(double base)
     {
-        return (int) Math.pow(base, 2);
+        return (long) Math.pow(base, 2);
     }
 
     // sine, cosine, tangent, etc
@@ -296,7 +305,7 @@ public class Mh
         return -(angle * RADIANS_TO_DEGREES);
     }
 
-    // rotation towards point
+    // rotation towards polong
 
     public static float sinRotNeg(double a)
     {
@@ -340,7 +349,7 @@ public class Mh
         return -(angle * RADIANS_TO_DEGREES);
     }
 
-    // rotation away point
+    // rotation away polong
 
     public static float sinRotPos(double a)
     {
@@ -582,7 +591,7 @@ public class Mh
     public static BigInteger factorial(int value)
     {
         BigInteger factorial = BigInteger.ONE;
-        for (int i = value; i > 0; i--) {
+        for (long i = value; i > 0; i--) {
             factorial = factorial.multiply(BigInteger.valueOf(i));
         }
         return factorial;
@@ -600,7 +609,7 @@ public class Mh
     public static BigInteger additorial(int value)
     {
         BigInteger additorial = BigInteger.ONE;
-        for (int i = value; i > 0; i--) {
+        for (long i = value; i > 0; i--) {
             additorial = additorial.add(BigInteger.valueOf(i));
         }
         return additorial;

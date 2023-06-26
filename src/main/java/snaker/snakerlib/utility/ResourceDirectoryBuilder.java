@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * Created by SnakerBone on 13/06/2023
  **/
-@SuppressWarnings("unused")
 public class ResourceDirectoryBuilder
 {
     protected final String modId;

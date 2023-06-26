@@ -10,15 +10,14 @@ import snaker.snakerlib.internal.SnakerLogger;
 /**
  * Created by SnakerBone on 20/06/2023
  **/
-@SuppressWarnings("unused")
 public class BasicCube
 {
     private final VertexConsumer consumer;
     private final PoseStack stack;
 
-    private final int x = 1;
-    private final int y = 1;
-    private final int z = 1;
+    private final long x = 1;
+    private final long y = 1;
+    private final long z = 1;
 
     public BasicCube(VertexConsumer consumer, PoseStack stack)
     {
@@ -63,13 +62,13 @@ public class BasicCube
         return this;
     }
 
-    private BasicCube draw(VertexConsumer consumer, PoseStack stack, int x, int y, int z)
+    private BasicCube draw(VertexConsumer consumer, PoseStack stack, long x, long y, long z)
     {
         draw(consumer, stack.last().pose(), x, y, z);
         return this;
     }
 
-    private BasicCube draw(VertexConsumer consumer, Matrix4f pose, int x, int y, int z)
+    private BasicCube draw(VertexConsumer consumer, Matrix4f pose, long x, long y, long z)
     {
         front(consumer, pose, x, y, z);
         back(consumer, pose, x, y, z);
@@ -80,7 +79,7 @@ public class BasicCube
         return this;
     }
 
-    private void front(VertexConsumer consumer, Matrix4f pose, int x, int y, int z)
+    private void front(VertexConsumer consumer, Matrix4f pose, long x, long y, long z)
     {
         vertex(consumer, pose, sub(x), sub(y), z);
         vertex(consumer, pose, x, sub(y), z);
@@ -88,7 +87,7 @@ public class BasicCube
         vertex(consumer, pose, sub(x), y, z);
     }
 
-    private void back(VertexConsumer consumer, Matrix4f pose, int x, int y, int z)
+    private void back(VertexConsumer consumer, Matrix4f pose, long x, long y, long z)
     {
         vertex(consumer, pose, sub(x), sub(y), sub(z));
         vertex(consumer, pose, x, sub(y), sub(z));
@@ -96,7 +95,7 @@ public class BasicCube
         vertex(consumer, pose, sub(x), y, sub(z));
     }
 
-    private void left(VertexConsumer consumer, Matrix4f pose, int x, int y, int z)
+    private void left(VertexConsumer consumer, Matrix4f pose, long x, long y, long z)
     {
         vertex(consumer, pose, sub(x), y, z);
         vertex(consumer, pose, sub(x), y, sub(z));
@@ -104,7 +103,7 @@ public class BasicCube
         vertex(consumer, pose, sub(x), sub(y), z);
     }
 
-    private void right(VertexConsumer consumer, Matrix4f pose, int x, int y, int z)
+    private void right(VertexConsumer consumer, Matrix4f pose, long x, long y, long z)
     {
         vertex(consumer, pose, x, y, z);
         vertex(consumer, pose, x, y, sub(z));
@@ -112,7 +111,7 @@ public class BasicCube
         vertex(consumer, pose, x, sub(y), z);
     }
 
-    private void top(VertexConsumer consumer, Matrix4f pose, int x, int y, int z)
+    private void top(VertexConsumer consumer, Matrix4f pose, long x, long y, long z)
     {
         vertex(consumer, pose, sub(x), y, z);
         vertex(consumer, pose, sub(x), y, sub(z));
@@ -120,7 +119,7 @@ public class BasicCube
         vertex(consumer, pose, x, y, z);
     }
 
-    private void bottom(VertexConsumer consumer, Matrix4f pose, int x, int y, int z)
+    private void bottom(VertexConsumer consumer, Matrix4f pose, long x, long y, long z)
     {
         vertex(consumer, pose, sub(x), sub(y), z);
         vertex(consumer, pose, sub(x), sub(y), sub(z));
@@ -128,7 +127,7 @@ public class BasicCube
         vertex(consumer, pose, x, sub(y), z);
     }
 
-    private void vertex(VertexConsumer consumer, Matrix4f matrix, int x, int y, int z)
+    private void vertex(VertexConsumer consumer, Matrix4f matrix, long x, long y, long z)
     {
         try {
             consumer.vertex(matrix, x, y, z).color(255, 255, 255, 255).uv(0, 0).uv2(0).normal(1, 0, 0).endVertex();
@@ -137,7 +136,7 @@ public class BasicCube
         }
     }
 
-    private int sub(int value)
+    private long sub(long value)
     {
         return value == 1 ? 0 : 1;
     }

@@ -1,7 +1,9 @@
 package snaker.snakerlib.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +15,9 @@ public abstract class CyclicalIconRenderer extends PreppedRenderer
 {
     protected static volatile boolean notifyError;
 
-    public CyclicalIconRenderer()
+    public CyclicalIconRenderer(BlockEntityRenderDispatcher renderDispatcher, EntityModelSet modelSet)
     {
+        super(renderDispatcher, modelSet);
         notifyError = true;
     }
 

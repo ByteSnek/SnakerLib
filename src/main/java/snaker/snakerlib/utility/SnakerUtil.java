@@ -1,5 +1,6 @@
 package snaker.snakerlib.utility;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
 import snaker.snakerlib.SnakerLib;
 import snaker.snakerlib.internal.SnakerLogger;
 import snaker.snakerlib.internal.StringNuker;
@@ -26,11 +28,24 @@ import java.util.stream.Stream;
 /**
  * Created by SnakerBone on 20/02/2023
  **/
-@SuppressWarnings("unused")
 public class SnakerUtil
 {
     public static final String PLACEHOLDER = SnakerLib.MODID + ":" + PlaceHolders.PH8;
     public static final String PLACEHOLDER_NO_MODID = PlaceHolders.PH8;
+
+    public static String getBaseName(Class<?> clazz)
+    {
+        String pkg = clazz.getPackage().getName();
+        return pkg.substring(pkg.lastIndexOf('.')).replace(".", "");
+    }
+
+    public static boolean keyPressed(int... keys)
+    {
+        for (int key : keys) {
+            return GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), key) == GLFW.GLFW_PRESS;
+        }
+        return false;
+    }
 
     @SafeVarargs
     public static <V> V randomFromObjects(final RandomSource random, V... values)
@@ -200,11 +215,6 @@ public class SnakerUtil
         StringNuker nuker = new StringNuker(hexCode);
         nuker.replaceAllAndDestroy("#");
         return Float.parseFloat(nuker.result());
-    }
-
-    public static ResourceLocation noModel()
-    {
-        return new SnakerBoneResourceLocation("geo/nil.geo.json");
     }
 
     public static ResourceLocation noAnimation()

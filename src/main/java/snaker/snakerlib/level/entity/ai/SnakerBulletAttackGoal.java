@@ -1,8 +1,10 @@
 package snaker.snakerlib.level.entity.ai;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
 import snaker.snakerlib.math.Mh;
 
 /**
@@ -36,13 +38,13 @@ public class SnakerBulletAttackGoal extends Goal
     public void tick()
     {
         LivingEntity target = this.owner.getTarget();
-        //RandomSource random = RandomSource.create();
+        RandomSource random = RandomSource.create();
 
         if (target != null) {
             owner.getLookControl().setLookAt(target, 10, owner.getMaxHeadXRot());
 
             if (target.distanceToSqr(owner) < 4096 && owner.hasLineOfSight(target)) {
-                //Level level = owner.level();
+                Level level = owner.level();
 
                 double x = target.getX() - owner.getX();
                 double y = target.getY() - owner.getY();
@@ -53,7 +55,7 @@ public class SnakerBulletAttackGoal extends Goal
 
                 //if (owner.tickCount % delay == 0) {
                 //Bullet bullet = new Bullet(ContentRegistry.ENTITY_BULLET.get(), owner, level);
-                //Vec3A xyz = new Vec3A(x, y, z);
+                //Vec3D xyz = new Vec3D(x, y, z);
 
                 //bullet.shoot(xyz.x, xyz.y, xyz.z, velocity, inaccuracy);
                 //level.addFreshEntity(bullet);

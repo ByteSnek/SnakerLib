@@ -1,8 +1,6 @@
 package snaker.snakerlib.level.entity;
 
-import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +13,6 @@ import snaker.snakerlib.level.entity.ai.SnakerFlyControl;
 import snaker.snakerlib.level.entity.ai.SnakerSwitchGameModeGoal;
 
 import java.util.Objects;
-import java.util.UUID;
 import java.util.function.Predicate;
 
 /**
@@ -35,12 +32,6 @@ public abstract class SnakerFlyingBoss extends FlyingMob
         this(type, level, SnakerConstants.BOSS_XP_REWARD.asInt());
     }
 
-    public abstract ServerBossEvent getBossInfo();
-
-    public abstract UUID getBossUUID();
-
-    public abstract BossEvent.BossBarColor getBarColour();
-
     public void extraHealth(int amount, AttributeModifier.Operation operation)
     {
         Objects.requireNonNull(getAttribute(Attributes.MAX_HEALTH)).addTransientModifier(new AttributeModifier("ExtraHealth", amount, operation));
@@ -55,7 +46,7 @@ public abstract class SnakerFlyingBoss extends FlyingMob
         if (lastHurtByMob instanceof ServerPlayer player) {
             if (!isPlayerCreative.test(player)) {
                 setTarget(player);
-            } else if (isPlayerCreative.test(player) && CommonConfig.playerVulnerableInCreative.get()) {
+            } else if (isPlayerCreative.test(player) && CommonConfig.PLAYER_VULNERABLE_IN_CREATIVE.get()) {
                 setTarget(player);
             }
         }

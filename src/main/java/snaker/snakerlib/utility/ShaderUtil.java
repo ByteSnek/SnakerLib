@@ -10,7 +10,6 @@ import java.awt.*;
 /**
  * Created by SnakerBone on 28/04/2023
  **/
-@SuppressWarnings("unused")
 public class ShaderUtil
 {
     public static <T extends LivingEntity> int packOverlay(T entity, int u)

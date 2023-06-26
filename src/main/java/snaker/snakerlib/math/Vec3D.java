@@ -18,129 +18,128 @@ import java.math.RoundingMode;
 /**
  * Created by SnakerBone on 12/05/2023
  **/
-@SuppressWarnings("unused")
-public class Vec3A
+public class Vec3D
 {
-    public static final Vec3A ZERO = new Vec3A(0, 0, 0);
-    public static final Vec3A CENTRE = new Vec3A(0.5, 0.5, 0.5);
-    public static final Vec3A ONE = new Vec3A(1, 1, 1);
-    public static final Vec3A X_POS = new Vec3A(1, 0, 0);
-    public static final Vec3A X_NEG = new Vec3A(-1, 0, 0);
-    public static final Vec3A Y_POS = new Vec3A(0, 1, 0);
-    public static final Vec3A Y_NEG = new Vec3A(0, -1, 0);
-    public static final Vec3A Z_POS = new Vec3A(0, 0, 1);
-    public static final Vec3A Z_NEG = new Vec3A(0, 0, -1);
+    public static final Vec3D ZERO = new Vec3D(0, 0, 0);
+    public static final Vec3D CENTRE = new Vec3D(0.5, 0.5, 0.5);
+    public static final Vec3D ONE = new Vec3D(1, 1, 1);
+    public static final Vec3D X_POS = new Vec3D(1, 0, 0);
+    public static final Vec3D X_NEG = new Vec3D(-1, 0, 0);
+    public static final Vec3D Y_POS = new Vec3D(0, 1, 0);
+    public static final Vec3D Y_NEG = new Vec3D(0, -1, 0);
+    public static final Vec3D Z_POS = new Vec3D(0, 0, 1);
+    public static final Vec3D Z_NEG = new Vec3D(0, 0, -1);
 
     public double x;
     public double y;
     public double z;
 
-    public Vec3A()
+    public Vec3D()
     {
         this(ZERO);
     }
 
-    public Vec3A(double x, double y, double z)
+    public Vec3D(double x, double y, double z)
     {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public Vec3A(BlockPos pos)
+    public Vec3D(BlockPos pos)
     {
         this.x = pos.getX();
         this.y = pos.getY();
         this.z = pos.getZ();
     }
 
-    public Vec3A(Vec3A vec)
+    public Vec3D(Vec3D vec)
     {
         this.x = vec.x;
         this.y = vec.y;
         this.z = vec.z;
     }
 
-    public Vec3A(double[] doubles)
+    public Vec3D(double[] doubles)
     {
         this(doubles[0], doubles[1], doubles[2]);
     }
 
-    public Vec3A(float[] floats)
+    public Vec3D(float[] floats)
     {
         this(floats[0], floats[1], floats[2]);
     }
 
-    public Vec3A(Vec3 vec)
+    public Vec3D(Vec3 vec)
     {
         this.x = vec.x;
         this.y = vec.y;
         this.z = vec.z;
     }
 
-    public static Vec3A blockPos(BlockPos pos)
+    public static Vec3D blockPos(BlockPos pos)
     {
         return vec3i(pos);
     }
 
-    public static Vec3A vec3i(Vec3i vec3i)
+    public static Vec3D vec3i(Vec3i vec3i)
     {
-        return new Vec3A(vec3i.getX(), vec3i.getY(), vec3i.getZ());
+        return new Vec3D(vec3i.getX(), vec3i.getY(), vec3i.getZ());
     }
 
-    public static Vec3A centre(Vec3A vec)
+    public static Vec3D centre(Vec3D vec)
     {
-        return new Vec3A(vec.x, vec.y, vec.z).add(0.5);
+        return new Vec3D(vec.x, vec.y, vec.z).add(0.5);
     }
 
-    public static Vec3A blockPosCentre(BlockPos pos)
+    public static Vec3D blockPosCentre(BlockPos pos)
     {
         return blockPos(pos).add(0.5);
     }
 
-    public static Vec3A entity(Entity entity)
+    public static Vec3D entity(Entity entity)
     {
-        return new Vec3A(entity.position());
+        return new Vec3D(entity.position());
     }
 
-    public static Vec3A entityCentre(Entity entity)
+    public static Vec3D entityCentre(Entity entity)
     {
-        return new Vec3A(entity.position()).add(0, entity.getMyRidingOffset() + entity.getBbHeight() / 2, 0);
+        return new Vec3D(entity.position()).add(0, entity.getMyRidingOffset() + entity.getBbHeight() / 2, 0);
     }
 
-    public static Vec3A blockEntity(BlockEntity entity)
+    public static Vec3D blockEntity(BlockEntity entity)
     {
         return blockPos(entity.getBlockPos());
     }
 
-    public static Vec3A blockEntityCentre(BlockEntity entity)
+    public static Vec3D blockEntityCentre(BlockEntity entity)
     {
         return blockEntity(entity).add(0.5);
     }
 
-    public static Vec3A axes(double[] doubles)
+    public static Vec3D axes(double[] doubles)
     {
-        return new Vec3A(doubles[2], doubles[0], doubles[1]);
+        return new Vec3D(doubles[2], doubles[0], doubles[1]);
     }
 
-    public static Vec3A axes(float[] floats)
+    public static Vec3D axes(float[] floats)
     {
-        return new Vec3A(floats[2], floats[0], floats[1]);
+        return new Vec3D(floats[2], floats[0], floats[1]);
     }
 
-    public static Vec3A array(double[] doubles)
+    public static Vec3D array(double[] doubles)
     {
-        return new Vec3A(doubles[0], doubles[1], doubles[2]);
+        return new Vec3D(doubles[0], doubles[1], doubles[2]);
     }
 
-    public static Vec3A array(float[] floats)
+    public static Vec3D array(float[] floats)
     {
-        return new Vec3A(floats[0], floats[1], floats[2]);
+        return new Vec3D(floats[0], floats[1], floats[2]);
     }
 
-    public static Vec3A readTag(CompoundTag tag)
+    public static Vec3D readTag(CompoundTag tag)
     {
-        return new Vec3A(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
+        return new Vec3D(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
     }
 
     public CompoundTag writeTag(CompoundTag tag)
@@ -156,7 +155,7 @@ public class Vec3A
         return new BlockPos((int) x, (int) y, (int) z);
     }
 
-    public Vector3f vector3f()
+    public Vector3f v3f()
     {
         return new Vector3f((float) x, (float) y, (float) z);
     }
@@ -166,7 +165,7 @@ public class Vec3A
         return new Vec3((float) x, (float) y, (float) z);
     }
 
-    public Vector4f vector4f()
+    public Vector4f v4f()
     {
         return new Vector4f((float) x, (float) y, (float) z, 1);
     }
@@ -181,7 +180,7 @@ public class Vec3A
         return new float[]{(float) x, (float) y, (float) z};
     }
 
-    public Vec3A set(double x, double y, double z)
+    public Vec3D set(double x, double y, double z)
     {
         this.x = x;
         this.y = y;
@@ -189,32 +188,32 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A set(double value)
+    public Vec3D set(double value)
     {
         return set(value, value, value);
     }
 
-    public Vec3A set(Vec3A vec)
+    public Vec3D set(Vec3D vec)
     {
         return set(vec.x, vec.y, vec.z);
     }
 
-    public Vec3A set(Vec3i vec3i)
+    public Vec3D set(Vec3i vec3i)
     {
         return set(vec3i.getX(), vec3i.getY(), vec3i.getZ());
     }
 
-    public Vec3A set(double[] doubles)
+    public Vec3D set(double[] doubles)
     {
         return set(doubles[0], doubles[1], doubles[2]);
     }
 
-    public Vec3A set(float[] floats)
+    public Vec3D set(float[] floats)
     {
         return set(floats[0], floats[1], floats[2]);
     }
 
-    public Vec3A add(double x, double y, double z)
+    public Vec3D add(double x, double y, double z)
     {
         this.x += x;
         this.y += y;
@@ -222,27 +221,27 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A add(double value)
+    public Vec3D add(double value)
     {
         return add(value, value, value);
     }
 
-    public Vec3A add(Vec3A vec)
+    public Vec3D add(Vec3D vec)
     {
         return add(vec.x, vec.y, vec.z);
     }
 
-    public Vec3A add(Vec3 vec)
+    public Vec3D add(Vec3 vec)
     {
         return add(vec.x, vec.y, vec.z);
     }
 
-    public Vec3A add(BlockPos pos)
+    public Vec3D add(BlockPos pos)
     {
         return add(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public Vec3A sub(double x, double y, double z)
+    public Vec3D sub(double x, double y, double z)
     {
         this.x -= x;
         this.y -= y;
@@ -250,27 +249,27 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A sub(double value)
+    public Vec3D sub(double value)
     {
         return sub(value, value, value);
     }
 
-    public Vec3A sub(Vec3A vec)
+    public Vec3D sub(Vec3D vec)
     {
         return sub(vec.x, vec.y, vec.z);
     }
 
-    public Vec3A sub(Vec3 vec)
+    public Vec3D sub(Vec3 vec)
     {
         return sub(vec.x, vec.y, vec.z);
     }
 
-    public Vec3A sub(BlockPos pos)
+    public Vec3D sub(BlockPos pos)
     {
         return sub(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public Vec3A mul(double x, double y, double z)
+    public Vec3D mul(double x, double y, double z)
     {
         this.x *= x;
         this.y *= y;
@@ -278,17 +277,17 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A mul(double value)
+    public Vec3D mul(double value)
     {
         return mul(value, value, value);
     }
 
-    public Vec3A mul(Vec3A vec)
+    public Vec3D mul(Vec3D vec)
     {
         return mul(vec.x, vec.y, vec.z);
     }
 
-    public Vec3A div(double x, double y, double z)
+    public Vec3D div(double x, double y, double z)
     {
         this.x /= x;
         this.y /= y;
@@ -296,22 +295,22 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A div(double value)
+    public Vec3D div(double value)
     {
         return div(value, value, value);
     }
 
-    public Vec3A div(Vec3A vec)
+    public Vec3D div(Vec3D vec)
     {
         return div(vec.x, vec.y, vec.z);
     }
 
-    public Vec3A div(BlockPos pos)
+    public Vec3D div(BlockPos pos)
     {
         return div(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public Vec3A floor()
+    public Vec3D floor()
     {
         this.x = Mh.floor(x);
         this.y = Mh.floor(y);
@@ -319,7 +318,7 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A ceil()
+    public Vec3D ceil()
     {
         this.x = Mh.ceil(x);
         this.y = Mh.ceil(y);
@@ -337,7 +336,7 @@ public class Vec3A
         return x * x + y * y + z * z;
     }
 
-    public Vec3A negate()
+    public Vec3D negate()
     {
         this.x = -x;
         this.y = -y;
@@ -345,7 +344,7 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A normalize()
+    public Vec3D normalize()
     {
         double sqrt = magnitudeSqrt();
         if (sqrt != 0) {
@@ -354,7 +353,7 @@ public class Vec3A
         return this;
     }
 
-    public double dist(Vec3A vec)
+    public double dist(Vec3D vec)
     {
         double x = this.x - vec.x;
         double y = this.y - vec.y;
@@ -362,7 +361,7 @@ public class Vec3A
         return Math.sqrt(x * x + y * y + z * z);
     }
 
-    public double distSq(Vec3A vec)
+    public double distSq(Vec3D vec)
     {
         double x = this.x - vec.x;
         double y = this.y - vec.y;
@@ -375,7 +374,7 @@ public class Vec3A
         return x * this.x + y * this.y + z * this.z;
     }
 
-    public double dot(Vec3A vec)
+    public double dot(Vec3D vec)
     {
         double value = vec.x * x + vec.y * y + vec.z * z;
         if (value > 1 && value < 1.00001) {
@@ -386,7 +385,7 @@ public class Vec3A
         return value;
     }
 
-    public Vec3A cross(Vec3A vec)
+    public Vec3D cross(Vec3D vec)
     {
         double x = y * vec.z - z * vec.y;
         double y = z * vec.x - this.x * vec.z;
@@ -397,7 +396,7 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A perpendicular()
+    public Vec3D perpendicular()
     {
         if (z == 0) {
             return zCross();
@@ -405,7 +404,7 @@ public class Vec3A
         return xCross();
     }
 
-    public Vec3A xCross()
+    public Vec3D xCross()
     {
         double z = this.z;
         double y = -this.y;
@@ -415,7 +414,7 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A yCross()
+    public Vec3D yCross()
     {
         double z = -this.z;
         double x = this.x;
@@ -425,7 +424,7 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A zCross()
+    public Vec3D zCross()
     {
         double y = this.y;
         double x = -this.x;
@@ -435,13 +434,13 @@ public class Vec3A
         return this;
     }
 
-    public double scalar(Vec3A vec)
+    public double scalar(Vec3D vec)
     {
         double value = vec.magnitudeSqrt();
         return value == 0 ? 0 : dot(vec) / value;
     }
 
-    public Vec3A project(Vec3A vec)
+    public Vec3D project(Vec3D vec)
     {
         double magnitute = vec.magnitute();
         if (magnitute == 0) {
@@ -453,19 +452,19 @@ public class Vec3A
         return this;
     }
 
-    public Vec3A conj(Quaternionf quat)
+    public Vec3D conj(Quaternionf quat)
     {
         quat.conjugate();
         return this;
     }
 
-    public double angle(Vec3A vec)
+    public double angle(Vec3D vec)
     {
         return Math.acos(copy().normalize().dot(vec.copy().normalize()));
     }
 
     @Nullable
-    public Vec3A YZintercept(Vec3A vec, double value)
+    public Vec3D YZintercept(Vec3D vec, double value)
     {
         double x = vec.x - this.x;
         double y = vec.y - this.y;
@@ -487,7 +486,7 @@ public class Vec3A
     }
 
     @Nullable
-    public Vec3A XZintercept(Vec3A vec, double value)
+    public Vec3D XZintercept(Vec3D vec, double value)
     {
         double x = vec.x - this.x;
         double y = vec.y - this.y;
@@ -509,7 +508,7 @@ public class Vec3A
     }
 
     @Nullable
-    public Vec3A XYintercept(Vec3A vec, double value)
+    public Vec3D XYintercept(Vec3D vec, double value)
     {
         double dx = vec.x - x;
         double dy = vec.y - y;
@@ -556,7 +555,7 @@ public class Vec3A
         throw new IndexOutOfBoundsException();
     }
 
-    public Vec3A setSide(int a, double b)
+    public Vec3D setSide(int a, double b)
     {
         switch (a) {
             case 0, 1 -> y = b;
@@ -585,20 +584,20 @@ public class Vec3A
         if (super.equals(object)) {
             return true;
         }
-        if (!(object instanceof Vec3A vec)) {
+        if (!(object instanceof Vec3D vec)) {
             return false;
         }
         return x == vec.x && y == vec.y && z == vec.z;
     }
 
-    public boolean equalsT(Vec3A vec)
+    public boolean equalsT(Vec3D vec)
     {
         return between(x - 1E-5, vec.x, x + 1E-5) && between(y - 1E-5, vec.y, y + 1E-5) && between(z - 1E-5, vec.z, z + 1E-5);
     }
 
-    public Vec3A copy()
+    public Vec3D copy()
     {
-        return new Vec3A(this);
+        return new Vec3D(this);
     }
 
     @Override

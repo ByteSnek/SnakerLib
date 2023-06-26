@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
-import snaker.snakerlib.client.InertAnimatable;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -20,11 +19,18 @@ import java.util.List;
 /**
  * Created by SnakerBone on 17/03/2023
  **/
-public abstract class SnakerItem extends Item implements InertAnimatable
+public abstract class SnakerItem extends Item
 {
+    public static final Properties TOOL_PROPERTIES = new Properties().stacksTo(1);
+
     public SnakerItem()
     {
         super(new Properties());
+    }
+
+    public SnakerItem(Properties properties)
+    {
+        super(properties);
     }
 
     @Override

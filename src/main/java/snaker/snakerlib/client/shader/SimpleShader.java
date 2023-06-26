@@ -11,7 +11,6 @@ import java.util.function.Supplier;
 /**
  * Created by SnakerBone on 12/05/2023
  **/
-@SuppressWarnings("unused")
 public class SimpleShader
 {
     private final boolean enableBlend, depthMask;

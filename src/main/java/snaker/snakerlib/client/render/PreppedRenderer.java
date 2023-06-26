@@ -1,9 +1,11 @@
 package snaker.snakerlib.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -13,9 +15,20 @@ import org.jetbrains.annotations.NotNull;
  **/
 public abstract class PreppedRenderer extends BlockEntityWithoutLevelRenderer
 {
-    public PreppedRenderer()
+    public EntityModelSet modelSet;
+    public BlockEntityRenderDispatcher renderDispatcher;
+
+    public PreppedRenderer(BlockEntityRenderDispatcher renderDispatcher, EntityModelSet modelSet)
     {
-        super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
+        super(renderDispatcher, modelSet);
+        this.renderDispatcher = renderDispatcher;
+        this.modelSet = modelSet;
+    }
+
+    @Override
+    public void onResourceManagerReload(@NotNull ResourceManager manager)
+    {
+        super.onResourceManagerReload(manager);
     }
 
     @Override

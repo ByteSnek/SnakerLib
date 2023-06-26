@@ -6,18 +6,18 @@ package snaker.snakerlib.internal;
 public enum MarkerType
 {
     NONE(null),
-    MESSAGE("[MESSAGE]: "),
-    INFO("[INFO]: "),
-    DEBUG("[DEBUG]: "),
-    CATCHING("[CATCHING]: "),
-    SYSTEM("[SYSTEM]: "),
-    THREAD("[THREAD]: "),
-    WORKER("[WORKER]: "),
-    TRACE("[TRACE]: "),
-    DEV("[DEV]: "),
-    WARN("[WARN]: "),
-    ERROR("[ERROR]: "),
-    FATAL("[FATAL]: ");
+    MESSAGE("[SnakerLib/MESSAGE]: "),
+    INFO("[SnakerLib/INFO]: "),
+    DEBUG("[SnakerLib/DEBUG]: "),
+    CATCHING("[SnakerLib/CATCHING]: "),
+    SYSTEM("[SnakerLib/SYSTEM]: "),
+    THREAD("[SnakerLib/THREAD]: "),
+    WORKER("[SnakerLib/WORKER]: "),
+    TRACE("[SnakerLib/TRACE]: "),
+    DEV("[SnakerLib/DEV]: "),
+    WARN("[SnakerLib/WARN]: "),
+    ERROR("[SnakerLib/ERROR]: "),
+    FATAL("[SnakerLib/FATAL]: ");
 
     final String value;
 

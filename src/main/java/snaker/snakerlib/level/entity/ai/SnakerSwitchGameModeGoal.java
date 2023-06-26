@@ -38,6 +38,6 @@ public class SnakerSwitchGameModeGoal extends Goal
     @Override
     public boolean canUse()
     {
-        return owner.getLastHurtByMob() instanceof ServerPlayer && CommonConfig.playerVulnerableInCreative.get();
+        return owner.getLastHurtByMob() instanceof ServerPlayer && CommonConfig.PLAYER_VULNERABLE_IN_CREATIVE.get();
     }
 }

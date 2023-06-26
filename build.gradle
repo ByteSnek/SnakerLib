@@ -30,8 +30,6 @@ String mvn_auth = System.getenv("MVN_AUTH")
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 repositories {
-    maven { url 'https://maven.covers1624.net' }
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven' }
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
@@ -42,7 +40,6 @@ tasks.withType(JavaCompile).configureEach {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
 }
 
 minecraft {

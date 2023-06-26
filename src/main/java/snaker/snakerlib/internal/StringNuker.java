@@ -10,7 +10,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * @see String#replace(char, char)
  * @see String#replaceAll(String, String)
  **/
-@SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
 public class StringNuker
 {

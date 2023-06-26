@@ -3,13 +3,13 @@ package snaker.snakerlib.level.item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 /**
  * Created by SnakerBone on 17/03/2023
  **/
-@SuppressWarnings("all")
 public enum SnakerTier implements Tier
 {
     FACTORIAL(6, 0, 9, 4, 16, () -> Ingredient.of(Items.AIR));
@@ -48,7 +48,7 @@ public enum SnakerTier implements Tier
     }
 
     @Override
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     public int getLevel()
     {
         return level;
@@ -61,7 +61,7 @@ public enum SnakerTier implements Tier
     }
 
     @Override
-    public Ingredient getRepairIngredient()
+    public @NotNull Ingredient getRepairIngredient()
     {
         return Ingredient.EMPTY;
     }

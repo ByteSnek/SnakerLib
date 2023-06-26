@@ -6,7 +6,6 @@ import net.minecraft.Util;
 /**
  * Created by SnakerBone on 17/06/2023
  **/
-@SuppressWarnings("unused")
 public class TextFormatting
 {
     public static final ChatFormatting[] ALL_FORMATTINGS = ChatFormatting.values();

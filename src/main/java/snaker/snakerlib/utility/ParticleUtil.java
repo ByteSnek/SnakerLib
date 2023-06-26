@@ -9,7 +9,6 @@ import net.minecraft.world.level.Level;
 /**
  * Created by SnakerBone on 11/05/2023
  **/
-@SuppressWarnings("unused")
 public class ParticleUtil
 {
     public static void addParticleDirectly(Level level, Particle particle)
