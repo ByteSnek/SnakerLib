@@ -7,7 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import snaker.snakerlib.config.CommonConfig;
+import snaker.snakerlib.config.SnakerConfig;
 import snaker.snakerlib.data.SnakerConstants;
 import snaker.snakerlib.level.entity.ai.SnakerFlyControl;
 import snaker.snakerlib.level.entity.ai.SnakerSwitchGameModeGoal;
@@ -46,7 +46,7 @@ public abstract class SnakerFlyingBoss extends FlyingMob
         if (lastHurtByMob instanceof ServerPlayer player) {
             if (!isPlayerCreative.test(player)) {
                 setTarget(player);
-            } else if (isPlayerCreative.test(player) && CommonConfig.PLAYER_VULNERABLE_IN_CREATIVE.get()) {
+            } else if (isPlayerCreative.test(player) && SnakerConfig.COMMON.playerVulnerableInCreative.get()) {
                 setTarget(player);
             }
         }

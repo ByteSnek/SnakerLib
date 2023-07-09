@@ -19,12 +19,12 @@ import java.util.Objects;
  **/
 public class AttackType
 {
-    public static void attackEntitiesInArea(ItemStack stack, Player attacker, AOE aoe, @Nullable Float damage, int cuboid3)
+    public static void attackEntitiesInArea(ItemStack stack, Player attacker, AOE aoe, @Nullable Float damage, int area)
     {
         Level level = attacker.level();
         if (!level.isClientSide) {
             double x = attacker.getX(), y = attacker.getY(), z = attacker.getZ();
-            AABB aabb = new AABB(x, y, z, x, y, z).inflate(cuboid3);
+            AABB aabb = new AABB(x, y, z, x, y, z).inflate(area);
             List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, aabb);
             DamageSource source = level.damageSources().playerAttack(attacker);
             BigInteger amount = switch (aoe) {
@@ -41,12 +41,12 @@ public class AttackType
         }
     }
 
-    public static void attackEntitiesInArea(ItemStack stack, Player attacker, AOE aoe, @Nullable Float amount, @Nullable DamageSource source, int cuboid3)
+    public static void attackEntitiesInArea(ItemStack stack, Player attacker, AOE aoe, @Nullable Float amount, @Nullable DamageSource source, int area)
     {
         Level level = attacker.level();
         if (!level.isClientSide) {
             double x = attacker.getX(), y = attacker.getY(), z = attacker.getZ();
-            AABB aabb = new AABB(x, y, z, x, y, z).inflate(cuboid3);
+            AABB aabb = new AABB(x, y, z, x, y, z).inflate(area);
             List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, aabb);
             DamageSource attackSource = level.damageSources().playerAttack(attacker);
             BigInteger attackDamage = switch (aoe) {
@@ -64,12 +64,12 @@ public class AttackType
         }
     }
 
-    public static void discardEntitiesInArea(Player attacker, int cuboid3)
+    public static void discardEntitiesInArea(Player attacker, int area)
     {
         Level level = attacker.level();
         if (!level.isClientSide) {
             double x = attacker.getX(), y = attacker.getY(), z = attacker.getZ();
-            AABB aabb = new AABB(x, y, z, x, y, z).inflate(cuboid3);
+            AABB aabb = new AABB(x, y, z, x, y, z).inflate(area);
             List<Entity> entities = level.getEntitiesOfClass(Entity.class, aabb);
             for (Entity entity : entities) {
                 if (entity != attacker) {

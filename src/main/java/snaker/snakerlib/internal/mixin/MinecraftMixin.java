@@ -16,13 +16,13 @@ import snaker.snakerlib.internal.LevelSavingEvent;
 public class MinecraftMixin
 {
     @Inject(method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/eventbus/api/IEventBus;post(Lnet/minecraftforge/eventbus/api/Event;)Z"))
-    public void clearLevel(Screen screen, CallbackInfo info)
+    public void clearLevel(Screen screen, CallbackInfo ci)
     {
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new LevelSavingEvent());
     }
 
     @Inject(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/eventbus/api/IEventBus;post(Lnet/minecraftforge/eventbus/api/Event;)Z"))
-    public void setLevel(ClientLevel pLevelClient, CallbackInfo info)
+    public void setLevel(ClientLevel pLevelClient, CallbackInfo ci)
     {
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new LevelSavingEvent());
     }

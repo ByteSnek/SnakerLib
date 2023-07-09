@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import snaker.snakerlib.config.CommonConfig;
+import snaker.snakerlib.config.SnakerConfig;
 
 import java.util.List;
 
@@ -38,6 +38,6 @@ public class SnakerSwitchGameModeGoal extends Goal
     @Override
     public boolean canUse()
     {
-        return owner.getLastHurtByMob() instanceof ServerPlayer && CommonConfig.PLAYER_VULNERABLE_IN_CREATIVE.get();
+        return owner.getLastHurtByMob() instanceof ServerPlayer && SnakerConfig.COMMON.playerVulnerableInCreative.get();
     }
 }

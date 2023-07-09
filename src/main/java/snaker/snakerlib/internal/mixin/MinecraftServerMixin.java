@@ -14,7 +14,7 @@ import snaker.snakerlib.internal.LevelSavingEvent;
 public class MinecraftServerMixin
 {
     @Inject(method = "stopServer", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/eventbus/api/IEventBus;post(Lnet/minecraftforge/eventbus/api/Event;)Z"))
-    public void stopServer(CallbackInfo info)
+    public void stopServer(CallbackInfo ci)
     {
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new LevelSavingEvent());
     }

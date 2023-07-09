@@ -1,4 +1,4 @@
-package snaker.snakerlib.client.model;//package snaker.snakerbone.client.model.baked;
+package snaker.snakerlib.client.model;//package snaker.snakerlib.client.model;
 //
 ///**
 //* Created by SnakerBone on 4/05/2023

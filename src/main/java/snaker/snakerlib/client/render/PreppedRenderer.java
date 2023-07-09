@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
  **/
 public abstract class PreppedRenderer extends BlockEntityWithoutLevelRenderer
 {
-    public EntityModelSet modelSet;
-    public BlockEntityRenderDispatcher renderDispatcher;
+    protected EntityModelSet modelSet;
+    protected BlockEntityRenderDispatcher renderDispatcher;
 
     public PreppedRenderer(BlockEntityRenderDispatcher renderDispatcher, EntityModelSet modelSet)
     {

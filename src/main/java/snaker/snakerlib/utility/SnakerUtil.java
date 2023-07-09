@@ -2,7 +2,6 @@ package snaker.snakerlib.utility;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -192,11 +191,6 @@ public class SnakerUtil
         return untranslateComponent(component, false);
     }
 
-    public static String appendId(String name)
-    {
-        return name + "_snkr";
-    }
-
     public static int randomHex()
     {
         Random random = new Random();
@@ -215,26 +209,6 @@ public class SnakerUtil
         StringNuker nuker = new StringNuker(hexCode);
         nuker.replaceAllAndDestroy("#");
         return Float.parseFloat(nuker.result());
-    }
-
-    public static ResourceLocation noAnimation()
-    {
-        return new SnakerBoneResourceLocation("animations/nil.animation.json");
-    }
-
-    public static ResourceLocation noTexture()
-    {
-        return new SnakerBoneResourceLocation("textures/clear.png");
-    }
-
-    public static ResourceLocation soildTexture()
-    {
-        return new SnakerBoneResourceLocation("textures/solid.png");
-    }
-
-    public static ResourceLocation blockModel()
-    {
-        return new SnakerBoneResourceLocation("geo/block.geo.json");
     }
 
     @Nullable

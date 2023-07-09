@@ -1,7 +1,11 @@
 package snaker.snakerlib.utility;
 
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -12,6 +16,11 @@ import java.awt.*;
  **/
 public class ShaderUtil
 {
+    public static int packLightLevel(Level level, BlockPos pos)
+    {
+        return level != null ? LightTexture.pack(level.getBrightness(LightLayer.BLOCK, pos), level.getBrightness(LightLayer.SKY, pos)) : 0;
+    }
+
     public static <T extends LivingEntity> int packOverlay(T entity, int u)
     {
         return LivingEntityRenderer.getOverlayCoords(entity, u);

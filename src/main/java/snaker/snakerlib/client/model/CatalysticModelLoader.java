@@ -1,5 +1,4 @@
-package snaker.snakerlib.client.model;//package snaker.snakerbone.client.model;
-//
+package snaker.snakerlib.client.model;//package snaker.snakerlib.client.model;
 //import codechicken.lib.model.CachedFormat;
 //import codechicken.lib.model.Quad;
 //import com.google.gson.JsonArray;
@@ -22,7 +21,6 @@ package snaker.snakerlib.client.model;//package snaker.snakerbone.client.model;
 //import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 //import net.minecraftforge.client.model.geometry.IGeometryLoader;
 //import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
-//import snaker.snakerbone.client.model.baked.CatalysticBakedModel;
 //
 //import java.util.*;
 //import java.util.function.Function;

@@ -1,7 +1,8 @@
-package snaker.snakerlib.utility;
+package snaker.snakerlib.resources;
 
 import net.minecraft.resources.ResourceLocation;
 import snaker.snakerlib.SnakerLib;
+import snaker.snakerlib.utility.ResourceDirectoryBuilder;
 
 /**
  * Created by SnakerBone on 15/02/2023
@@ -10,16 +11,16 @@ public class SnakerBoneResourceLocation extends ResourceLocation
 {
     public SnakerBoneResourceLocation(ResourceDirectoryBuilder builder)
     {
-        this(builder.getPath());
+        super(builder.getPath());
     }
 
     public SnakerBoneResourceLocation(String path)
     {
-        super(SnakerLib.MODID, path);
+        super(SnakerLib.SNAKERBONE_MODID, path);
     }
 
     public <T> SnakerBoneResourceLocation(Class<T> clazz)
     {
-        super(SnakerLib.MODID, clazz.getSimpleName().toLowerCase());
+        super(SnakerLib.SNAKERBONE_MODID, clazz.getSimpleName().toLowerCase());
     }
 }

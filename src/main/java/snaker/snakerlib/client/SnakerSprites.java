@@ -1,21 +1,17 @@
 package snaker.snakerlib.client;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
-import snaker.snakerlib.utility.SnakerBoneResourceLocation;
-
 /**
  * Created by SnakerBone on 4/05/2023
  **/
 public class SnakerSprites
 {
-    public static final ResourceLocation PARTICLE_LOCATION = new SnakerBoneResourceLocation("textures/particle/orb.png");
+    //public static final ResourceLocation PARTICLE_LOCATION = new ResourceLocation("textures/particle/orb.png");
     //private static final SpriteRegistryHelper SAMPLER_HELPER = new SpriteRegistryHelper();
     //public static TextureAtlasSprite[] CATALYSTIC_SAMPLERS = new TextureAtlasSprite[10];
-    public static TextureAtlasSprite[] INFUSION_SAMPLERS = new TextureAtlasSprite[5];
+    //public static TextureAtlasSprite[] INFUSION_SAMPLERS = new TextureAtlasSprite[5];
     //public static TextureAtlasSprite CAT0, CAT1, CAT2, CAT3, CAT4, CAT5, CAT6, CAT7, CAT8, CAT9;
     //public static TextureAtlasSprite INF0, INF1, INF2, INF3, INF4;
-    public static TextureAtlasSprite ORB;
+    //public static TextureAtlasSprite ORB;
 
     static void register()
     {
