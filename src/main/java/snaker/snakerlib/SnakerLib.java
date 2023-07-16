@@ -1,14 +1,12 @@
 package snaker.snakerlib;
 
-import io.netty.util.internal.UnstableApi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -16,20 +14,22 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryUtil;
-import snaker.snakerlib.client.SnakerSprites;
 import snaker.snakerlib.config.SnakerConfig;
 import snaker.snakerlib.internal.*;
 import snaker.snakerlib.internal.log4j.Log4jFilter;
 import snaker.snakerlib.level.entity.SnakerBoss;
+import snaker.snakerlib.math.Mh;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
 
 /**
  * Created by SnakerBone on 5/05/2023
@@ -45,24 +45,23 @@ public class SnakerLib
     public static final Component VIRTUAL_MACHINE_FORCE_CRASH_KEYBINDS_PRESSED = Component.literal("Left shift and F4 pressed.");
     public static final Component DISABLE_IN_CONFIG = Component.literal("You can disable this in the config (snakerlib-common.toml) if you wish");
     public static final StackWalker STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+    public static final SnakerLogger LOGGER = SnakerLoggerManager.getLogger(SnakerLib.STACK_WALKER.getCallerClass());
     public static final Log4jFilter FILTER = new Log4jFilter();
 
     public static final String MODID = "snakerlib";
     public static final String SNAKERBONE_MODID = "snakerbone";
-    public static final String TORNIQUETED_MODID = "torniqueted";
+    public static final String TORNIQUETED_MODID = "tq";
 
     public static Path runFolder;
 
     public static final String[] DATAFLOW_ISSUES = {
-            "Registry ", "Channel ", "Holder ", "Applying ", "[forge] ",
+            "Incorrect Key ", "Registry ", "Channel ", "Holder ", "Applying ", "[forge] ",
             "Could not authorize you against Realms server: Invalid session id",
             "Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.",
             "Missing sound for event: minecraft:entity.goat.screaming.horn_break",
             "Missing sound for event: minecraft:item.goat_horn.play",
-            "Shader minecraft:color_convolve could not find uniform named InSize in the specified shader program.",
-            "Shader minecraft:color_convolve could not find uniform named OutSize in the specified shader program.",
-            "Shader minecraft:phosphor could not find uniform named InSize in the specified shader program.",
-            "Shader minecraft:phosphor could not find uniform named OutSize in the specified shader program."
+            "Shader color_convolve could not find uniform named InSize in the specified shader program.",
+            "Shader phosphor could not find uniform named InSize in the specified shader program."
     };
 
     public SnakerLib()
@@ -72,7 +71,7 @@ public class SnakerLib
         bus.addListener(this::configLoadEvent);
         bus.addListener(this::modSetupEvent);
 
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> SnakerSprites::initialize);
+        //DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> SnakerSprites::initialize);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
         SnakerConfig.load(SnakerConfig.COMMON_SPEC, FMLPaths.CONFIGDIR.get().resolve("snakerlib-common.toml").toString());
 
@@ -96,6 +95,73 @@ public class SnakerLib
         return GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), key) == GLFW.GLFW_PRESS;
     }
 
+    public static boolean tickOffs(float tickOffset)
+    {
+        return getClientTickCount() % tickOffset == 0;
+    }
+
+    public static boolean tickOffs(float other, float tickOffset)
+    {
+        return other % tickOffset == 0;
+    }
+
+    public static boolean secOffs(int secOffset)
+    {
+        return getClientTickCount() % Mh.secondsToTicks(secOffset) == 0;
+    }
+
+    public static boolean secOffs(float other, int secOffset)
+    {
+        return other % Mh.secondsToTicks(secOffset) == 0;
+    }
+
+
+    @SafeVarargs
+    public static <V> V randomFromObjects(final RandomSource random, V... values)
+    {
+        return random.nextBoolean() ? values[random.nextInt(1, values.length) % values.length] : values[random.nextInt(values.length)];
+    }
+
+    @SafeVarargs
+    public static <V> V randomFromObjects(final RandomSource random, boolean copy, V... values)
+    {
+        if (copy) {
+            return random.nextBoolean() ? randomFromObjects(random, values) : random.nextBoolean() ? values[random.nextInt(1, values.length) % values.length] : values[random.nextInt(values.length)];
+        } else {
+            return randomFromObjects(random, values);
+        }
+    }
+
+    public static <V> V[] filterEnumValues(V[] values, Predicate<? super V> filter, IntFunction<V[]> function)
+    {
+        if (values != null && values.length > 0) {
+            return Arrays.stream(values).filter(filter).toArray(function);
+        } else {
+            SnakerLib.LOGGER.error("Invalid enum or enum values");
+            return null;
+        }
+    }
+
+    public static <S extends AbstractSet<V>, V> void populateSet(S set, V value)
+    {
+        if (set.isEmpty()) {
+            set.add(value);
+        } else {
+            set.clear();
+            set.add(value);
+        }
+    }
+
+    public static <M extends AbstractMap<K, V>, K, V> void populateMap(M map, K key, V value)
+    {
+        if (map.isEmpty()) {
+            map.put(key, value);
+        } else {
+            map.clear();
+            map.put(key, value);
+        }
+    }
+
     /**
      * Force crashes the JVM by starving its memory
      * <p>
@@ -105,27 +171,25 @@ public class SnakerLib
      *
      * @param reason The reason for crashing so it can be logged if implemented
      **/
-    @UnstableApi
-    @ParametersAreNonnullByDefault
-    public static void forceCrashJVM(@NotNull String reason)
+    public static void forceCrashJVM(String reason)
     {
         String clazz = STACK_WALKER.getCallerClass().toString();
         String regex = ".*[a-zA-Z]+.*";
         String br = "\n";
         StringBuilder builder = new StringBuilder("-+-");
         builder.append("-+-".repeat(36));
-        SnakerLogger.worker("JVM crash detected on " + Thread.currentThread().getName());
-        SnakerLogger.fatal(String.format(br + "%24s" + br, builder), ColourCode.RED, MarkerType.NONE);
-        SnakerLogger.fatal(String.format("The JVM was forcefully crashed by %s" + br, clazz), ColourCode.RED, MarkerType.NONE);
+        SnakerLib.LOGGER.worker("JVM crash detected on " + Thread.currentThread().getName());
+        SnakerLib.LOGGER.fatal(String.format(br + "%24s" + br, builder), ColourCode.RED, MarkerType.NONE);
+        SnakerLib.LOGGER.fatal(String.format("The JVM was forcefully crashed by %s" + br, clazz), ColourCode.RED, MarkerType.NONE);
         if (!clazz.contains("SnakerLib")) {
-            SnakerLogger.fatal(String.format("The JVM was not crashed by SnakerLib. Please go report it to %s" + br, clazz), ColourCode.RED, MarkerType.NONE);
+            SnakerLib.LOGGER.fatal(String.format("The JVM was not crashed by SnakerLib. Please go report it to %s" + br, clazz), ColourCode.RED, MarkerType.NONE);
         }
         if (!reason.matches(regex)) {
-            SnakerLogger.fatal("The reason for the crash was not specified" + br, ColourCode.RED, MarkerType.NONE);
+            SnakerLib.LOGGER.fatal("The reason for the crash was not specified" + br, ColourCode.RED, MarkerType.NONE);
         } else {
-            SnakerLogger.fatal(String.format("The reason was: %s" + br, reason), ColourCode.RED, MarkerType.NONE);
+            SnakerLib.LOGGER.fatal(String.format("The reason was: %s" + br, reason), ColourCode.RED, MarkerType.NONE);
         }
-        SnakerLogger.fatal(String.format("%24s", builder), ColourCode.RED, MarkerType.NONE);
+        SnakerLib.LOGGER.fatal(String.format("%24s", builder), ColourCode.RED, MarkerType.NONE);
         MemoryUtil.memSet(0, 0, 1);
     }
 
@@ -261,9 +325,9 @@ public class SnakerLib
                 for (File jvmFile : files) {
                     if (jvmFile.getName().startsWith("hs")) {
                         if (jvmFile.delete()) {
-                            SnakerLogger.system(String.format("Successfully deleted JVM crash file '%s'", jvmFile.getName()), ColourCode.WHITE, MarkerType.SYSTEM);
+                            SnakerLib.LOGGER.system(String.format("Successfully deleted JVM crash file '%s'", jvmFile.getName()), ColourCode.WHITE, MarkerType.SYSTEM);
                         } else {
-                            SnakerLogger.system(String.format("Could not delete JVM crash file '%s'", jvmFile.getName()), ColourCode.WHITE, MarkerType.SYSTEM);
+                            SnakerLib.LOGGER.system(String.format("Could not delete JVM crash file '%s'", jvmFile.getName()), ColourCode.WHITE, MarkerType.SYSTEM);
                         }
                     }
                 }
@@ -303,9 +367,9 @@ public class SnakerLib
             if (crashFiles != null) {
                 for (File crashFile : crashFiles) {
                     if (crashFile.delete()) {
-                        SnakerLogger.system(String.format("Successfully deleted crash file '%s'", crashFile.getName()), ColourCode.WHITE, MarkerType.SYSTEM);
+                        SnakerLib.LOGGER.system(String.format("Successfully deleted crash file '%s'", crashFile.getName()), ColourCode.WHITE, MarkerType.SYSTEM);
                     } else {
-                        SnakerLogger.system(String.format("Could not delete crash file '%s'", crashFile.getName()), ColourCode.WHITE, MarkerType.SYSTEM);
+                        SnakerLib.LOGGER.system(String.format("Could not delete crash file '%s'", crashFile.getName()), ColourCode.WHITE, MarkerType.SYSTEM);
                     }
                 }
             }
@@ -333,7 +397,7 @@ public class SnakerLib
             for (SnakerBoss boss : new CopyOnWriteArrayList<>(bosses)) {
                 boss.discard();
                 if (notify) {
-                    SnakerLogger.info(String.format("Successfully discarded %s bosses", bosses.size()));
+                    SnakerLib.LOGGER.info(String.format("Successfully discarded %s bosses", bosses.size()));
                     notify = false;
                 }
             }

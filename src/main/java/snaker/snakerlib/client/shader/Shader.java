@@ -9,7 +9,6 @@ import net.minecraft.server.packs.resources.ResourceProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.*;
 import snaker.snakerlib.SnakerLib;
-import snaker.snakerlib.internal.SnakerLogger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class Shader extends ShaderInstance
         try {
             return new Shader(provider, shader, format);
         } catch (Exception e) {
-            SnakerLogger.logError(e);
+            SnakerLib.LOGGER.logError(e);
             throw new RuntimeException(e);
         }
     }

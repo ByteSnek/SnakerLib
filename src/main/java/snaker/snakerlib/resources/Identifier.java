@@ -7,19 +7,19 @@ import snaker.snakerlib.utility.ResourceDirectoryBuilder;
 /**
  * Created by SnakerBone on 15/02/2023
  **/
-public class TorniquetedResourceLocation extends ResourceLocation
+public class Identifier extends ResourceLocation
 {
-    public TorniquetedResourceLocation(ResourceDirectoryBuilder builder)
+    public Identifier(ResourceDirectoryBuilder builder)
     {
         super(builder.getPath());
     }
 
-    public TorniquetedResourceLocation(String path)
+    public Identifier(String path)
     {
         super(SnakerLib.TORNIQUETED_MODID, path);
     }
 
-    public <T> TorniquetedResourceLocation(Class<T> clazz)
+    public <T> Identifier(Class<T> clazz)
     {
         super(SnakerLib.TORNIQUETED_MODID, clazz.getSimpleName().toLowerCase());
     }

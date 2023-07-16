@@ -5,130 +5,148 @@ package snaker.snakerlib.internal;
  * <p>
  * Log helper
  **/
-public class SnakerLogger
+public interface SnakerLogger
 {
-    public static <Exception extends Throwable> void logError(Exception exception)
+    SnakerLogger INSTANCE = make();
+
+    static SnakerLogger make()
+    {
+        return new SnakerLogger()
+        {
+
+        };
+    }
+
+    default <E extends Throwable> void logError(E exception)
     {
         error(exception);
         exception.printStackTrace();
     }
 
-    public static <Message> void msg(Message message)
+    default <Message> void logOnce(Message message)
+    {
+        if (SnakerLoggerManager.getLogStatus()) {
+            info(message);
+            SnakerLoggerManager.invertLoggerStatus();
+        }
+    }
+
+    default <Message> void msg(Message message)
     {
         msg(message, ColourCode.WHITE, MarkerType.MESSAGE);
     }
 
-    public static <Message> void msg(Message message, ColourCode colour, MarkerType type)
+    default <Message> void msg(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void info(Message message)
+    default <Message> void info(Message message)
     {
         info(message, ColourCode.CYAN, MarkerType.INFO);
     }
 
-    public static <Message> void info(Message message, ColourCode colour, MarkerType type)
+    default <Message> void info(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void debug(Message message)
+    default <Message> void debug(Message message)
     {
         debug(message, ColourCode.CYAN, MarkerType.DEBUG);
     }
 
-    public static <Message> void debug(Message message, ColourCode colour, MarkerType type)
+    default <Message> void debug(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void catching(Message message)
+    default <Message> void catching(Message message)
     {
         catching(message, ColourCode.YELLOW, MarkerType.CATCHING);
     }
 
-    public static <Message> void catching(Message message, ColourCode colour, MarkerType type)
+    default <Message> void catching(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void system(Message message)
+    default <Message> void system(Message message)
     {
         system(message, ColourCode.GREEN, MarkerType.SYSTEM);
     }
 
-    public static <Message> void system(Message message, ColourCode colour, MarkerType type)
+    default <Message> void system(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void thread(Message message)
+    default <Message> void thread(Message message)
     {
         thread(message, ColourCode.GREEN, MarkerType.THREAD);
     }
 
-    public static <Message> void thread(Message message, ColourCode colour, MarkerType type)
+    default <Message> void thread(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void worker(Message message)
+    default <Message> void worker(Message message)
     {
         worker(message, ColourCode.CYAN, MarkerType.WORKER);
     }
 
-    public static <Message> void worker(Message message, ColourCode colour, MarkerType type)
+    default <Message> void worker(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void trace(Message message)
+    default <Message> void trace(Message message)
     {
         trace(message, ColourCode.RED, MarkerType.TRACE);
     }
 
-    public static <Message> void trace(Message message, ColourCode colour, MarkerType type)
+    default <Message> void trace(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void dev(Message message)
+    default <Message> void dev(Message message)
     {
         dev(message, ColourCode.PURPLE, MarkerType.DEV);
     }
 
-    public static <Message> void dev(Message message, ColourCode colour, MarkerType type)
+    default <Message> void dev(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void warn(Message message)
+    default <Message> void warn(Message message)
     {
         warn(message, ColourCode.YELLOW, MarkerType.WARN);
     }
 
-    public static <Message> void warn(Message message, ColourCode colour, MarkerType type)
+    default <Message> void warn(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void error(Message message)
+    default <Message> void error(Message message)
     {
         error(message, ColourCode.RED, MarkerType.ERROR);
     }
 
-    public static <Message> void error(Message message, ColourCode colour, MarkerType type)
+    default <Message> void error(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }
 
-    public static <Message> void fatal(Message message)
+    default <Message> void fatal(Message message)
     {
         fatal(message, ColourCode.RED, MarkerType.FATAL);
     }
 
-    public static <Message> void fatal(Message message, ColourCode colour, MarkerType type)
+    default <Message> void fatal(Message message, ColourCode colour, MarkerType type)
     {
         print(colour.get() + type.get() + message);
     }

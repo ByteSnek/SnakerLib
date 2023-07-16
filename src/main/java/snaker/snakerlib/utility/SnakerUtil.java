@@ -1,26 +1,19 @@
 package snaker.snakerlib.utility;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Rarity;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 import snaker.snakerlib.SnakerLib;
-import snaker.snakerlib.internal.SnakerLogger;
 import snaker.snakerlib.internal.StringNuker;
+import snaker.snakerlib.math.Mh;
 
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.function.IntFunction;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,58 +31,19 @@ public class SnakerUtil
         return pkg.substring(pkg.lastIndexOf('.')).replace(".", "");
     }
 
-    public static boolean keyPressed(int... keys)
+    public static <T extends LivingEntity, E extends MobEffect> boolean addEffectDirect(T entity, E effect, @Nullable Integer duration, @Nullable Integer mul, boolean isAmbient, boolean showBubble, boolean showIcon)
     {
-        for (int key : keys) {
-            return GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), key) == GLFW.GLFW_PRESS;
-        }
-        return false;
+        return entity.addEffect(new MobEffectInstance(effect, duration == null ? Mh.secondsToTicks(10) : duration, mul == null ? 0 : mul, isAmbient, showBubble, showIcon));
     }
 
-    @SafeVarargs
-    public static <V> V randomFromObjects(final RandomSource random, V... values)
+    public static <T extends LivingEntity, E extends MobEffect> boolean addEffectDirect(T entity, E effect, @Nullable Integer duration, @Nullable Integer mul)
     {
-        return random.nextBoolean() ? values[random.nextInt(1, values.length) % values.length] : values[random.nextInt(values.length)];
+        return addEffectDirect(entity, effect, duration, mul, false, false, false);
     }
 
-    @SafeVarargs
-    public static <V> V randomFromObjects(final RandomSource random, boolean copy, V... values)
+    public static <T extends LivingEntity, E extends MobEffect> boolean addEffectDirect(T entity, E effect)
     {
-        if (copy) {
-            return random.nextBoolean() ? randomFromObjects(random, values) : random.nextBoolean() ? values[random.nextInt(1, values.length) % values.length] : values[random.nextInt(values.length)];
-        } else {
-            return randomFromObjects(random, values);
-        }
-    }
-
-    public static <V> V[] filterEnumValues(V[] values, Predicate<? super V> filter, IntFunction<V[]> function)
-    {
-        if (values != null && values.length > 0) {
-            return Arrays.stream(values).filter(filter).toArray(function);
-        } else {
-            SnakerLogger.error("Invalid enum or enum values");
-            return null;
-        }
-    }
-
-    public static <S extends AbstractSet<V>, V> void populateSet(S set, V value)
-    {
-        if (set.isEmpty()) {
-            set.add(value);
-        } else {
-            set.clear();
-            set.add(value);
-        }
-    }
-
-    public static <M extends AbstractMap<K, V>, K, V> void populateMap(M map, K key, V value)
-    {
-        if (map.isEmpty()) {
-            map.put(key, value);
-        } else {
-            map.clear();
-            map.put(key, value);
-        }
+        return addEffectDirect(entity, effect, null, null);
     }
 
     public static <T extends LivingEntity> boolean isEntityRotating(@NotNull T entity)
@@ -213,8 +167,7 @@ public class SnakerUtil
 
     @Nullable
     @SuppressWarnings("unchecked")
-    @Contract("null->null;!null->!null")
-    public static <Anything> Anything cast(@Nullable Object object)
+    public static <Anything> Anything shutUp(@Nullable Object object)
     {
         return (Anything) object;
     }

@@ -1,17 +1,16 @@
 package snaker.snakerlib.level.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -32,9 +31,11 @@ public abstract class SnakerBlockEntity extends BlockEntity
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag()
+    public void setChanged()
     {
-        return this.saveWithFullMetadata();
+        level.setBlock(worldPosition, getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
+        super.setChanged();
+        level.setBlock(worldPosition, getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
     }
 
     public void markDirtyAndDispatch()
@@ -53,7 +54,15 @@ public abstract class SnakerBlockEntity extends BlockEntity
                 BlockPos pos = blockEntity.getBlockPos();
                 for (Player player : players) {
                     if (player instanceof ServerPlayer sPlayer) {
-                        if (isPlayerNearby(sPlayer.getX(), sPlayer.getZ(), pos.getX() + 0.5, pos.getZ() + 0.5)) {
+                        if (true) { // @formatter:off
+                                    // 2do: make this thing actually do something with
+                                    // my shader blocks in tq when placed by world gen.
+                                    // if you have a solution to this please message me RIGHT NOW.
+                                    // i have been trying to fix this issue for months but to no prevail
+                                    // no matter how hard i try i just cannot make
+                                    // them update. i dont know if its because im retarded
+                                    // or if its something on minecrafts end (maybe?) i have no clue
+                                    // @formatter:on
                             sPlayer.connection.send(packet);
                         }
                     }
@@ -61,6 +70,7 @@ public abstract class SnakerBlockEntity extends BlockEntity
             }
         }
     }
+
 
     private static boolean isPlayerNearby(double x1, double z1, double x2, double z2)
     {

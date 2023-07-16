@@ -3,6 +3,7 @@ package snaker.snakerlib.client;
 /**
  * Created by SnakerBone on 4/05/2023
  **/
+@Deprecated // Wait until CCL updates to 1.20+
 public class SnakerSprites
 {
     //public static final ResourceLocation PARTICLE_LOCATION = new ResourceLocation("textures/particle/orb.png");

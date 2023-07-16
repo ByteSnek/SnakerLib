@@ -10,7 +10,10 @@ import java.util.function.Supplier;
 
 /**
  * Created by SnakerBone on 12/05/2023
+ *
+ * @deprecated use the better alternative {@link Shader}
  **/
+@Deprecated // Pointless. Unused since 1.16.5
 public class SimpleShader
 {
     private final boolean enableBlend, depthMask;

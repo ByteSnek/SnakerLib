@@ -10,6 +10,7 @@ import org.joml.Vector3f;
 /**
  * Created by SnakerBone on 11/05/2023
  **/
+@Deprecated // Unused since 1.16.5 -> 1.18.2 port. Might nuke later
 public abstract class SnakerParticle<T extends BlockEntity> extends Particle
 {
     protected final T blockEntity;

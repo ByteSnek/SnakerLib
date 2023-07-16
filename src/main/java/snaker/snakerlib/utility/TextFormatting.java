@@ -2,6 +2,7 @@ package snaker.snakerlib.utility;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import snaker.snakerlib.SnakerLib;
 
 /**
  * Created by SnakerBone on 17/06/2023
@@ -9,8 +10,8 @@ import net.minecraft.Util;
 public class TextFormatting
 {
     public static final ChatFormatting[] ALL_FORMATTINGS = ChatFormatting.values();
-    public static final ChatFormatting[] ALL_COLOURS = SnakerUtil.filterEnumValues(ChatFormatting.values(), ChatFormatting::isColor, ChatFormatting[]::new);
-    public static final ChatFormatting[] ALL_FORMATS = SnakerUtil.filterEnumValues(ChatFormatting.values(), ChatFormatting::isFormat, ChatFormatting[]::new);
+    public static final ChatFormatting[] ALL_COLOURS = SnakerLib.filterEnumValues(ChatFormatting.values(), ChatFormatting::isColor, ChatFormatting[]::new);
+    public static final ChatFormatting[] ALL_FORMATS = SnakerLib.filterEnumValues(ChatFormatting.values(), ChatFormatting::isFormat, ChatFormatting[]::new);
     public static final ChatFormatting[] ALL_SHADES = {ChatFormatting.BLACK, ChatFormatting.DARK_GRAY, ChatFormatting.GRAY, ChatFormatting.WHITE};
     public static final ChatFormatting[] PRIME_COLOURS = {ChatFormatting.RED, ChatFormatting.GREEN, ChatFormatting.BLUE, ChatFormatting.YELLOW};
     public static final ChatFormatting[] RAINBOW_COLOURS = {ChatFormatting.RED, ChatFormatting.GREEN, ChatFormatting.BLUE, ChatFormatting.YELLOW, ChatFormatting.LIGHT_PURPLE, ChatFormatting.AQUA};

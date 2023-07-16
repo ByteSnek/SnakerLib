@@ -1,10 +1,11 @@
-package snaker.snakerlib.client.model;//package snaker.snakerlib.client.model;
-//
-///**
-//* Created by SnakerBone on 4/05/2023
-//**/
-//public class CatalysticBakedModel extends WrappedItemModel implements IItemRenderer
-//{
+package snaker.snakerlib.client.model;
+
+/**
+ * Created by SnakerBone on 4/05/2023
+ **/
+@Deprecated // Wait until CCL updates to 1.20+
+public class CatalysticBakedModel //extends WrappedItemModel implements IItemRenderer
+{
 //    private static final RandomSource RANDOM = RandomSource.create();
 //    private final BakedQuad quad;
 //    private final boolean flash;
@@ -104,5 +105,5 @@ package snaker.snakerlib.client.model;//package snaker.snakerlib.client.model;
 //        vertex.uv[0] = (float) u;
 //        vertex.uv[1] = (float) v;
 //    }
-//}
+}
 //

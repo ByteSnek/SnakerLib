@@ -1,5 +1,6 @@
 package snaker.snakerlib.math;
 
+import net.minecraft.Util;
 import net.minecraft.world.phys.Vec3;
 
 import java.math.BigInteger;
@@ -9,10 +10,12 @@ import java.math.BigInteger;
  **/
 public class Mh
 {
-    public static final long LEVEL_AABB_RADIUS = 0x989680;
+    public static final int LEVEL_AABB_RADIUS = 0x989680;
 
     public static final float RADIANS_TO_DEGREES = 57.29577951308232F;
     public static final float DEGREES_TO_RADIANS = 0.017453292519943F;
+
+    public static final float MAGIC_ANIM_CONSTANT = 0.6662F;
 
     public static final float PI = (float) Math.PI;
     public static final float E = (float) Math.E;
@@ -24,6 +27,46 @@ public class Mh
     public static final float PIE_SUB = Mh.PI - Mh.E;
     public static final float PIE_MUL = Mh.PI * Mh.E;
     public static final float PIE_DIV = Mh.PI / Mh.E;
+
+    public static final int[] LOG2_BIT_TABLE = new int[]{0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9};
+
+    public static int bitConj(int a, int b)
+    {
+        int startTime = (int) System.currentTimeMillis() | (int) ~Util.getMillis();
+        startTime ^= startTime & ~a | startTime & ~b / (clampPow2ByQuad(a ^ b));
+        return startTime ^ (a - LOG2_BIT_TABLE[1 | 2 | 3 | 4 | 5 | 6 | 9 | 12 | 31]) >>> (b - LOG2_BIT_TABLE[1 | 2 | 3 | 4 | 5 | 6 | 9 | 12 | 31]) * startTime ^ (b - LOG2_BIT_TABLE[1 | 2 | 3 | 4 | 5 | 6 | 9 | 12 | 31]) >>> (a - LOG2_BIT_TABLE[1 | 2 | 3 | 4 | 5 | 6 | 9 | 12 | 31]) / (System.getProperties().hashCode() / System.currentTimeMillis());
+    }
+
+    public static int secondsToTicks(int a)
+    {
+        return a * 20;
+    }
+
+    public static int ticksToSeconds(int a)
+    {
+        return a / 20;
+    }
+
+    public static boolean isPow2(int value)
+    {
+        return (value & (value - 1)) == 0;
+    }
+
+    public static int clampPow2ByQuad(int input)
+    {
+        int result = input - 1;
+        result |= result >> 1;
+        result |= result >> 2;
+        result |= result >> 4;
+        result |= result >> 8;
+        result |= result >> 16;
+        return result + 1;
+    }
+
+    public static int ceilx2(int value)
+    {
+        return LOG2_BIT_TABLE[(isPow2(value) ? value : clampPow2ByQuad(value) * 125613361 >> 27) & 31];
+    }
 
     public static float toDeg(double radians)
     {
@@ -40,15 +83,15 @@ public class Mh
         return (float) Math.sqrt(a);
     }
 
-    public static long floor(double a)
+    public static int floor(double a)
     {
-        long value = (long) a;
+        int value = (int) a;
         return a < (double) value ? value - 1 : value;
     }
 
-    public static long ceil(double a)
+    public static int ceil(double a)
     {
-        long value = (long) a;
+        int value = (int) a;
         return a > (double) value ? value + 1 : value;
     }
 
@@ -190,11 +233,6 @@ public class Mh
         return Math.max(Math.min(value, upper), lower);
     }
 
-    public static float clamp(long value, long lower, long upper)
-    {
-        return Math.max(Math.min(value, upper), lower);
-    }
-
     public static float clamp(float value, float lower, float upper)
     {
         return Math.max(Math.min(value, upper), lower);
@@ -221,9 +259,9 @@ public class Mh
 
     // power of
 
-    public static long powSq(long value)
+    public static int powSq(int value)
     {
-        return (long) Math.pow(value, value);
+        return (int) Math.pow(value, value);
     }
 
     public static float powSq(double value)
@@ -231,24 +269,24 @@ public class Mh
         return (float) Math.pow(value, value);
     }
 
-    public static long pow2e(long exponent)
+    public static int pow2e(int exponent)
     {
-        return (long) Math.pow(2, exponent);
+        return (int) Math.pow(2, exponent);
     }
 
     public static double pow2e(double exponent)
     {
-        return (long) Math.pow(2, exponent);
+        return (int) Math.pow(2, exponent);
     }
 
-    public static long pow2b(long base)
+    public static int pow2b(int base)
     {
-        return (long) Math.pow(base, 2);
+        return (int) Math.pow(base, 2);
     }
 
     public static double pow2b(double base)
     {
-        return (long) Math.pow(base, 2);
+        return (int) Math.pow(base, 2);
     }
 
     // sine, cosine, tangent, etc
@@ -588,15 +626,6 @@ public class Mh
 
     // factorials, additorials, etc
 
-    public static BigInteger factorial(int value)
-    {
-        BigInteger factorial = BigInteger.ONE;
-        for (long i = value; i > 0; i--) {
-            factorial = factorial.multiply(BigInteger.valueOf(i));
-        }
-        return factorial;
-    }
-
     public static BigInteger factorial(long value)
     {
         BigInteger factorial = BigInteger.ONE;
@@ -606,7 +635,16 @@ public class Mh
         return factorial;
     }
 
-    public static BigInteger additorial(int value)
+    public static BigInteger factorial(int value)
+    {
+        BigInteger factorial = BigInteger.ONE;
+        for (int i = value; i > 0; i--) {
+            factorial = factorial.multiply(BigInteger.valueOf(i));
+        }
+        return factorial;
+    }
+
+    public static BigInteger additorial(long value)
     {
         BigInteger additorial = BigInteger.ONE;
         for (long i = value; i > 0; i--) {
@@ -615,10 +653,10 @@ public class Mh
         return additorial;
     }
 
-    public static BigInteger additorial(long value)
+    public static BigInteger additorial(int value)
     {
         BigInteger additorial = BigInteger.ONE;
-        for (long i = value; i > 0; i--) {
+        for (int i = value; i > 0; i--) {
             additorial = additorial.add(BigInteger.valueOf(i));
         }
         return additorial;

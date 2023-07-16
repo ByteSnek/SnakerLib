@@ -1,35 +1,11 @@
-package snaker.snakerlib.client.model;//package snaker.snakerlib.client.model;
-//import codechicken.lib.model.CachedFormat;
-//import codechicken.lib.model.Quad;
-//import com.google.gson.JsonArray;
-//import com.google.gson.JsonDeserializationContext;
-//import com.google.gson.JsonElement;
-//import com.google.gson.JsonObject;
-//import com.mojang.datafixers.util.Pair;
-//import it.unimi.dsi.fastutil.ints.IntArrayList;
-//import it.unimi.dsi.fastutil.ints.IntList;
-//import net.covers1624.quack.gson.JsonUtils;
-//import net.minecraft.client.renderer.block.model.BakedQuad;
-//import net.minecraft.client.renderer.block.model.BlockModel;
-//import net.minecraft.client.renderer.block.model.ItemOverrides;
-//import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-//import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-//import net.minecraft.client.resources.model.*;
-//import net.minecraft.core.Direction;
-//import net.minecraft.resources.ResourceLocation;
-//import net.minecraft.util.RandomSource;
-//import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-//import net.minecraftforge.client.model.geometry.IGeometryLoader;
-//import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
-//
-//import java.util.*;
-//import java.util.function.Function;
-//
-///**
-// * Created by SnakerBone on 4/05/2023
-// **/
-//public class CatalysticModelLoader implements IGeometryLoader<CatalysticModelLoader.Geo>
-//{
+package snaker.snakerlib.client.model;
+
+/**
+ * Created by SnakerBone on 4/05/2023
+ **/
+@Deprecated // Wait until CCL updates to 1.20+
+public class CatalysticModelLoader //implements IGeometryLoader<CatalysticModelLoader.Geo>
+{
 //    public Geo read(JsonObject contents, JsonDeserializationContext context)
 //    {
 //        JsonObject catalystic = contents.getAsJsonObject("catalystic");
@@ -161,4 +137,4 @@ package snaker.snakerlib.client.model;//package snaker.snakerlib.client.model;
 //            }
 //        }
 //    }
-//}
+}

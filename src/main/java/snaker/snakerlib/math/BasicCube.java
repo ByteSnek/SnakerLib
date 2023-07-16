@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import org.joml.Matrix4f;
-import snaker.snakerlib.internal.SnakerLogger;
+import snaker.snakerlib.SnakerLib;
 
 /**
  * Created by SnakerBone on 20/06/2023
@@ -132,7 +132,7 @@ public class BasicCube
         try {
             consumer.vertex(matrix, x, y, z).color(255, 255, 255, 255).uv(0, 0).uv2(0).normal(1, 0, 0).endVertex();
         } catch (Exception e) {
-            SnakerLogger.logError(e);
+            SnakerLib.LOGGER.logError(e);
         }
     }
 
