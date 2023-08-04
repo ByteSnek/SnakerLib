@@ -41,11 +41,16 @@ import java.util.Objects;
  * <p>
  * Used for getting the ResourceLocation / namespace / path / registry name of most game objects
  **/
-public class ResourceUtil
+public class ResourceStuff
 {
     public static ResourceLocation getResourceLocation(ItemStack key)
     {
         return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(key.getItem()));
+    }
+
+    public static String getPath(ResourceLocation key)
+    {
+        return Objects.requireNonNull(key).getPath();
     }
 
     public static String getPath(ItemStack key)

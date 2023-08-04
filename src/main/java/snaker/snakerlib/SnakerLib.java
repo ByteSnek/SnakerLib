@@ -2,7 +2,9 @@ package snaker.snakerlib;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -14,22 +16,23 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryUtil;
 import snaker.snakerlib.config.SnakerConfig;
 import snaker.snakerlib.internal.*;
 import snaker.snakerlib.internal.log4j.Log4jFilter;
 import snaker.snakerlib.level.entity.SnakerBoss;
-import snaker.snakerlib.math.Mh;
+import snaker.snakerlib.math.Maths;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Arrays;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by SnakerBone on 5/05/2023
@@ -45,12 +48,10 @@ public class SnakerLib
     public static final Component VIRTUAL_MACHINE_FORCE_CRASH_KEYBINDS_PRESSED = Component.literal("Left shift and F4 pressed.");
     public static final Component DISABLE_IN_CONFIG = Component.literal("You can disable this in the config (snakerlib-common.toml) if you wish");
     public static final StackWalker STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
-    public static final SnakerLogger LOGGER = SnakerLoggerManager.getLogger(SnakerLib.STACK_WALKER.getCallerClass());
+    public static final SnakerLogger LOGGER = SnakerLoggerManager.getLogger(SnakerLib.getCallerClassReference());
     public static final Log4jFilter FILTER = new Log4jFilter();
 
     public static final String MODID = "snakerlib";
-    public static final String SNAKERBONE_MODID = "snakerbone";
-    public static final String TORNIQUETED_MODID = "tq";
 
     public static Path runFolder;
 
@@ -61,7 +62,8 @@ public class SnakerLib
             "Missing sound for event: minecraft:entity.goat.screaming.horn_break",
             "Missing sound for event: minecraft:item.goat_horn.play",
             "Shader color_convolve could not find uniform named InSize in the specified shader program.",
-            "Shader phosphor could not find uniform named InSize in the specified shader program."
+            "Shader phosphor could not find uniform named InSize in the specified shader program.",
+            "Unable to parse the boolean system property 'java.net.preferIPv6Addresses':system - using the default value: false"
     };
 
     public SnakerLib()
@@ -89,10 +91,135 @@ public class SnakerLib
      * @param key A {@link GLFW} printable key
      * @return True if the key is currently being pressed
      **/
-    @Via(Accessibility.CLIENT)
     public static boolean isKeyDown(int key)
     {
         return GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), key) == GLFW.GLFW_PRESS;
+    }
+
+    public static String placeholder(Locale locale, int limit, boolean modid)
+    {
+        return modid ? MODID + ":" + RandomStringUtils.randomAlphanumeric(limit).toLowerCase(locale) : RandomStringUtils.randomAlphanumeric(limit).toLowerCase(locale);
+    }
+
+    public static String placeholder(Locale locale, int limit)
+    {
+        return placeholder(locale, limit, false);
+    }
+
+    public static String placeholder(Locale locale, boolean modid)
+    {
+        return placeholder(locale, 8, modid);
+    }
+
+    public static String placeholder(Locale locale)
+    {
+        return placeholder(locale, false);
+    }
+
+    public static String placeholder()
+    {
+        return placeholder(Locale.ROOT);
+    }
+
+    public static String placeholderWithId()
+    {
+        return placeholder(Locale.ROOT, true);
+    }
+
+    public static String untranslateComponent(MutableComponent component, boolean leaveCaps)
+    {
+        StringNuker nuker = new StringNuker(component.getString());
+        nuker.replaceAllAndDestroy("\\p{P}");
+        return leaveCaps ? nuker.result() : nuker.result().toLowerCase();
+    }
+
+    public static int hexToInt(String hexCode)
+    {
+        StringNuker nuker = new StringNuker(hexCode);
+        nuker.replaceAllAndDestroy("#");
+        return Integer.parseInt(nuker.result(), 16);
+    }
+
+    public static float hexToFloat(String hexCode)
+    {
+        StringNuker nuker = new StringNuker(hexCode);
+        nuker.replaceAllAndDestroy("#");
+        return Float.parseFloat(nuker.result());
+    }
+
+    public static int randomHex()
+    {
+        Random random = new Random();
+        return random.nextInt(0xffffff + 1);
+    }
+
+    public static String untranslateComponent(MutableComponent component)
+    {
+        return untranslateComponent(component, false);
+    }
+
+    public static String i18nt(String text)
+    {
+        if (!text.isEmpty()) {
+            return Stream.of(text.trim().split("\\s|\\p{Pc}")).filter(word -> word.length() > 0).map(word -> word.substring(0, 1).toUpperCase() + word.substring(1)).collect(Collectors.joining(" "));
+        } else {
+            return text;
+        }
+    }
+
+    public static String i18nt(String text, Rarity rarity)
+    {
+        switch (rarity) {
+            case UNCOMMON -> {
+                return "§e" + i18nt(text);
+            }
+            case RARE -> {
+                return "§b" + i18nt(text);
+            }
+            case EPIC -> {
+                return "§d" + i18nt(text);
+            }
+            default -> {
+                return i18nt(text);
+            }
+        }
+    }
+
+    public static String i18nf(String text)
+    {
+        return !text.isEmpty() ? text.replaceAll("\\s+", "_").toLowerCase() : text;
+    }
+
+    public static boolean isInvalidString(String string, boolean notify, boolean crash)
+    {
+        String message = String.format("String '%s' is not a valid string", string);
+        if (string == null || string.isEmpty()) {
+            return true;
+        } else {
+            String regex = ".*[a-zA-Z]+.*";
+            if (!string.matches(regex)) {
+                if (notify) {
+                    LOGGER.warn(message);
+                    if (crash) {
+                        throw new RuntimeException(message);
+                    }
+                }
+                if (!notify && crash) {
+                    throw new RuntimeException(message);
+                }
+            }
+            return !string.matches(regex);
+        }
+    }
+
+    public static boolean isInvalidString(String string, boolean notify)
+    {
+        return isInvalidString(string, notify, false);
+    }
+
+    public static boolean isInvalidString(String string)
+    {
+        return isInvalidString(string, false);
     }
 
     public static boolean tickOffs(float tickOffset)
@@ -107,14 +234,23 @@ public class SnakerLib
 
     public static boolean secOffs(int secOffset)
     {
-        return getClientTickCount() % Mh.secondsToTicks(secOffset) == 0;
+        return getClientTickCount() % Maths.secondsToTicks(secOffset) == 0;
     }
 
     public static boolean secOffs(float other, int secOffset)
     {
-        return other % Mh.secondsToTicks(secOffset) == 0;
+        return other % Maths.secondsToTicks(secOffset) == 0;
     }
 
+    public static Class<?> getCallerClassReference()
+    {
+        return STACK_WALKER.getCallerClass();
+    }
+
+    public static ClassLoader getCallerClassLoaderReference()
+    {
+        return getCallerClassReference().getClassLoader();
+    }
 
     @SafeVarargs
     public static <V> V randomFromObjects(final RandomSource random, V... values)
@@ -173,7 +309,7 @@ public class SnakerLib
      **/
     public static void forceCrashJVM(String reason)
     {
-        String clazz = STACK_WALKER.getCallerClass().toString();
+        String clazz = SnakerLib.getCallerClassReference().toString();
         String regex = ".*[a-zA-Z]+.*";
         String br = "\n";
         StringBuilder builder = new StringBuilder("-+-");

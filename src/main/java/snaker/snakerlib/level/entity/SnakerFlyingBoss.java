@@ -29,7 +29,12 @@ public abstract class SnakerFlyingBoss extends FlyingMob
 
     public SnakerFlyingBoss(EntityType<? extends FlyingMob> type, Level level)
     {
-        this(type, level, SnakerConstants.BOSS_XP_REWARD.asInt());
+        this(type, level, SnakerConstants.EntityAttributes.BOSS_XP_REWARD);
+    }
+
+    public boolean isCranky()
+    {
+        return isAlive() && isEffectiveAi() && isAggressive() && getTarget() != null;
     }
 
     public void extraHealth(int amount, AttributeModifier.Operation operation)

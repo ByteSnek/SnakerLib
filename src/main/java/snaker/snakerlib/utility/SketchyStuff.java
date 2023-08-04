@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snaker.snakerlib.internal.StupidArgumentException;
 
-public class SketchyUtil
+public class SketchyStuff
 {
     @Nullable
     @SuppressWarnings("unchecked")
-    public static <Anything> Anything shutUp(@Nullable Object object)
+    public static <Anything> Anything tryCast(@Nullable Object object)
     {
         return (Anything) object;
     }
