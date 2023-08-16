@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.data.SnakerConstants;
+import xyz.snaker.snakerlib.data.DefaultTexts;
 
 import net.minecraft.client.resources.SplashManager;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -25,7 +25,7 @@ public class SplashMixin
 {
     @Shadow
     @Final
-    private List<String> splashes;
+    public List<String> splashes;
 
     @Inject(method = "apply(Ljava/util/List;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At(value = "HEAD"), cancellable = true)
     public void apply(List<String> pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler, CallbackInfo ci)
@@ -36,7 +36,7 @@ public class SplashMixin
             splashes.clear();
         }
 
-        if (splashes.addAll(Arrays.asList(SnakerConstants.Texts.SPLASHES))) {
+        if (splashes.addAll(Arrays.asList(DefaultTexts.SPLASH_TEXTS))) {
             int splashesSize = splashes.size();
             SnakerLib.LOGGER.infof("Successfuly added %s new splashes", splashesSize);
         }

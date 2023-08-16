@@ -12,6 +12,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
+/**
+ * Created by SnakerBone on 12/06/2023
+ * <p>
+ * The minecraft sword as its own model
+ **/
 public abstract class GenericSwordModel extends Model
 {
     protected final ModelPart blade;

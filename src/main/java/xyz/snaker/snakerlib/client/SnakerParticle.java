@@ -34,9 +34,7 @@ public abstract class SnakerParticle<T extends BlockEntity> extends Particle
     {
         Quaternionf quaternion = camera.rotation();
         Vector3f[] renderVector = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
-        for (int amount = 0;
-             amount < 4;
-             amount++) {
+        for (int amount = 0; amount < 4; amount++) {
             Vector3f vector3f = renderVector[amount];
             vector3f.rotate(quaternion);
             vector3f.mul(scale);

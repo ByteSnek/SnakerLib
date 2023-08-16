@@ -15,6 +15,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
  **/
 public abstract class CyclicalIconRenderer extends PreppedRenderer
 {
+    /**
+     * Logs an error only once if anything does occur
+     **/
     protected static volatile boolean notifyError;
 
     public CyclicalIconRenderer(BlockEntityRenderDispatcher renderDispatcher, EntityModelSet modelSet)
