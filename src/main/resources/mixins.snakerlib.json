@@ -10,7 +10,6 @@
       ],
       "mixins": [
             "ForgeModMixin",
-            "MinecraftServerMixin",
-            "PlayTagWithOtherKidsMixin"
+            "MinecraftServerMixin"
       ]
 }

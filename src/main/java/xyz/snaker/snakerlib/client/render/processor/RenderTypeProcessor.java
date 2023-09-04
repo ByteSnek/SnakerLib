@@ -3,6 +3,7 @@ package xyz.snaker.snakerlib.client.render.processor;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
@@ -93,10 +94,11 @@ public interface RenderTypeProcessor
         return RenderType.CompositeState.builder()
                 .setShaderState(new ShaderStateShard(shader))
                 .setTextureState(builder.build())
-                .setCullState(CULL)
-                .setWriteMaskState(COLOR_DEPTH_WRITE)
+                .setCullState(NO_CULL)
+                .setLightmapState(LIGHTMAP)
+                .setDepthTestState(GREATER_DEPTH_TEST)
                 .setTransparencyState(NO_TRANSPARENCY)
-                .createCompositeState(true);
+                .createCompositeState(false);
     }
 
     /**
