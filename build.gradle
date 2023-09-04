@@ -109,6 +109,12 @@ tasks.named('jar', Jar).configure {
     finalizedBy 'reobfJar'
 }
 
+tasks.register('docJar', Jar) {
+    build.dependsOn it
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
 tasks.register('srcJar', Jar) {
     build.dependsOn it
     from sourceSets.main.allSource
@@ -118,23 +124,29 @@ tasks.register('srcJar', Jar) {
 tasks.register('openMavenStream', Exec) {
     group 'snaker'
     workingDir 'maven'
-    commandLine 'cmd', '/c', 'mvn.bat' // Start server on localhost and open link in browser
 }
 
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
             artifact jar
-            artifact srcJar // Generate sources
-        }
-    }
-    repositories {
-        maven {
-            url "http://localhost:8081/releases" // Publish to local site maven
-            allowInsecureProtocol true
-            credentials {
-                username System.getenv("MVN_USER")
-                password System.getenv("MVN_PASS")
+            artifact srcJar
+            artifact docJar
+            pom {
+                name = project.name
+                description = 'Modding Library'
+                url = 'https://github.com/SnakerBone/SnakerLib'
+                scm {
+                    url = 'https://github.com/SnakerBone/SnakerLib'
+                    connection = 'scm:git:git://github.com/SnakerBone/SnakerLib.git'
+                    developerConnection = 'scm:git:git@github.com:SnakerBone/SnakerLib.git'
+                }
+                licenses {
+                    license {
+                        name = 'GPLv3'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
+                    }
+                }
             }
         }
     }
@@ -142,6 +154,6 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.deprecation(false) // Annoying
-    options.warnings(false) // Annoying
+    options.deprecation(false)
+    options.warnings(false)
 }
