@@ -8,6 +8,7 @@ import xyz.snaker.snakerlib.config.SnakerConfig;
 import xyz.snaker.snakerlib.internal.LevelSavingEvent;
 import xyz.snaker.snakerlib.internal.log4j.SnakerLogger;
 import xyz.snaker.snakerlib.internal.log4j.SnakerLoggerManager;
+import xyz.snaker.snakerlib.utility.ConfigDispatcher;
 import xyz.snaker.snakerlib.utility.tools.KeyboardStuff;
 import xyz.snaker.snakerlib.utility.tools.StringStuff;
 import xyz.snaker.snakerlib.utility.tools.UnsafeStuff;
@@ -17,7 +18,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -60,6 +60,11 @@ public class SnakerLib
     private static boolean isRegistered;
 
     /**
+     * Checks if SnakerLib's config is registered
+     **/
+    private static boolean isConfigRegistered;
+
+    /**
      * A locked value holding the modid of the mod that initialized SnakerLib
      *
      * @see SnakerLib#initialize()
@@ -79,7 +84,7 @@ public class SnakerLib
     public SnakerLib()
     {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modSetupEvent);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
+        ConfigDispatcher.direct(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
     }
 
     /**
