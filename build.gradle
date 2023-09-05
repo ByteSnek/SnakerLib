@@ -150,6 +150,15 @@ publishing {
             }
         }
     }
+    repositories {
+        maven {
+            url "https://s01.oss.sonatype.org/content/repositories/releases"
+            credentials {
+                username 'snaker'
+                password System.getenv('MAVEN_PASS')
+            }
+        }
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
