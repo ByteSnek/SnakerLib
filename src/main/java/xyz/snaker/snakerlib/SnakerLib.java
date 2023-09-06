@@ -8,16 +8,15 @@ import xyz.snaker.snakerlib.config.SnakerConfig;
 import xyz.snaker.snakerlib.internal.LevelSavingEvent;
 import xyz.snaker.snakerlib.internal.log4j.SnakerLogger;
 import xyz.snaker.snakerlib.internal.log4j.SnakerLoggerManager;
-import xyz.snaker.snakerlib.utility.ConfigDispatcher;
 import xyz.snaker.snakerlib.utility.tools.KeyboardStuff;
-import xyz.snaker.snakerlib.utility.tools.StringStuff;
 import xyz.snaker.snakerlib.utility.tools.UnsafeStuff;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -60,11 +59,6 @@ public class SnakerLib
     private static boolean isRegistered;
 
     /**
-     * Checks if SnakerLib's config is registered
-     **/
-    private static boolean isConfigRegistered;
-
-    /**
      * A locked value holding the modid of the mod that initialized SnakerLib
      *
      * @see SnakerLib#initialize()
@@ -84,7 +78,7 @@ public class SnakerLib
     public SnakerLib()
     {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modSetupEvent);
-        ConfigDispatcher.direct(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
     }
 
     /**
@@ -102,7 +96,7 @@ public class SnakerLib
                 throw new RuntimeException(String.format("Could not initialize mod to SnakerLib: Class '%s' is not annotated with @Mod", clazz.getSimpleName()));
             }
             String modId = clazz.getAnnotation(Mod.class).value();
-            if (StringStuff.isValidString(modId)) {
+            if (ResourceLocation.isValidNamespace(modId)) {
                 if (MOD.set(modId)) {
                     String name = MOD.get();
                     SnakerLib.LOGGER.infof("Successfully initialized mod '%s' to SnakerLib", name);
@@ -114,7 +108,6 @@ public class SnakerLib
             if (isRegistered) {
                 throw new RuntimeException("SnakerLib has already been registered");
             } else {
-                MinecraftForge.EVENT_BUS.register(new SnakerLib());
                 isRegistered = true;
             }
         }
