@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import xyz.snaker.snakerlib.concurrent.lock.LockedValue;
 import xyz.snaker.snakerlib.config.SnakerConfig;
-import xyz.snaker.snakerlib.internal.LevelSavingEvent;
 import xyz.snaker.snakerlib.internal.log4j.SnakerLogger;
 import xyz.snaker.snakerlib.internal.log4j.SnakerLoggerManager;
 import xyz.snaker.snakerlib.utility.tools.KeyboardStuff;
@@ -29,9 +28,10 @@ import org.lwjgl.glfw.GLFW;
  * Created by SnakerBone on 5/05/2023
  **/
 @Mod(SnakerLib.MODID)
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SnakerLib
 {
-    public static final String NAME = SnakerLib.class.getSimpleName();
+    public static final String NAME = "SnakerLib";
     public static final String MODID = "snakerlib";
 
     /**
@@ -137,7 +137,7 @@ public class SnakerLib
     }
 
     @SubscribeEvent
-    protected void clientTick(TickEvent.ClientTickEvent event)
+    static void clientTick(TickEvent.ClientTickEvent event)
     {
         if (event.phase == TickEvent.Phase.END || !Minecraft.getInstance().isPaused()) {
             if (KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
@@ -148,18 +148,19 @@ public class SnakerLib
                 }
             }
             clientTickCount++;
+            SnakerLib.LOGGER.info(clientTickCount);
         }
     }
 
     @SubscribeEvent
-    protected void serverTick(TickEvent.ServerTickEvent event)
+    static void serverTick(TickEvent.ServerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.END) {
             serverTickCount++;
         }
     }
 
-    public void modSetupEvent(FMLCommonSetupEvent event)
+    private void modSetupEvent(FMLCommonSetupEvent event)
     {
         File runDir = new File(FMLPaths.GAMEDIR.get().toUri());
         File crashDir = new File(FMLPaths.GAMEDIR.get().resolve("crash-reports").toUri());
@@ -184,12 +185,6 @@ public class SnakerLib
                 }
             }
         }
-    }
-
-    @SubscribeEvent
-    protected void serverStopped(LevelSavingEvent event)
-    {
-
     }
 
     public static long getClientTickCount()

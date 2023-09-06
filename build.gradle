@@ -121,11 +121,6 @@ tasks.register('srcJar', Jar) {
     archiveClassifier = 'sources'
 }
 
-tasks.register('openMavenStream', Exec) {
-    group 'snaker'
-    workingDir 'maven'
-}
-
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
