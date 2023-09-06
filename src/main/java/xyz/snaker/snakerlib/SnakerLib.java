@@ -148,7 +148,6 @@ public class SnakerLib
                 }
             }
             clientTickCount++;
-            SnakerLib.LOGGER.info(clientTickCount);
         }
     }
 
