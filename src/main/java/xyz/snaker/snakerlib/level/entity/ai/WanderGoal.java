@@ -45,7 +45,6 @@ public class WanderGoal extends Goal
         if (pos != null) {
             owner.getNavigation().moveTo(owner.getNavigation().createPath(BlockPos.containing(pos), 1), 1.0D);
         }
-
     }
 
     /**

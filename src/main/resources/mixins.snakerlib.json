@@ -6,8 +6,7 @@
       "compatibilityLevel": "JAVA_17",
       "client": [
             "EffectInstanceMixin",
-            "MinecraftMixin",
-            "SplashMixin"
+            "MinecraftMixin"
       ],
       "mixins": [
             "ForgeModMixin",

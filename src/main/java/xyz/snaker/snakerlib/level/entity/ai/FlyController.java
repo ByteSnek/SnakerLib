@@ -55,9 +55,7 @@ public class FlyController extends MoveControl
     private boolean canReach(Vec3 pos, int length)
     {
         AABB aabb = owner.getBoundingBox();
-        for (int i = 1;
-             i < length;
-             ++i) {
+        for (int i = 1; i < length; i++) {
             aabb = aabb.move(pos);
             if (!owner.level().noCollision(owner, aabb)) {
                 return false;
