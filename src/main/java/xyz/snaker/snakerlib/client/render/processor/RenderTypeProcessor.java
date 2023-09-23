@@ -1,9 +1,8 @@
 package xyz.snaker.snakerlib.client.render.processor;
 
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
@@ -95,9 +94,7 @@ public interface RenderTypeProcessor
                 .setShaderState(new ShaderStateShard(shader))
                 .setTextureState(builder.build())
                 .setCullState(NO_CULL)
-                .setLightmapState(LIGHTMAP)
-                .setDepthTestState(GREATER_DEPTH_TEST)
-                .setTransparencyState(NO_TRANSPARENCY)
+                .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                 .createCompositeState(false);
     }
 
@@ -113,5 +110,43 @@ public interface RenderTypeProcessor
     default RenderType.CompositeState sampler(Supplier<ShaderInstance> shader, ResourceLocation sampler, boolean blur, boolean mipmap)
     {
         return sampler(shader, blur, mipmap, sampler, sampler);
+    }
+
+    /**
+     * A premade render type composite state using samplers for 'blit' targets (UI elements, GUI elements. etc...)
+     *
+     * @param shader   The shader instance
+     * @param blur     Should the sampler texture have blur
+     * @param mipmap   Should the sampler texture have mipmap
+     * @param samplers The location(s) of the sampler textures
+     * @return The render type composite state
+     **/
+    default RenderType.CompositeState blitSampler(Supplier<ShaderInstance> shader, boolean blur, boolean mipmap, ResourceLocation... samplers)
+    {
+        MultiTextureStateShard.Builder builder = MultiTextureStateShard.builder();
+        for (ResourceLocation sampler : samplers) {
+            builder.add(sampler, blur, mipmap);
+        }
+        return RenderType.CompositeState.builder()
+                .setShaderState(new ShaderStateShard(shader))
+                .setTextureState(builder.build())
+                .setCullState(CULL)
+                .setWriteMaskState(COLOR_DEPTH_WRITE) // Might implement this properly one day to allow transparent texture masking
+                .setTransparencyState(NO_TRANSPARENCY)
+                .createCompositeState(false);
+    }
+
+    /**
+     * A premade render type composite state using samplers for 'blit' targets (UI elements, GUI elements. etc...)
+     *
+     * @param shader  The shader instance
+     * @param sampler The location of the sampler texture
+     * @param blur    Should the sampler texture have blur
+     * @param mipmap  Should the sampler texture have mipmap
+     * @return The render type composite state
+     **/
+    default RenderType.CompositeState blitSampler(Supplier<ShaderInstance> shader, ResourceLocation sampler, boolean blur, boolean mipmap)
+    {
+        return blitSampler(shader, blur, mipmap, sampler, sampler);
     }
 }

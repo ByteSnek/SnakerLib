@@ -1,7 +1,7 @@
 package xyz.snaker.snakerlib.client.render.processor;
 
-import java.util.Objects;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 import xyz.snaker.snakerlib.utility.tools.StringStuff;
 
@@ -25,6 +25,6 @@ public interface SimpleRenderTypeProcessor extends RenderTypeProcessor
     @Override
     default RenderType create(@Nullable String name, Pair<VertexFormat, RenderType.CompositeState> pair)
     {
-        return RenderType.create(Objects.requireNonNullElse(name, StringStuff.placeholderWithId()), pair.getFirst(), VertexFormat.Mode.QUADS, 256, pair.getSecond());
+        return RenderType.create(Objects.requireNonNullElse(name, StringStuff.placeholderWithId()), pair.getFirst(), VertexFormat.Mode.QUADS, RenderType.TRANSIENT_BUFFER_SIZE, pair.getSecond());
     }
 }
