@@ -9,6 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import org.lwjgl.opengl.GL11;
+
 /**
  * Created by SnakerBone on 12/05/2023
  *
@@ -29,7 +31,7 @@ public class SimpleShader
 
     public SimpleShader(boolean enableBlend, boolean depthMask)
     {
-        this(enableBlend, depthMask, 0);
+        this(enableBlend, depthMask, GL11.GL_ZERO);
     }
 
     public void createStandardParticle(GlStateManager.SourceFactor blendSrcFactor, GlStateManager.DestFactor blendDestFactor, Supplier<ShaderInstance> primaryShader, Supplier<ShaderInstance> secondaryShader, ResourceLocation shaderTexLoc)

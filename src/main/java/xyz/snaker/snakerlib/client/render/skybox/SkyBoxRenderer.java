@@ -18,6 +18,8 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL11C;
 
 /**
  * Created by SnakerBone on 27/09/2023
@@ -47,7 +49,7 @@ public class SkyBoxRenderer
             Entity entity = Objects.requireNonNull(minecraft.getCameraEntity());
             ClientLevel level = Objects.requireNonNull(minecraft.level);
             if (level.dimension() == dimension) {
-                RenderSystem.clear(16640, Minecraft.ON_OSX);
+                RenderSystem.clear(GL11C.GL_COLOR_BUFFER_BIT | GL11C.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
                 drawSkyBox(event, entity);
             }
         }
@@ -71,10 +73,10 @@ public class SkyBoxRenderer
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        RenderSystem.bindTexture(0);
+        RenderSystem.bindTexture(GL11.GL_ONE);
         RenderSystem.setShaderColor(1, 1, 1, alpha);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, skyBoxTexture.getTexture(side));
+        RenderSystem.setShaderTexture(GL11.GL_ZERO, skyBoxTexture.getTexture(side));
 
         stack.pushPose();
         stack.mulPose(Axis.XP.rotationDegrees(90));
@@ -97,7 +99,7 @@ public class SkyBoxRenderer
         builder.discard();
         stack.popPose();
 
-        RenderSystem.deleteTexture(0);
+        RenderSystem.deleteTexture(GL11.GL_ZERO);
         RenderSystem.disableBlend();
     }
 
