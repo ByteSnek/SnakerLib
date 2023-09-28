@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.internal;
+package xyz.snaker.snakerlib.concurrent.event;
 
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;

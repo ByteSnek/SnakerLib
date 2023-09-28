@@ -1,6 +1,6 @@
 package xyz.snaker.snakerlib.internal.mixin;
 
-import xyz.snaker.snakerlib.internal.LevelSavingEvent;
+import xyz.snaker.snakerlib.concurrent.event.LevelSavingEvent;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;

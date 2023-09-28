@@ -1,5 +1,6 @@
 package xyz.snaker.snakerlib.utility.tools;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,32 @@ import org.jetbrains.annotations.Nullable;
  **/
 public class ReflectiveStuff
 {
+    public static Field getField(Class<?> clazz, String name, boolean isPrivateField)
+    {
+        try {
+            Field field = clazz.getDeclaredField(name);
+            if (isPrivateField) {
+                field.setAccessible(true);
+            }
+            return field;
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T getFieldDirect(Class<?> clazz, String name, boolean isPrivate, @Nullable Object obj)
+    {
+        try {
+            Field field = clazz.getDeclaredField(name);
+            if (isPrivate) {
+                field.setAccessible(true);
+            }
+            return UnsafeStuff.cast(field.get(obj));
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static <T> T[] getFieldsInClass(Class<?> targetClass)
     {
         return UnsafeStuff.cast(Arrays.stream(targetClass.getDeclaredFields()).map(field -> {
