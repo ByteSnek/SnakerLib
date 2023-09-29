@@ -53,7 +53,7 @@
 
 ## Implementing
 
-**In `build.gradle` (or similar):**
+In `build.gradle` (or similar):
 
 ```gradle
 repositories {
@@ -65,13 +65,13 @@ dependencies {
 }
 ```
 
-**And define the version in a `gradle.properties` (or similar):**
+And define the version in a `gradle.properties` (or similar):
 
 ```properties
 sl_version=1.6.7.1 # Replace with your desired version (see https://maven.snaker.xyz for the repository)
 ```
 
-**If using maven in `pom.xml` (or similar):**
+If using maven in `pom.xml` (or similar):
 
 ```xml
 <dependencies>
@@ -82,7 +82,7 @@ sl_version=1.6.7.1 # Replace with your desired version (see https://maven.snaker
 </dependencies>
 ```
 
-**In your main mod class constructor (with the `@Mod` annotation), invoke `SnakerLib.initialize()`:**
+In your main mod class constructor (with the `@Mod` annotation), invoke `SnakerLib.initialize()`:
 
 ```java
 @Mod(SnadFishMod.MODID)
@@ -98,7 +98,7 @@ public class SnadFishMod
 }
 ```
 
-**If all goes well then you should see this output when starting the game:**
+If all goes well then you should see this output when starting the game:
 
 ```log
 [SnakerLib/INFO]: Successfully initialized mod 'snadfish' to SnakerLib
