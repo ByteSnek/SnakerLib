@@ -32,7 +32,7 @@
 
 - Various block remakes
 - Boss entity implementation
-- Various entity goals, memories and brains
+- Various entity goals, memories and brain providers
 - Configured features for rubble and stalagmite formations
 
 ### Misc
