@@ -110,7 +110,7 @@ If all goes well then you should see this output when starting the game:
 For using clientbound stuff (e.g. rendering a skybox), this should be done on the client distribution thread to avoid a server crash like so:
 
 ```java
- if (FMLEnvironment.dist.isClient()) {
+if (FMLEnvironment.dist.isClient()) {
     SkyBoxRenderer.createForDimension(Dimensions.EETSWA, SkyBoxTexture::new);
 }
 ```
