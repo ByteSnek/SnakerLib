@@ -3,6 +3,7 @@ package xyz.snaker.snakerlib.client.render.skybox;
 import java.util.HashMap;
 import java.util.Map;
 
+import xyz.snaker.snakerlib.internal.RegularExpressions;
 import xyz.snaker.snakerlib.utility.ResourcePath;
 
 import net.minecraft.Util;
@@ -12,14 +13,26 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by SnakerBone on 27/09/2023
+ * <p>
+ * A texture consisting of 6 textures and 6 sides used to draw a skybox
  **/
 public class SkyBoxTexture
 {
+    /**
+     * The skybox folder to look in for the textures
+     **/
     public static final String SKYBOX_FOLDER = "textures/skybox/";
 
+    /**
+     * 6 empty ResourceLocation's for the textures
+     **/
     private final ResourceLocation[] textures = new ResourceLocation[6];
 
-    private final Map<Integer, String> side = Util.make(new HashMap<>(), map -> {
+    /**
+     * A map that maps the texture index to the side
+     **/
+    private final Map<Integer, String> side = Util.make(new HashMap<>(), map ->
+    {
         map.put(0, "front");
         map.put(1, "right");
         map.put(2, "back");
@@ -38,7 +51,12 @@ public class SkyBoxTexture
         this(null);
     }
 
-    private void setTextures(@Nullable String textureName)
+    /**
+     * Sets the textures and creates a new skybox texture
+     *
+     * @param textureName An optional texture name
+     **/
+    public void setTextures(@Nullable String textureName)
     {
         if (textureName != null) {
             for (int i = 0; i < 6; i++) {
@@ -51,16 +69,50 @@ public class SkyBoxTexture
         }
     }
 
-    private ResourcePath texturePath(String path)
+    /**
+     * Sets a texture path
+     *
+     * @param path The path to the texture
+     * @return A new ResourcePath
+     * @throws IllegalArgumentException If the path contains a file extension
+     **/
+    public ResourcePath texturePath(String path)
     {
+        if (path.matches(RegularExpressions.FILE_EXTENSION)) {
+            throw new IllegalArgumentException("Texture path cannot contain file extensions");
+        }
         return new ResourcePath(SKYBOX_FOLDER + path + ".png");
     }
 
+    /**
+     * Sets a texture path
+     *
+     * @param path The path to the texture
+     * @return A new ResourceLocation
+     * @throws IllegalArgumentException If the path contains a file extension
+     **/
+    public ResourceLocation texturePath(String namesapce, String path)
+    {
+        if (path.matches(RegularExpressions.FILE_EXTENSION)) {
+            throw new IllegalArgumentException("Texture path cannot contain file extensions");
+        }
+        return new ResourceLocation(namesapce, SKYBOX_FOLDER + path + ".png");
+    }
+
+    /**
+     * Gets a single side of a texture
+     *
+     * @param side The side to get
+     * @return The texture as a ResourceLocation
+     **/
     public ResourceLocation getTexture(Side side)
     {
         return textures[side.getIndex()];
     }
 
+    /**
+     * A skybox texture side enum
+     **/
     public enum Side
     {
         FRONT(0),
@@ -70,6 +122,9 @@ public class SkyBoxTexture
         UP(4),
         DOWN(5);
 
+        /**
+         * The index of the side
+         **/
         private final int index;
 
         Side(int index)
@@ -77,6 +132,11 @@ public class SkyBoxTexture
             this.index = index;
         }
 
+        /**
+         * Gets the side index
+         *
+         * @return The side index
+         **/
         public int getIndex()
         {
             return index;

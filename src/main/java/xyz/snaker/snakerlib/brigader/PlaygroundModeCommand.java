@@ -10,10 +10,15 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ServerLevelData;
+import net.minecraft.world.level.storage.WorldData;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -21,6 +26,7 @@ import com.mojang.brigadier.context.CommandContext;
 /**
  * Created by SnakerBone on 22/08/2023
  **/
+@SuppressWarnings("JavadocReference")
 public class PlaygroundModeCommand
 {
     private boolean enabled;
@@ -37,6 +43,16 @@ public class PlaygroundModeCommand
         return new PlaygroundModeCommand(dispatcher, SnakerLib.MODID, "PlaygroundMode");
     }
 
+    /**
+     * Discard all entities excluding players, toggles daylight cycle, toggles mob spawning and toggles weather cycle
+     * @param context The command context
+     * @return The execution result
+     * <ul>
+     *     <li><strong>1</strong> for <strong>SUCCESS</strong></li>
+     *     <li><strong>0</strong> for <strong>FAILURE</strong></li>
+     *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
+     * </ul>
+     **/
     private int execute(CommandContext<CommandSourceStack> context)
     {
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);
@@ -47,7 +63,6 @@ public class PlaygroundModeCommand
             Level level = player.level();
 
             if (server != null) {
-                GameRules rules = server.getGameRules();
                 List<Entity> entities = level.getEntitiesOfClass(Entity.class, WorldStuff.getWorldBoundingBox(player), predicate);
 
                 for (Entity entity : entities) {
@@ -55,12 +70,9 @@ public class PlaygroundModeCommand
                 }
 
                 enabled = !enabled;
-
                 boolean active = !enabled;
 
-                rules.getRule(GameRules.RULE_DAYLIGHT).set(active, server);
-                rules.getRule(GameRules.RULE_DOMOBSPAWNING).set(active, server);
-                rules.getRule(GameRules.RULE_WEATHER_CYCLE).set(active, server);
+                setupPlaygroundMode(server);
 
                 if (!player.getPersistentData().contains("PlaygroundMode")) {
                     player.getPersistentData().putBoolean("PlaygroundMode", active);
@@ -73,5 +85,25 @@ public class PlaygroundModeCommand
         }
 
         return 0;
+    }
+
+    /**
+     * Modified level data for debugging found in the MinecraftServer class
+     * @param server The Minecraft Server
+     * @see MinecraftServer#setupDebugLevel(WorldData)
+     **/
+    private void setupPlaygroundMode(MinecraftServer server)
+    {
+        WorldData worldData = server.getWorldData();
+        ServerLevelData overworldData = worldData.overworldData();
+
+        worldData.setDifficulty(Difficulty.PEACEFUL);
+        worldData.setDifficultyLocked(true);
+
+        overworldData.setRaining(false);
+        overworldData.setThundering(false);
+        overworldData.setClearWeatherTime(1000000000);
+        overworldData.setDayTime(6000);
+        overworldData.setGameType(GameType.CREATIVE);
     }
 }

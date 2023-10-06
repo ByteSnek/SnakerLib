@@ -33,6 +33,16 @@ public class KillAllEntitiesCommand
         return new KillAllEntitiesCommand(dispatcher, SnakerLib.MODID, "KillAllEntities");
     }
 
+    /**
+     * Kills all entities excluding players
+     * @param context The command context
+     * @return The execution result
+     * <ul>
+     *     <li><strong>1</strong> for <strong>SUCCESS</strong></li>
+     *     <li><strong>0</strong> for <strong>FAILURE</strong></li>
+     *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
+     * </ul>
+     **/
     private int execute(CommandContext<CommandSourceStack> context)
     {
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);

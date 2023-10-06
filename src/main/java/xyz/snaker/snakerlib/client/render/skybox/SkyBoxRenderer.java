@@ -3,19 +3,21 @@ package xyz.snaker.snakerlib.client.render.skybox;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Axis;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -23,12 +25,30 @@ import org.lwjgl.opengl.GL11C;
 
 /**
  * Created by SnakerBone on 27/09/2023
+ * <p>
+ * An implemention of a basic skybox renderer using a skybox texture
+ *
+ * @see SkyBoxTexture
  **/
 public class SkyBoxRenderer
 {
+    /**
+     * The skybox texture to use
+     **/
     private final SkyBoxTexture skyBoxTexture;
+
+    /**
+     * The dimension for the skybox to be rendered in
+     **/
     private final ResourceKey<Level> dimension;
 
+    /**
+     * Creates and renders the skybox directly for the specified dimension. Make sure this is done client side only (e.g. using {@link Dist#CLIENT} via {@link FMLEnvironment#dist} or similar)
+     *
+     * @param dimension The dimension
+     * @param texture   The skybox texture to use
+     * @return A new skybox renderer
+     **/
     public static SkyBoxRenderer createForDimension(ResourceKey<Level> dimension, Supplier<SkyBoxTexture> texture)
     {
         return new SkyBoxRenderer(dimension, texture.get());
@@ -55,7 +75,17 @@ public class SkyBoxRenderer
         }
     }
 
-    private void drawQuad(RenderLevelStageEvent event, SkyBoxTexture.Side side, double yaw, double pitch, double roll, double size)
+    /**
+     * Draws a single texture of the skybox as a quad
+     *
+     * @param event The parent event
+     * @param side  The side of the texture to render
+     * @param yaw   The yaw of the texture
+     * @param pitch The pitch of the texture
+     * @param roll  The roll of the texture
+     * @param size  The size of the quad to draw
+     **/
+    public void drawQuad(RenderLevelStageEvent event, SkyBoxTexture.Side side, double yaw, double pitch, double roll, double size)
     {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = Objects.requireNonNull(minecraft.level);
@@ -103,7 +133,13 @@ public class SkyBoxRenderer
         RenderSystem.disableBlend();
     }
 
-    private void drawSkyBox(RenderLevelStageEvent event, Entity entity)
+    /**
+     * Draws the entire skybox
+     *
+     * @param event  The parent event
+     * @param entity The camera entity
+     **/
+    public void drawSkyBox(RenderLevelStageEvent event, Entity entity)
     {
         if (entity.level().dimension() == dimension) {
             drawQuad(event, SkyBoxTexture.Side.FRONT, 0, 0, 0, 100);
