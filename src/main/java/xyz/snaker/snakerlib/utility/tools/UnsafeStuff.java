@@ -1,6 +1,7 @@
 package xyz.snaker.snakerlib.utility.tools;
 
 import java.lang.reflect.Field;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -8,7 +9,6 @@ import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.concurrent.UncaughtExceptionThread;
 
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.system.MemoryUtil;
 
 import sun.misc.Unsafe;
 
@@ -16,7 +16,42 @@ public class UnsafeStuff
 {
     private static Unsafe theUnsafe;
 
+    private static final ByteOrder BYTE_ORDER = ByteOrder.nativeOrder();
+    private static final ByteShift SHIFT;
+
     static {
+        if (BYTE_ORDER == ByteOrder.BIG_ENDIAN) {
+            SHIFT = new ByteShift()
+            {
+                @Override
+                public long left(long value, int bytes)
+                {
+                    return value << (bytes << 3);
+                }
+
+                @Override
+                public long right(long value, int bytes)
+                {
+                    return value >>> (bytes << 3);
+                }
+            };
+        } else {
+            SHIFT = new ByteShift()
+            {
+                @Override
+                public long left(long value, int bytes)
+                {
+                    return value >>> (bytes << 3);
+                }
+
+                @Override
+                public long right(long value, int bytes)
+                {
+                    return value << (bytes << 3);
+                }
+            };
+        }
+
         try {
             Field field = Unsafe.class.getDeclaredField("theUnsafe");
             field.setAccessible(true);
@@ -73,6 +108,12 @@ public class UnsafeStuff
         }
     }
 
+    /**
+     * Attempts to create a new instance of any object
+     *
+     * @param obj The object to get
+     * @return The object if it isn't null or a versatile object
+     **/
     public static <V> V getOrUnsafeAssign(V obj)
     {
         return Objects.requireNonNullElse(obj, versatileObject());
@@ -182,49 +223,109 @@ public class UnsafeStuff
 
     /**
      * Force crashes the JVM by starving its memory
-     * <p>
-     * Extremely dangerous, inefficient and nothing is saved or backed up during the process
-     * <p>
-     * <b>There should be no reason at all to be implementing this method outside of the developer environment</b>
-     *
-     * @param crashReason The reason for crashing so it can be logged if implemented
      **/
-    public static void forceCrashJVM(String crashReason)
+    public static void forceCrashJVM()
     {
-        String className = SnakerLib.STACK_WALKER.getCallerClass().toString();
-        String threadName = Thread.currentThread().getName();
-        String regex = ".*[a-zA-Z]+.*";
-        String lineBreak = "\n";
-
-        StringBuilder reportBuilder = new StringBuilder("-+-");
-
-        reportBuilder.append("-+-".repeat(36));
-
-        SnakerLib.LOGGER.warnf("JVM crash detected on %s", threadName);
-        SnakerLib.LOGGER.errorf("%s %24s %s", lineBreak, reportBuilder, lineBreak);
-        SnakerLib.LOGGER.errorf("The JVM was forcefully crashed by %s %s", className, lineBreak);
-
-        if (!className.contains("SnakerLib")) {
-            SnakerLib.LOGGER.errorf("The JVM was not crashed by SnakerLib. Please go report it to %s %s", className, lineBreak);
-        }
-
-        if (!crashReason.matches(regex)) {
-            SnakerLib.LOGGER.errorf("The reason for the crash was not specified %s", lineBreak);
-        } else {
-            SnakerLib.LOGGER.errorf("%s %s", crashReason, lineBreak);
-        }
-
-        SnakerLib.LOGGER.errorf("%24s", reportBuilder);
-        MemoryUtil.memSet(0, 0, 1);
+        setMemory(0, 0, 1);
     }
 
     /**
-     * Don't do anything retarded ;)
+     * Sets the memory of the JVM
      *
-     * @return The unsafe instance
+     * @param pointer The pointer
+     * @param value   The value
+     * @param bytes   The bytes
      **/
-    public static Unsafe getTheUnsafe()
+    public static void setMemory(long pointer, int value, long bytes)
     {
-        return theUnsafe;
+        if (bytes < 256) {
+            int ptr = (int) pointer;
+            if (is64bit()) {
+                int arch = ptr & 7;
+                if (arch == 0) {
+                    setMemory64(pointer, value, (int) bytes & 0xFF);
+                }
+            } else {
+                int arch = ptr & 3;
+                if (arch == 0) {
+                    setMemory32(ptr, value, (int) bytes & 0xFF);
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets the 64bit memory of the JVM
+     *
+     * @param pointer The pointer
+     * @param value   The value
+     * @param bytes   The bytes
+     **/
+    static void setMemory64(long pointer, int value, int bytes)
+    {
+        long ptrn = Long.divideUnsigned(-1, 255);
+        long rdx = value & 0XFF;
+        long fill = rdx * ptrn;
+
+        int byteCount = bytes;
+
+        while (8 <= byteCount) {
+            theUnsafe.putLong(null, pointer, fill);
+            byteCount -= 8;
+            pointer += 8;
+        }
+
+        if (byteCount != 0) {
+            long mask = SHIFT.right(-1L, byteCount);
+            long bytePointer = fill ^ theUnsafe.getLong(null, pointer);
+            long offset = fill ^ bytePointer & mask;
+            theUnsafe.putLong(null, pointer, offset);
+        }
+    }
+
+    /**
+     * Sets the 32bit memory of the JVM
+     *
+     * @param pointer The pointer
+     * @param value   The value
+     * @param bytes   The bytes
+     **/
+    static void setMemory32(int pointer, int value, int bytes)
+    {
+        int ptrn = Integer.divideUnsigned(-1, 255);
+        int rdx = value & 0xFF;
+        int fill = rdx * ptrn;
+
+        int i = 0;
+
+        for (; i <= bytes - 4; i += 4) {
+            int offset = pointer + i;
+            theUnsafe.putInt(null, offset, fill);
+        }
+
+        for (; i < bytes; i++) {
+            int offset = pointer + i;
+            theUnsafe.putByte(null, offset, (byte) fill);
+        }
+    }
+
+    /**
+     * Checks if the current system is 64bit
+     *
+     * @return True if the current system is 64bit
+     **/
+    static boolean is64bit()
+    {
+        return System.getProperty("sun.arch.data.model").equals("64");
+    }
+
+    /**
+     * A byte shift interface for shifting memory addresses
+     **/
+    interface ByteShift
+    {
+        long left(long value, int bytes);
+
+        long right(long value, int bytes);
     }
 }

@@ -11,7 +11,6 @@ import xyz.snaker.snakerlib.utility.tools.KeyboardStuff;
 import xyz.snaker.snakerlib.utility.tools.UnsafeStuff;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -114,7 +113,7 @@ public class SnakerLib
     }
 
     /**
-     * Deletes any JVM hotspot crash files that were caused by {@link UnsafeStuff#forceCrashJVM(String)}
+     * Deletes any JVM hotspot crash files that were caused by {@link UnsafeStuff#forceCrashJVM()}
      **/
     public static void deleteJVMHSFiles()
     {
@@ -140,10 +139,12 @@ public class SnakerLib
     static void clientTick(TickEvent.ClientTickEvent event)
     {
         if (event.phase == TickEvent.Phase.END || !Minecraft.getInstance().isPaused()) {
-            if (KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-                if (KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_F4)) {
-                    if (SnakerConfig.COMMON.forceCrashJvmKeyBindings.get()) {
-                        UnsafeStuff.forceCrashJVM(Component.literal("Left shift and F4 pressed.").getString() + " " + Component.literal("You can disable this in the config (snakerlib-common.toml) if you wish").getString());
+            if (KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_LEFT_ALT) || KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_RIGHT_ALT)) {
+                if (KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT) || KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_RIGHT_SHIFT)) {
+                    if (KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_F4)) {
+                        if (SnakerConfig.COMMON.forceCrashJvmKeyBindings.get()) {
+                            UnsafeStuff.forceCrashJVM();
+                        }
                     }
                 }
             }

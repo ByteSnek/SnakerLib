@@ -29,7 +29,7 @@ public class SnakerConfig
         {
             builder.push("common");
             playerVulnerableInCreative = builder.comment("Should mobs target the player when in creative mode (default: true)").define("playerVulnerableInCreative", true);
-            forceCrashJvmKeyBindings = builder.comment("Should Left Shift + F4 force crash the JVM for debugging purposes (default: true)").define("forceCrashJvmKeyBindings", true);
+            forceCrashJvmKeyBindings = builder.comment("Should ALT + SHIFT + F4 force crash the JVM for debugging purposes (default: true)").define("forceCrashJvmKeyBindings", true);
             removeJvmCrashFilesOnStartup = builder.comment("Should JVM crash files be deleted on startup for optimization purposes (default: true)").define("removeJvmCrashFilesOnStartup", true);
             removeMinecraftCrashFilesOnStartup = builder.comment("Should Minecraft crash files be deleted on startup for optimization purposes (default: false)").define("removeMinecraftCrashFilesOnStartup", false);
             builder.pop();
