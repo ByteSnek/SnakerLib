@@ -13,12 +13,12 @@ public class Maths
     public static final int LEVEL_AABB_RADIUS = 0x989680;
 
     /**
-     * The sum of {@link Math#PI} / 180
+     * The sum of 180 / {@link Math#PI}
      **/
     public static final float RADIANS_TO_DEGREES = 57.29577951308232F;
-
+    
     /**
-     * The sum of 180 / {@link Math#PI}
+     * The sum of {@link Math#PI} / 180
      **/
     public static final float DEGREES_TO_RADIANS = 0.017453292519943F;
 

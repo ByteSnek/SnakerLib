@@ -5,8 +5,9 @@ import java.util.Arrays;
 
 import xyz.snaker.snakerlib.concurrent.lock.LockedValue;
 import xyz.snaker.snakerlib.config.SnakerConfig;
+import xyz.snaker.snakerlib.internal.log4j.DevLogger;
+import xyz.snaker.snakerlib.internal.log4j.SimpleLogger;
 import xyz.snaker.snakerlib.internal.log4j.SnakerLogger;
-import xyz.snaker.snakerlib.internal.log4j.SnakerLoggerManager;
 import xyz.snaker.snakerlib.utility.tools.KeyboardStuff;
 import xyz.snaker.snakerlib.utility.tools.UnsafeStuff;
 
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import org.lwjgl.glfw.GLFW;
@@ -48,6 +50,13 @@ public class SnakerLib
     private static long serverTickCount = 0;
 
     /**
+     * A printable debug key for debugging. By default this key is set to keypad enter
+     *
+     * @see KeyboardStuff#isDebugKeyDown()
+     **/
+    private static int debugKey;
+
+    /**
      * Checks if SnakerLib is initialized
      **/
     private static boolean isInitialized;
@@ -56,6 +65,11 @@ public class SnakerLib
      * Checks if SnakerLib is registered to Forge
      **/
     private static boolean isRegistered;
+
+    /**
+     * Checks if SnakerLib is running in developer environment
+     **/
+    private static boolean inDeveloperEnvironment;
 
     /**
      * A locked value holding the modid of the mod that initialized SnakerLib
@@ -67,7 +81,12 @@ public class SnakerLib
     /**
      * SnakerLib's logger instance
      **/
-    public static final SnakerLogger LOGGER = SnakerLoggerManager.INSTANCE.apply(SnakerLib.NAME);
+    public static final SnakerLogger LOGGER = SimpleLogger.INSTANCE.apply(SnakerLib.NAME);
+
+    /**
+     * SnakerLib's dev logger instance
+     **/
+    public static final SnakerLogger DEVLOGGER = DevLogger.INSTANCE.apply(SnakerLib.NAME);
 
     /**
      * Stack walker with class reference retention
@@ -78,6 +97,8 @@ public class SnakerLib
     {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modSetupEvent);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
+        SnakerLib.inDeveloperEnvironment = !FMLLoader.isProduction() || !System.getProperties().containsKey("production");
+        SnakerLib.debugKey = GLFW.GLFW_KEY_KP_ENTER;
     }
 
     /**
@@ -185,6 +206,21 @@ public class SnakerLib
                 }
             }
         }
+    }
+
+    public static void setDebugKey(int key)
+    {
+        debugKey = key;
+    }
+
+    public static int getDebugKey()
+    {
+        return debugKey;
+    }
+
+    public static boolean isInDeveloperEnvironment()
+    {
+        return inDeveloperEnvironment;
     }
 
     public static long getClientTickCount()

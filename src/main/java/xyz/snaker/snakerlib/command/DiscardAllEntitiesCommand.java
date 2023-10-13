@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.brigader;
+package xyz.snaker.snakerlib.command;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -19,22 +19,23 @@ import com.mojang.brigadier.context.CommandContext;
 /**
  * Created by SnakerBone on 31/08/2023
  **/
-public class KillAllEntitiesCommand
+public class DiscardAllEntitiesCommand
 {
-    KillAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name, String arg)
+    DiscardAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name, String arg)
     {
         dispatcher.register(Commands.literal(name)
                 .then(Commands.literal(arg)
                         .executes(this::execute)));
     }
 
-    public static KillAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
+    public static DiscardAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new KillAllEntitiesCommand(dispatcher, SnakerLib.MODID, "KillAllEntities");
+        return new DiscardAllEntitiesCommand(dispatcher, SnakerLib.MODID, "DiscardAllEntities");
     }
 
     /**
-     * Kills all entities excluding players
+     * Discards all entities excluding players
+     *
      * @param context The command context
      * @return The execution result
      * <ul>
@@ -52,24 +53,15 @@ public class KillAllEntitiesCommand
             Level level = player.level();
             List<Entity> entities = level.getEntitiesOfClass(Entity.class, WorldStuff.getWorldBoundingBox(player), predicate);
 
-            boolean immune = false;
-
             for (Entity entity : entities) {
-                if (!entity.isInvulnerable()) {
-                    entity.kill();
-                } else {
-                    immune = true;
-                }
+                entity.discard();
             }
 
-            if (!entities.isEmpty() && immune) {
-                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully killed %s entities. Some entities could not be killed as they were invulnerable", entities.size())), true);
-                return 1;
-            } else if (!entities.isEmpty()) {
-                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully killed %s entities", entities.size())), true);
+            if (!entities.isEmpty()) {
+                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully discarded %s entities", entities.size())), true);
                 return 1;
             } else {
-                context.getSource().sendFailure(Component.literal("Could not find any entities to kill"));
+                context.getSource().sendFailure(Component.literal("Could not find any entities to discard"));
                 return 0;
             }
         }

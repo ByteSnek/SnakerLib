@@ -10,21 +10,21 @@ public interface SnakerLogger
      *
      * @param message The message to log
      **/
-    <V> void info(V message);
+    <MSG> void info(MSG message);
 
     /**
      * Prints a message with the log level of warning
      *
      * @param message The message to log
      **/
-    <V> void warn(V message);
+    <MSG> void warn(MSG message);
 
     /**
      * Prints a message with the log level of error
      *
      * @param message The message to log
      **/
-    <V> void error(V message);
+    <MSG> void error(MSG message);
 
     /**
      * Prints a message with a custom defined log level
@@ -32,7 +32,7 @@ public interface SnakerLogger
      * @param message The message to log
      * @param level   The console log level
      **/
-    <V> void print(V message, ConsoleLogLevel level);
+    <MSG> void print(MSG message, ConsoleLogLevel level);
 
     /**
      * Prints a formatted message with a log level of information

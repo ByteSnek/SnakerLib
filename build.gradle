@@ -66,6 +66,7 @@ repositories {
 dependencies {
     minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
     runtimeOnly fg.deobf("curse.maven:the-one-probe-245211:4629624")
+    minecraftLibrary 'org.apache.commons:commons-math3:3.6.1'
 }
 
 mixin {

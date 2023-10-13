@@ -1,5 +1,7 @@
 package xyz.snaker.snakerlib.utility.tools;
 
+import xyz.snaker.snakerlib.SnakerLib;
+
 import net.minecraft.client.Minecraft;
 
 import org.lwjgl.glfw.GLFW;
@@ -18,5 +20,15 @@ public class KeyboardStuff
     public static boolean isKeyDown(int key)
     {
         return GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), key) == GLFW.GLFW_PRESS;
+    }
+
+    /**
+     * Checks if the debug key is down
+     *
+     * @return True if the debug key is down is developer environment
+     **/
+    public static boolean isDebugKeyDown()
+    {
+        return isKeyDown(SnakerLib.getDebugKey()) && SnakerLib.isInDeveloperEnvironment();
     }
 }

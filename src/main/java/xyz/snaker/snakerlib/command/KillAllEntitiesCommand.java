@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.brigader;
+package xyz.snaker.snakerlib.command;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -14,30 +14,28 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 /**
  * Created by SnakerBone on 31/08/2023
  **/
-public class HurtAllEntitiesCommand
+public class KillAllEntitiesCommand
 {
-    HurtAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name, String arg)
+    KillAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name, String arg)
     {
         dispatcher.register(Commands.literal(name)
                 .then(Commands.literal(arg)
-                        .then(Commands.argument("DamageAmount", FloatArgumentType.floatArg())
-                                .executes(context -> execute(context,
-                                        FloatArgumentType.getFloat(context, "DamageAmount"))))));
+                        .executes(this::execute)));
     }
 
-    public static HurtAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
+    public static KillAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new HurtAllEntitiesCommand(dispatcher, SnakerLib.MODID, "HurtAllEntities");
+        return new KillAllEntitiesCommand(dispatcher, SnakerLib.MODID, "KillAllEntities");
     }
 
     /**
-     * Hurts all entities excluding players
+     * Kills all entities excluding players
+     *
      * @param context The command context
      * @return The execution result
      * <ul>
@@ -46,7 +44,7 @@ public class HurtAllEntitiesCommand
      *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
      * </ul>
      **/
-    private int execute(CommandContext<CommandSourceStack> context, float amount)
+    private int execute(CommandContext<CommandSourceStack> context)
     {
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);
         ServerPlayer player = context.getSource().getPlayer();
@@ -59,20 +57,20 @@ public class HurtAllEntitiesCommand
 
             for (Entity entity : entities) {
                 if (!entity.isInvulnerable()) {
-                    entity.hurt(level.damageSources().generic(), amount);
+                    entity.kill();
                 } else {
                     immune = true;
                 }
             }
 
             if (!entities.isEmpty() && immune) {
-                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully inflicted %s entities with %s damage. Some entities could not be hurt as they were invulnerable", entities.size(), amount)), true);
+                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully killed %s entities. Some entities could not be killed as they were invulnerable", entities.size())), true);
                 return 1;
             } else if (!entities.isEmpty()) {
-                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully inflicted %s entities with %s damage", entities.size(), amount)), true);
+                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully killed %s entities", entities.size())), true);
                 return 1;
             } else {
-                context.getSource().sendFailure(Component.literal("Could not find any entities to hurt"));
+                context.getSource().sendFailure(Component.literal("Could not find any entities to kill"));
                 return 0;
             }
         }

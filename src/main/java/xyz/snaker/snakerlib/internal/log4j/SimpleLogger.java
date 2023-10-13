@@ -8,7 +8,7 @@ import xyz.snaker.snakerlib.utility.tools.StringStuff;
 /**
  * Created by SnakerBone on 9/07/2023
  **/
-public class SnakerLoggerManager implements SnakerLogger
+public class SimpleLogger implements SnakerLogger
 {
     /**
      * The instance to create. Pass in an identifier for the logger. The logger would output something like this:
@@ -18,38 +18,38 @@ public class SnakerLoggerManager implements SnakerLogger
      * </code>
      * </p>
      **/
-    public static Function<String, SnakerLoggerManager> INSTANCE = SnakerLoggerManager::new;
+    public static Function<String, SimpleLogger> INSTANCE = SimpleLogger::new;
 
     /**
-     * The logger's identifier
+     * This logger's identifier
      **/
-    private final String name;
+    protected final String name;
 
-    private SnakerLoggerManager(String name)
+    protected SimpleLogger(String name)
     {
         this.name = StringStuff.i18nt(name);
     }
 
     @Override
-    public <V> void info(V message)
+    public <MSG> void info(MSG message)
     {
         print(message, ConsoleLogLevel.INFO);
     }
 
     @Override
-    public <V> void warn(V message)
+    public <MSG> void warn(MSG message)
     {
         print(message, ConsoleLogLevel.WARN);
     }
 
     @Override
-    public <V> void error(V message)
+    public <MSG> void error(MSG message)
     {
         print(message, ConsoleLogLevel.ERROR);
     }
 
     @Override
-    public <V> void print(V message, ConsoleLogLevel level)
+    public <MSG> void print(MSG message, ConsoleLogLevel level)
     {
         System.out.println(level.colourValue() + "[" + name + "/" + level.markerValue() + "]: " + message + ConsoleTextColour.WHITE.value());
     }

@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.brigader;
+package xyz.snaker.snakerlib.command;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -10,11 +10,9 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ServerLevelData;
@@ -45,6 +43,7 @@ public class PlaygroundModeCommand
 
     /**
      * Discard all entities excluding players, toggles daylight cycle, toggles mob spawning and toggles weather cycle
+     *
      * @param context The command context
      * @return The execution result
      * <ul>
@@ -89,6 +88,7 @@ public class PlaygroundModeCommand
 
     /**
      * Modified level data for debugging found in the MinecraftServer class
+     *
      * @param server The Minecraft Server
      * @see MinecraftServer#setupDebugLevel(WorldData)
      **/

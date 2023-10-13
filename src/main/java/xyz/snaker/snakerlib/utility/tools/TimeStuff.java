@@ -1,56 +1,88 @@
 package xyz.snaker.snakerlib.utility.tools;
 
-import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.math.Maths;
-
 /**
  * Created by SnakerBone on 15/08/2023
  **/
 public class TimeStuff
 {
     /**
-     * Checks if the remainder of the tick offset is equal to 0
-     *
-     * @param tickOffset The offset amount
-     * @return True if the remainder of the tick offset is equal to 0
+     * A single second in milliseconds
      **/
-    public static boolean tickOffs(float tickOffset)
+    public static final long SECOND = 1000;
+
+    /**
+     * A single millisecond in nanoseconds
+     **/
+    public static final long MILLISECOND = 1000000;
+
+    /**
+     * A single second in nanoseconds
+     **/
+    public static final long SECONDS = MILLISECOND * SECOND;
+
+    /**
+     * Converts nanoseconds to seconds
+     *
+     * @param nanos The time to convert in nanoseconds
+     * @return The nanoseconds in seconds
+     **/
+    public static double nanosToSeconds(double nanos)
     {
-        return SnakerLib.getClientTickCount() % tickOffset == 0;
+        return toSeconds(nanos / SECONDS);
     }
 
     /**
-     * Checks if the remainder of the tick offset is equal to 0
+     * Converts nanoseconds to seconds
      *
-     * @param other      A ticker / timer
-     * @param tickOffset The offset amount
-     * @return True if the remainder of the tick offset is equal to 0
+     * @param nanos The time to convert in nanoseconds
+     * @return The nanoseconds in seconds
      **/
-    public static boolean tickOffs(float other, float tickOffset)
+    public static long nanosToSeconds(long nanos)
     {
-        return other % tickOffset == 0;
+        return toSeconds(nanos / SECONDS);
     }
 
     /**
-     * Checks if the remainder of the second offset is equal to 0
+     * Converts nanoseconds to milliseconds
      *
-     * @param secOffset The offset amount
-     * @return True if the remainder of the second offset is equal to 0
+     * @param nanos The time to convert in nanoseconds
+     * @return The nanoseconds in milliseconds
      **/
-    public static boolean secOffs(int secOffset)
+    public static double nanosToMillis(double nanos)
     {
-        return SnakerLib.getClientTickCount() % Maths.secondsToTicks(secOffset) == 0;
+        return toSeconds(nanos / MILLISECOND);
     }
 
     /**
-     * Checks if the remainder of the second offset is equal to 0
+     * Converts nanoseconds to milliseconds
      *
-     * @param other     A ticker / timer
-     * @param secOffset The offset amount
-     * @return True if the remainder of the second offset is equal to 0
+     * @param nanos The time to convert in nanoseconds
+     * @return The nanoseconds in milliseconds
      **/
-    public static boolean secOffs(float other, int secOffset)
+    public static long nanosToMillis(long nanos)
     {
-        return other % Maths.secondsToTicks(secOffset) == 0;
+        return toSeconds(nanos / MILLISECOND);
+    }
+
+    /**
+     * Base method for converting time to seconds
+     *
+     * @param time The time to convert
+     * @return The time in seconds
+     **/
+    public static double toSeconds(double time)
+    {
+        return (double) Math.round(time * SECOND) / SECOND;
+    }
+
+    /**
+     * Base method for converting time to seconds
+     *
+     * @param time The time to convert
+     * @return The time in seconds
+     **/
+    public static long toSeconds(long time)
+    {
+        return (long) Math.round(time * SECOND) / SECOND;
     }
 }
