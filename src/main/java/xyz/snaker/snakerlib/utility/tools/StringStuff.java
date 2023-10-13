@@ -1,12 +1,20 @@
 package xyz.snaker.snakerlib.utility.tools;
 
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import xyz.snaker.snakerlib.SnakerLib;
+import xyz.snaker.snakerlib.utility.FeatureCycleSorter;
+
+import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.RandomStringUtils;
+
+import it.unimi.dsi.fastutil.ints.IntSet;
 
 /**
  * Created by SnakerBone on 15/08/2023
@@ -207,5 +215,45 @@ public class StringStuff
         } else {
             return string;
         }
+    }
+
+    public static String formatFeatureCycleErrorMessage(Map<FeatureCycleSorter.FeatureData, Map<FeatureCycleSorter.BiomeData, IntSet>> tracebacks, List<FeatureCycleSorter.FeatureData> cycle)
+    {
+        StringBuilder error = new StringBuilder("A feature cycle was found. Cycle:");
+
+        ListIterator<FeatureCycleSorter.FeatureData> iterator = cycle.listIterator();
+        FeatureCycleSorter.FeatureData start = iterator.next();
+        Map<FeatureCycleSorter.BiomeData, IntSet> prevTracebacks = tracebacks.get(start);
+
+        error.append("At step ").append(start.step()).append('\n').append("Feature '").append(start.name()).append("'\n");
+
+        while (iterator.hasNext()) {
+            FeatureCycleSorter.FeatureData current = iterator.next();
+            Map<FeatureCycleSorter.BiomeData, IntSet> currentTracebacks = tracebacks.get(current);
+
+            int found = 0;
+
+            for (FeatureCycleSorter.BiomeData biome : Sets.intersection(prevTracebacks.keySet(), currentTracebacks.keySet())) {
+                int prevTb = prevTracebacks.get(biome).intStream().min().orElseThrow();
+                int currTb = currentTracebacks.get(biome).intStream().max().orElseThrow();
+
+                if (prevTb < currTb) {
+                    if (found == 0) {
+                        error.append("  must be before '").append(current.name()).append("' (defined in '").append(biome.name()).append("' at index ").append(prevTb).append(", ").append(currTb);
+                    }
+                    found++;
+                }
+            }
+
+            if (found > 1) {
+                error.append(" and ").append(found - 1).append(" others)\n");
+            } else if (found > 0) {
+                error.append(")\n");
+            }
+
+            prevTracebacks = currentTracebacks;
+        }
+
+        return error.toString();
     }
 }
