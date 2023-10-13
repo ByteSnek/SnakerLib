@@ -13,6 +13,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ForgeMod.class)
 public class ForgeModMixin
 {
-    @Redirect(method = "preInit", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/fml/VersionChecker;startVersionCheck()V"))
+    @Redirect(method = "preInit", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/fml/VersionChecker;startVersionCheck()V"), remap = false)
     public void supressVersionCheckerError(FMLCommonSetupEvent event) {}
 }
