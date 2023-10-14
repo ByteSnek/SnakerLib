@@ -11,12 +11,12 @@ public class Log4jStuff
 {
     public static void cleanLootTableError(SnakerLogger logger, String message, Object p0, Object p1)
     {
-        cleanError(logger, "Error parsing loot table {}.json : {}", message, p0, p1);
+        cleanError(logger, "Error parsing loot table %s.json : %s", message, p0, p1);
     }
 
     public static void cleanRecipeError(SnakerLogger logger, String message, Object p0, Object p1)
     {
-        cleanError(logger, "Error parsing recipe {}.json : {}", message, p0, p1);
+        cleanError(logger, "Error parsing recipe %s.json : %s", message, p0, p1);
     }
 
     private static void cleanError(SnakerLogger logger, String message, String fallbackMessage, Object possibleId, Object possibleError)
