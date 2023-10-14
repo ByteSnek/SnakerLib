@@ -11,11 +11,11 @@ public class ExecuteOnce
 
     public boolean execute()
     {
-        return value.getAndSet(true);
+        return !value.getAndSet(true);
     }
 
-    public boolean reset()
+    public void reset()
     {
-        return !value.getAndSet(false);
+        value.getAndSet(false);
     }
 }
