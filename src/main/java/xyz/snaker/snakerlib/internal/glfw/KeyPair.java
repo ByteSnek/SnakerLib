@@ -3,7 +3,12 @@ package xyz.snaker.snakerlib.internal.glfw;
 import java.util.Arrays;
 import java.util.List;
 
+import xyz.snaker.snakerlib.concurrent.UncaughtExceptionThread;
+import xyz.snaker.snakerlib.utility.tools.KeyboardStuff;
 import xyz.snaker.snakerlib.utility.tools.ReflectiveStuff;
+
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import com.mojang.datafixers.util.Pair;
 
@@ -39,9 +44,16 @@ public class KeyPair
      **/
     private final Pair<Integer, Integer> keyPair;
 
+    /**
+     * The handle of the current window
+     **/
+    private long handle;
+
     public KeyPair(int left, int right)
     {
         validateKeys(left, right);
+        findOrSetWindowHandle();
+
         this.keyPair = new Pair<>(left, right);
     }
 
@@ -86,6 +98,33 @@ public class KeyPair
     }
 
     /**
+     * Attempts to find and/or set the current window handle
+     **/
+    private void findOrSetWindowHandle()
+    {
+        if (!FMLEnvironment.dist.isClient()) {
+            return; // Precautions; It should always be client side, just in case the caller is brain dead
+        }
+
+        long glfwHandle = GLFW.glfwGetCurrentContext();
+        long mcHandle = Minecraft.getInstance().getWindow().getWindow();
+
+        if (glfwHandle == 0 || glfwHandle != mcHandle) {
+            if (mcHandle == 0) {
+                IllegalStateException exception = new IllegalStateException("No valid window could be found. Key state checking will be unavailable");
+                UncaughtExceptionThread.createAndRun(exception);
+                return;
+            }
+
+            handle = mcHandle;
+
+            return;
+        }
+
+        handle = glfwHandle;
+    }
+
+    /**
      * Gets the 'left' variant of this KeyPair
      *
      * @return The 'left' key
@@ -106,13 +145,35 @@ public class KeyPair
     }
 
     /**
+     * Base method for checking if a key is being pressed
+     *
+     * @param key The key to check
+     * @return True if the key is currently being pressed
+     **/
+    private boolean isDown(int key)
+    {
+        return KeyboardStuff.isKeyDown(handle, key);
+    }
+
+    /**
+     * Base method for checking if a key is not being pressed
+     *
+     * @param key The key to check
+     * @return True if the key is not currently being pressed
+     **/
+    private boolean isUp(int key)
+    {
+        return KeyboardStuff.isKeyUp(handle, key);
+    }
+
+    /**
      * Checks if the 'left' key is being pressed
      *
      * @return True if the key is currently being pressed
      **/
     public boolean leftDown()
     {
-        return left() == GLFW.GLFW_PRESS;
+        return isDown(left());
     }
 
     /**
@@ -122,7 +183,7 @@ public class KeyPair
      **/
     public boolean rightDown()
     {
-        return right() == GLFW.GLFW_PRESS;
+        return isDown(right());
     }
 
     /**
@@ -132,7 +193,7 @@ public class KeyPair
      **/
     public boolean leftUp()
     {
-        return left() == GLFW.GLFW_RELEASE;
+        return isUp(left());
     }
 
     /**
@@ -142,7 +203,7 @@ public class KeyPair
      **/
     public boolean rightUp()
     {
-        return right() == GLFW.GLFW_RELEASE;
+        return isUp(right());
     }
 
     /**
