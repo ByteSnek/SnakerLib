@@ -16,7 +16,7 @@ public class Maths
      * The sum of 180 / {@link Math#PI}
      **/
     public static final float RADIANS_TO_DEGREES = 57.29577951308232F;
-    
+
     /**
      * The sum of {@link Math#PI} / 180
      **/
@@ -204,19 +204,6 @@ public class Maths
      * @param upper The upper bound
      * @return The clamped value as a float
      **/
-    public static float clamp(int value, int lower, int upper)
-    {
-        return Math.max(Math.min(value, upper), lower);
-    }
-
-    /**
-     * Keeps a number between two values
-     *
-     * @param value The value to clamp
-     * @param lower The lower bound
-     * @param upper The upper bound
-     * @return The clamped value as a float
-     **/
     public static float clamp(float value, float lower, float upper)
     {
         return Math.max(Math.min(value, upper), lower);
@@ -233,6 +220,19 @@ public class Maths
     public static float clamp(double value, double lower, double upper)
     {
         return (float) Math.max(Math.min(value, upper), lower);
+    }
+
+    /**
+     * Keeps a number between two values
+     *
+     * @param value The value to clamp
+     * @param lower The lower bound
+     * @param upper The upper bound
+     * @return The clamped value as a float
+     **/
+    public static int clamp(int value, int lower, int upper)
+    {
+        return Math.min(Math.max(value, lower), upper);
     }
 
     /**

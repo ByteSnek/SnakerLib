@@ -1,6 +1,7 @@
 package xyz.snaker.snakerlib.utility.tools;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -41,21 +42,18 @@ public class ReflectiveStuff
         }
     }
 
-    public static <T> T[] getFieldsInClass(Class<?> targetClass)
+    public static <T> T[] getFieldsInClass(Class<?> targetClass, Predicate<? super Object> filter, IntFunction<T[]> generator)
     {
-        return UnsafeStuff.cast(Arrays.stream(targetClass.getDeclaredFields()).map(field -> {
-            try {
-                return field.get(null);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }).toArray());
+        return UnsafeStuff.cast(Arrays.stream(targetClass.getDeclaredFields())
+                .map(field -> getFieldDirect(targetClass, field.getName(), Modifier.isPrivate(field.getModifiers()), null))
+                .filter(filter).toArray(generator));
     }
 
     public static <T> T getRandomFieldInClass(Class<?> targetClass, @Nullable Predicate<? super Object> filter, IntFunction<T[]> generator)
     {
         RandomSource random = RandomSource.create();
-        return Util.getRandom(Arrays.stream(targetClass.getDeclaredFields()).map(field -> {
+        return Util.getRandom(Arrays.stream(targetClass.getDeclaredFields()).map(field ->
+        {
             try {
                 return field.get(null);
             } catch (IllegalAccessException e) {
@@ -66,7 +64,8 @@ public class ReflectiveStuff
 
     public static <T> T getRandomFieldInClass(Class<?> targetClass, @Nullable Predicate<? super Object> filter, IntFunction<T[]> generator, RandomSource random)
     {
-        return Util.getRandom(Arrays.stream(targetClass.getDeclaredFields()).map(field -> {
+        return Util.getRandom(Arrays.stream(targetClass.getDeclaredFields()).map(field ->
+        {
             try {
                 return field.get(null);
             } catch (IllegalAccessException e) {
@@ -78,7 +77,8 @@ public class ReflectiveStuff
     public static <T> T getRandomFieldInClass(Class<?> targetClass, @Nullable Predicate<? super Object> filter, IntFunction<T[]> generator, long seed)
     {
         RandomSource random = RandomSource.create(seed);
-        return Util.getRandom(Arrays.stream(targetClass.getDeclaredFields()).map(field -> {
+        return Util.getRandom(Arrays.stream(targetClass.getDeclaredFields()).map(field ->
+        {
             try {
                 return field.get(null);
             } catch (IllegalAccessException e) {
