@@ -2,6 +2,7 @@ package xyz.snaker.snakerlib.command;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.utility.tools.WorldStuff;
@@ -21,16 +22,18 @@ import com.mojang.brigadier.context.CommandContext;
  **/
 public class DiscardAllEntitiesCommand
 {
-    DiscardAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name, String arg)
+    DiscardAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
     {
         dispatcher.register(Commands.literal(name)
-                .then(Commands.literal(arg)
-                        .executes(this::execute)));
+                .then(Commands.literal("discardAllEntities")
+                        .executes(this::execute)
+                )
+        );
     }
 
     public static DiscardAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new DiscardAllEntitiesCommand(dispatcher, SnakerLib.MODID, "DiscardAllEntities");
+        return new DiscardAllEntitiesCommand(dispatcher, SnakerLib.MODID);
     }
 
     /**
@@ -58,14 +61,24 @@ public class DiscardAllEntitiesCommand
             }
 
             if (!entities.isEmpty()) {
-                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully discarded %s entities", entities.size())), true);
+                context.getSource().sendSuccess(success(entities.size()), player.isCreative());
                 return 1;
             } else {
-                context.getSource().sendFailure(Component.literal("Could not find any entities to discard"));
+                context.getSource().sendFailure(failure());
                 return 0;
             }
         }
 
         return 0;
+    }
+
+    private Supplier<Component> success(int size)
+    {
+        return () -> Component.translatable("commands.snakerlib.discard_entity_success", size);
+    }
+
+    private Component failure()
+    {
+        return Component.translatable("commands.snakerlib.discard_entity_failure");
     }
 }

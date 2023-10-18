@@ -2,6 +2,7 @@ package xyz.snaker.snakerlib.command;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.utility.tools.WorldStuff;
@@ -21,16 +22,18 @@ import com.mojang.brigadier.context.CommandContext;
  **/
 public class KillAllEntitiesCommand
 {
-    KillAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name, String arg)
+    KillAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
     {
         dispatcher.register(Commands.literal(name)
-                .then(Commands.literal(arg)
-                        .executes(this::execute)));
+                .then(Commands.literal("killAllEntities")
+                        .executes(this::execute)
+                )
+        );
     }
 
     public static KillAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new KillAllEntitiesCommand(dispatcher, SnakerLib.MODID, "KillAllEntities");
+        return new KillAllEntitiesCommand(dispatcher, SnakerLib.MODID);
     }
 
     /**
@@ -64,17 +67,32 @@ public class KillAllEntitiesCommand
             }
 
             if (!entities.isEmpty() && immune) {
-                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully killed %s entities. Some entities could not be killed as they were invulnerable", entities.size())), true);
+                context.getSource().sendSuccess(success0(entities.size()), player.isCreative());
                 return 1;
             } else if (!entities.isEmpty()) {
-                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully killed %s entities", entities.size())), true);
+                context.getSource().sendSuccess(success(entities.size()), player.isCreative());
                 return 1;
             } else {
-                context.getSource().sendFailure(Component.literal("Could not find any entities to kill"));
+                context.getSource().sendFailure(failure());
                 return 0;
             }
         }
 
         return 0;
+    }
+
+    private Supplier<Component> success0(int size)
+    {
+        return () -> Component.translatable("commands.snakerlib.kill_entity_success_0", size);
+    }
+
+    private Supplier<Component> success(int size)
+    {
+        return () -> Component.translatable("commands.snakerlib.kill_entity_success", size);
+    }
+
+    private Component failure()
+    {
+        return Component.translatable("commands.snakerlib.kill_entity_failure");
     }
 }

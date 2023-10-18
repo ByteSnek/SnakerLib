@@ -2,6 +2,7 @@ package xyz.snaker.snakerlib.command;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.utility.tools.WorldStuff;
@@ -22,18 +23,22 @@ import com.mojang.brigadier.context.CommandContext;
  **/
 public class HurtAllEntitiesCommand
 {
-    HurtAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name, String arg)
+    HurtAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
     {
         dispatcher.register(Commands.literal(name)
-                .then(Commands.literal(arg)
+                .then(Commands.literal("hurtAllEntities")
                         .then(Commands.argument("DamageAmount", FloatArgumentType.floatArg())
                                 .executes(context -> execute(context,
-                                        FloatArgumentType.getFloat(context, "DamageAmount"))))));
+                                        FloatArgumentType.getFloat(context, "DamageAmount"))
+                                )
+                        )
+                )
+        );
     }
 
     public static HurtAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new HurtAllEntitiesCommand(dispatcher, SnakerLib.MODID, "HurtAllEntities");
+        return new HurtAllEntitiesCommand(dispatcher, SnakerLib.MODID);
     }
 
     /**
@@ -67,17 +72,32 @@ public class HurtAllEntitiesCommand
             }
 
             if (!entities.isEmpty() && immune) {
-                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully inflicted %s entities with %s damage. Some entities could not be hurt as they were invulnerable", entities.size(), amount)), true);
+                context.getSource().sendSuccess(success0(entities.size(), amount), true);
                 return 1;
             } else if (!entities.isEmpty()) {
-                context.getSource().sendSuccess(() -> Component.literal(String.format("Successfully inflicted %s entities with %s damage", entities.size(), amount)), true);
+                context.getSource().sendSuccess(success(entities.size(), amount), true);
                 return 1;
             } else {
-                context.getSource().sendFailure(Component.literal("Could not find any entities to hurt"));
+                context.getSource().sendFailure(failure());
                 return 0;
             }
         }
 
         return 0;
+    }
+
+    private Supplier<Component> success0(int size, float amount)
+    {
+        return () -> Component.translatable("commands.snakerlib.hurt_entity_success_0", size, amount);
+    }
+
+    private Supplier<Component> success(int size, float amount)
+    {
+        return () -> Component.translatable("commands.snakerlib.hurt_entity_success", size, amount);
+    }
+
+    private Component failure()
+    {
+        return Component.translatable("commands.snakerlib.hurt_entity_failure");
     }
 }

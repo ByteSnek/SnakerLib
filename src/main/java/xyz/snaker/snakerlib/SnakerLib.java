@@ -3,6 +3,7 @@ package xyz.snaker.snakerlib;
 import java.io.File;
 import java.util.Arrays;
 
+import xyz.snaker.snakerlib.command.*;
 import xyz.snaker.snakerlib.concurrent.lock.LockedValue;
 import xyz.snaker.snakerlib.config.SnakerConfig;
 import xyz.snaker.snakerlib.internal.log4j.DevLogger;
@@ -12,7 +13,9 @@ import xyz.snaker.snakerlib.utility.tools.KeyboardStuff;
 import xyz.snaker.snakerlib.utility.tools.UnsafeStuff;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -22,6 +25,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
+
+import com.mojang.brigadier.CommandDispatcher;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -95,7 +100,7 @@ public class SnakerLib
 
     public SnakerLib()
     {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modSetupEvent);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
         SnakerLib.inDeveloperEnvironment = !FMLLoader.isProduction() || !System.getProperties().containsKey("production");
         SnakerLib.debugKey = GLFW.GLFW_KEY_KP_ENTER;
@@ -157,7 +162,7 @@ public class SnakerLib
     }
 
     @SubscribeEvent
-    static void clientTick(TickEvent.ClientTickEvent event)
+    static void onClientTick(TickEvent.ClientTickEvent event)
     {
         if (event.phase == TickEvent.Phase.END || !Minecraft.getInstance().isPaused()) {
             if (KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_LEFT_ALT) || KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_RIGHT_ALT)) {
@@ -174,14 +179,25 @@ public class SnakerLib
     }
 
     @SubscribeEvent
-    static void serverTick(TickEvent.ServerTickEvent event)
+    static void onServerTick(TickEvent.ServerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.END) {
             serverTickCount++;
         }
     }
 
-    private void modSetupEvent(FMLCommonSetupEvent event)
+    @SubscribeEvent
+    static void onCommandRego(RegisterCommandsEvent event)
+    {
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        DiscardAllEntitiesCommand.register(dispatcher);
+        HurtAllEntitiesCommand.register(dispatcher);
+        KillAllEntitiesCommand.register(dispatcher);
+        PlaygroundModeCommand.register(dispatcher);
+        ConfigCommand.register(dispatcher);
+    }
+
+    private void onCommonSetup(FMLCommonSetupEvent event)
     {
         File runDir = new File(FMLPaths.GAMEDIR.get().toUri());
         File crashDir = new File(FMLPaths.GAMEDIR.get().resolve("crash-reports").toUri());

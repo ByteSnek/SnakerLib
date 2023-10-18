@@ -2,6 +2,7 @@ package xyz.snaker.snakerlib.command;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.utility.tools.WorldStuff;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.level.storage.WorldData;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 /**
@@ -27,18 +29,20 @@ import com.mojang.brigadier.context.CommandContext;
 @SuppressWarnings("JavadocReference")
 public class PlaygroundModeCommand
 {
-    private boolean enabled;
-
-    PlaygroundModeCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name, String arg)
+    PlaygroundModeCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
     {
         dispatcher.register(Commands.literal(name)
-                .then(Commands.literal(arg)
-                        .executes(this::execute)));
+                .then(Commands.literal("playgroundMode")
+                        .then(Commands.argument("playgroundMode", BoolArgumentType.bool())
+                                .executes(context -> execute(context, BoolArgumentType.getBool(context, "playgroundMode")))
+                        )
+                )
+        );
     }
 
     public static PlaygroundModeCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new PlaygroundModeCommand(dispatcher, SnakerLib.MODID, "PlaygroundMode");
+        return new PlaygroundModeCommand(dispatcher, SnakerLib.MODID);
     }
 
     /**
@@ -52,7 +56,7 @@ public class PlaygroundModeCommand
      *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
      * </ul>
      **/
-    private int execute(CommandContext<CommandSourceStack> context)
+    private int execute(CommandContext<CommandSourceStack> context, boolean value)
     {
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);
         ServerPlayer player = context.getSource().getPlayer();
@@ -68,16 +72,13 @@ public class PlaygroundModeCommand
                     entity.discard();
                 }
 
-                enabled = !enabled;
-                boolean active = !enabled;
-
-                setupPlaygroundMode(server);
+                setPlaygroundMode(server, value);
 
                 if (!player.getPersistentData().contains("PlaygroundMode")) {
-                    player.getPersistentData().putBoolean("PlaygroundMode", active);
+                    player.getPersistentData().putBoolean("PlaygroundMode", value);
                 }
 
-                context.getSource().sendSuccess(() -> Component.literal(String.format("%s Playground Mode", enabled ? "Enabled" : "Disabled")), true);
+                context.getSource().sendSuccess(success(value), true);
 
                 return 1;
             }
@@ -92,18 +93,23 @@ public class PlaygroundModeCommand
      * @param server The Minecraft Server
      * @see MinecraftServer#setupDebugLevel(WorldData)
      **/
-    private void setupPlaygroundMode(MinecraftServer server)
+    private void setPlaygroundMode(MinecraftServer server, boolean value)
     {
         WorldData worldData = server.getWorldData();
         ServerLevelData overworldData = worldData.overworldData();
 
-        worldData.setDifficulty(Difficulty.PEACEFUL);
-        worldData.setDifficultyLocked(true);
+        worldData.setDifficulty(value ? Difficulty.PEACEFUL : Difficulty.NORMAL);
+        worldData.setDifficultyLocked(value);
 
-        overworldData.setRaining(false);
-        overworldData.setThundering(false);
-        overworldData.setClearWeatherTime(1000000000);
-        overworldData.setDayTime(6000);
-        overworldData.setGameType(GameType.CREATIVE);
+        overworldData.setRaining(!value);
+        overworldData.setThundering(!value);
+        overworldData.setClearWeatherTime(value ? 1000000000 : overworldData.getClearWeatherTime());
+        overworldData.setDayTime(value ? 6000 : overworldData.getDayTime());
+        overworldData.setGameType(value ? GameType.CREATIVE : overworldData.getGameType());
+    }
+
+    private Supplier<Component> success(boolean value)
+    {
+        return () -> Component.translatable("commands.snakerlib.playground_mode_status", value ? Component.translatable("addServer.resourcePack.enabled").getString() : Component.translatable("addServer.resourcePack.disabled").getString());
     }
 }
