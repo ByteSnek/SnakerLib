@@ -15,7 +15,6 @@ import com.google.common.collect.Lists;
  *
  * @see FlatLayer
  **/
-@SuppressWarnings("JavadocReference")
 public class FlatLayerList
 {
     /**
@@ -119,7 +118,7 @@ public class FlatLayerList
     }
 
     /**
-     * Gets the internal list as an {@link Collections.UnmodifiableList}
+     * Gets the internal list as an {@link Collections#unmodifiableList(List)}
      *
      * @return This list as an unmodifiable list
      **/
