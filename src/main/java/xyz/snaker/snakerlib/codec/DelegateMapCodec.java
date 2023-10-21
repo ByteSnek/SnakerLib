@@ -6,16 +6,31 @@ import com.mojang.serialization.*;
 
 /**
  * Created by SnakerBone on 13/10/2023
+ * <p>
+ * A delegated map codec
+ *
+ * @see ErrorReportingCodec
  **/
-public class DelegateMapCodec<A> extends MapCodec<A>
+class DelegateMapCodec<A> extends MapCodec<A>
 {
+    /**
+     * The delegate for this map codec
+     **/
     private final MapCodec<A> delegate;
 
-    protected DelegateMapCodec(MapCodec<A> delegate)
+    /**
+     * Creates a new delegated map codec
+     **/
+    public DelegateMapCodec(MapCodec<A> delegate)
     {
         this.delegate = delegate;
     }
 
+    /**
+     * Gets the delegate of this map codec
+     *
+     * @return The delegate of this map codec
+     **/
     public MapCodec<A> delegate()
     {
         return delegate;

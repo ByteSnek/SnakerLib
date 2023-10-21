@@ -13,8 +13,16 @@ import org.apache.commons.lang3.mutable.MutableObject;
 
 /**
  * Created by SnakerBone on 13/10/2023
+ * <p>
+ * A list codec with an error reporter
+ *
+ * @param elementCodec  The delegated codec
+ * @param errorReporter The error reporter for this codec
+ * @param <A>           The element of this codec
+ * @see Codecs#newListCodec(Codec)
+ * @see Codecs#newListCodec(Codec, Reporter)
  **/
-public record ListCodec<A>(Codec<A> elementCodec, Reporter errorReporter) implements Codec<List<A>>
+record ListCodec<A>(Codec<A> elementCodec, Reporter errorReporter) implements Codec<List<A>>
 {
     @Override
     public <T> DataResult<T> encode(final List<A> input, final DynamicOps<T> ops, final T prefix)
@@ -61,6 +69,9 @@ public record ListCodec<A>(Codec<A> elementCodec, Reporter errorReporter) implem
         });
     }
 
+    /**
+     * Standalone error reporting interface
+     **/
     @FunctionalInterface
     public interface Reporter
     {

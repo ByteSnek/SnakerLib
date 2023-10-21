@@ -7,12 +7,28 @@ import com.mojang.serialization.*;
 
 /**
  * Created by SnakerBone on 13/10/2023
+ * <p>
+ * An optional map codec
+ *
+ * @param <A> The element of this codec
+ * @see Codecs#newOptionalFieldOfCodec(Codec, String)
+ * @see Codecs#newOptionalFieldOfCodec(Codec, String, Object)
  **/
-public final class OptionalCodec<A> extends MapCodec<Optional<A>>
+class OptionalCodec<A> extends MapCodec<Optional<A>>
 {
+    /**
+     * The codec name
+     **/
     private final String name;
+
+    /**
+     * The delegate of this codec
+     **/
     private final Codec<A> elementCodec;
 
+    /**
+     * Creates a new optional codec
+     **/
     public OptionalCodec(String name, Codec<A> elementCodec)
     {
         this.name = name;

@@ -9,6 +9,9 @@ import com.mojang.serialization.DynamicOps;
  **/
 public interface ShapedCodec<A> extends Codec<A>
 {
+    /**
+     * Creates a new shaped codec with a number element
+     **/
     static <A> ShapedCodec<A> ofNumber(Codec<A> codec)
     {
         return new CodecShape<>(codec)
@@ -21,6 +24,9 @@ public interface ShapedCodec<A> extends Codec<A>
         };
     }
 
+    /**
+     * Creates a new shaped codec with a string element
+     **/
     static <A> ShapedCodec<A> ofString(Codec<A> codec)
     {
         return new CodecShape<>(codec)
@@ -33,6 +39,9 @@ public interface ShapedCodec<A> extends Codec<A>
         };
     }
 
+    /**
+     * Creates a new shaped codec with a map element
+     **/
     static <A> ShapedCodec<A> ofMap(Codec<A> codec)
     {
         return new CodecShape<>(codec)
@@ -45,6 +54,9 @@ public interface ShapedCodec<A> extends Codec<A>
         };
     }
 
+    /**
+     * Creates a new shaped codec with a list element
+     **/
     static <A> ShapedCodec<A> ofList(Codec<A> codec)
     {
         return new CodecShape<>(codec)
@@ -57,6 +69,9 @@ public interface ShapedCodec<A> extends Codec<A>
         };
     }
 
+    /**
+     * Creates a new shaped codec
+     **/
     static <A> ShapedCodec<A> of(Codec<A> codec)
     {
         return new CodecShape<>(codec)
@@ -69,12 +84,24 @@ public interface ShapedCodec<A> extends Codec<A>
         };
     }
 
+    /**
+     * Decodes this codec
+     **/
     <T> DataResult<?> decodeShape(DynamicOps<T> ops, T input);
 
+    /**
+     * A codec shape implementation
+     **/
     abstract class CodecShape<A> implements DelegateCodec<A>, ShapedCodec<A>
     {
+        /**
+         * The internal codec
+         **/
         private final Codec<A> codec;
 
+        /**
+         * Creates a new codec shape
+         **/
         CodecShape(Codec<A> codec)
         {
             this.codec = codec;

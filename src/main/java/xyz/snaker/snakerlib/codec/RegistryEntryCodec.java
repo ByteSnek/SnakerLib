@@ -20,8 +20,15 @@ import com.mojang.serialization.Lifecycle;
 
 /**
  * Created by SnakerBone on 13/10/2023
+ * <p>
+ * A registry entry codec
+ *
+ * @param registryKey  The resource key for this codec
+ * @param elementCodec The delegate codec
+ * @param <E>          The element of this codec
+ * @see Codecs#newRegistryEntryCodec(ResourceKey, Codec)
  **/
-public record RegistryEntryCodec<E>(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec) implements Codec<Holder<E>>
+record RegistryEntryCodec<E>(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec) implements Codec<Holder<E>>
 {
     @Override
     public <T> DataResult<T> encode(Holder<E> input, DynamicOps<T> ops, T prefix)

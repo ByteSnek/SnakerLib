@@ -8,8 +8,17 @@ import com.mojang.serialization.DynamicOps;
 
 /**
  * Created by SnakerBone on 13/10/2023
+ * <p>
+ * An either codec record
+ *
+ * @param <F> The first element of this codec
+ * @param <S> The second element of this codec
+ * @see Either
+ * @see Codecs#newEitherCodec(Codec, ShapedCodec)
+ * @see Codecs#newEitherCodec(Codec, Codec)
+ * @see Codecs#newEitherCodec(ShapedCodec, Codec)
  **/
-public record EitherCodec<F, S>(ShapedCodec<F> first, ShapedCodec<S> second) implements Codec<Either<F, S>>
+record EitherCodec<F, S>(ShapedCodec<F> first, ShapedCodec<S> second) implements Codec<Either<F, S>>
 {
     @Override
     public <T> DataResult<Pair<Either<F, S>, T>> decode(DynamicOps<T> ops, T input)

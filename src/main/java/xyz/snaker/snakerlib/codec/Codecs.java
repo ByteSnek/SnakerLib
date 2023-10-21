@@ -23,69 +23,110 @@ import com.mojang.serialization.MapCodec;
 
 /**
  * Created by SnakerBone on 13/10/2023
+ * <p>
+ * Custom misc codecs
  **/
 public class Codecs
 {
+    /**
+     * Creates a new either codec
+     **/
     public static <F, S> Codec<Either<F, S>> newEitherCodec(Codec<F> first, Codec<S> second)
     {
         return new EitherCodec<>(ShapedCodec.of(first), ShapedCodec.of(second));
     }
 
+    /**
+     * Creates a new either codec
+     **/
     public static <F, S> Codec<Either<F, S>> newEitherCodec(ShapedCodec<F> first, Codec<S> second)
     {
         return new EitherCodec<>(first, ShapedCodec.of(second));
     }
 
+    /**
+     * Creates a new either codec
+     **/
     public static <F, S> Codec<Either<F, S>> newEitherCodec(Codec<F> first, ShapedCodec<S> second)
     {
         return new EitherCodec<>(ShapedCodec.of(first), second);
     }
 
+    /**
+     * Creates a new shaped either codec
+     **/
     public static <F, S> Codec<Either<F, S>> newShapedEitherCodec(ShapedCodec<F> first, ShapedCodec<S> second)
     {
         return new EitherCodec<>(first, second);
     }
 
+    /**
+     * Creates a new list codec
+     **/
     public static <E> Codec<List<E>> newListCodec(Codec<E> elementCodec)
     {
         return new ListCodec<>(elementCodec, (e, i) -> e + " at index " + i);
     }
 
+    /**
+     * Creates a new list codec
+     **/
     public static <E> Codec<List<E>> newListCodec(Codec<E> elementCodec, ListCodec.Reporter indexReporter)
     {
         return new ListCodec<>(elementCodec, indexReporter);
     }
 
+    /**
+     * Creates a new error reporting codec
+     **/
     public static <E> Codec<E> newErrorReportingCodec(Codec<E> codec, String at)
     {
         return new ErrorReportingCodec<>(codec, e -> RegistryStuff.appendErrorLocation(e, '"' + at + '"'));
     }
 
+    /**
+     * Creates a new error reporting codec
+     **/
     public static <E> Codec<E> newErrorReportingCodec(Codec<E> codec, UnaryOperator<String> errorReporter)
     {
         return new ErrorReportingCodec<>(codec, errorReporter);
     }
 
+    /**
+     * Creates a new error reporting codec
+     **/
     public static <E> MapCodec<E> newErrorReportingCodec(MapCodec<E> codec, String at)
     {
         return new ErrorReportingMapCodec<>(codec, e -> RegistryStuff.appendErrorLocation(e, '"' + at + '"'));
     }
 
+    /**
+     * Creates a new error reporting codec
+     **/
     public static <E> MapCodec<E> newErrorReportingCodec(MapCodec<E> codec, UnaryOperator<String> errorReporter)
     {
         return new ErrorReportingMapCodec<>(codec, errorReporter);
     }
 
+    /**
+     * Creates a new optional codec
+     **/
     public static <E> MapCodec<E> newOptionalFieldOfCodec(Codec<E> codec, String name, E defaultValue)
     {
         return newOptionalFieldOfCodec(codec, name).xmap(o -> o.orElse(defaultValue), a -> Objects.equals(a, defaultValue) ? Optional.empty() : Optional.of(a));
     }
 
+    /**
+     * Creates a new optional codec
+     **/
     public static <F> MapCodec<Optional<F>> newOptionalFieldOfCodec(Codec<F> elementCodec, String name)
     {
         return new OptionalCodec<>(name, elementCodec);
     }
 
+    /**
+     * Creates a new enum codec
+     **/
     public static <E extends Enum<E> & StringRepresentable> Codec<E> newEnumCodec(String id, Supplier<E[]> enumValues)
     {
         Supplier<E[]> values = Suppliers.memoize(enumValues::get);
@@ -107,11 +148,17 @@ public class Codecs
         );
     }
 
+    /**
+     * Creates a new registry entry codec
+     **/
     public static <E> Codec<Holder<E>> newRegistryEntryCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec)
     {
         return new RegistryEntryCodec<>(registryKey, elementCodec);
     }
 
+    /**
+     * Creates a new registry entry list codec
+     **/
     public static <E> Codec<HolderSet<E>> newRegistryEntryListCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec)
     {
         return new RegistryListCodec<>(registryKey, newRegistryEntryCodec(registryKey, elementCodec), false);

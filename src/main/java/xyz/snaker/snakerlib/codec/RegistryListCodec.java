@@ -18,15 +18,36 @@ import com.mojang.serialization.DynamicOps;
 
 /**
  * Created by SnakerBone on 13/10/2023
+ * <p>
+ * A registry list codec
+ *
+ * @param <E> The element of this codec
  **/
-public final class RegistryListCodec<E> implements Codec<HolderSet<E>>
+class RegistryListCodec<E> implements Codec<HolderSet<E>>
 {
+    /**
+     * The registry key for this codec
+     **/
     private final ResourceKey<? extends Registry<E>> registryKey;
 
+    /**
+     * The internal list codec
+     **/
     private final Codec<List<Holder<E>>> listCodec;
+
+    /**
+     * The direct list codec
+     **/
     private final Codec<List<Holder.Direct<E>>> directListCodec;
+
+    /**
+     * The registry aware tag or list codec
+     **/
     private final Codec<Either<TagKey<E>, List<Holder<E>>>> registryAwareTagOrListCodec;
 
+    /**
+     * Creates a new registry list codec
+     **/
     public RegistryListCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<Holder<E>> elementCodec, boolean onlyLists)
     {
         this.registryKey = registryKey;
@@ -84,11 +105,17 @@ public final class RegistryListCodec<E> implements Codec<HolderSet<E>>
         return encodeWithoutRegistry(input, ops, prefix);
     }
 
+    /**
+     * Decodes a codec without registries
+     **/
     private <T> DataResult<Pair<HolderSet<E>, T>> decodeWithoutRegistry(DynamicOps<T> ops, T input)
     {
         return directListCodec.decode(ops, input).map(pair -> pair.mapFirst(HolderSet::direct));
     }
 
+    /**
+     * Encodes a codec without registries
+     **/
     private <T> DataResult<T> encodeWithoutRegistry(HolderSet<E> input, DynamicOps<T> ops, T prefix)
     {
         return listCodec.encode(input.stream().toList(), ops, prefix);

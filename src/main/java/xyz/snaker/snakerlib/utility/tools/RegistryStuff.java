@@ -2,14 +2,20 @@ package xyz.snaker.snakerlib.utility.tools;
 
 import java.io.Reader;
 import java.util.*;
+import java.util.function.Supplier;
 
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.WritableRegistry;
+import xyz.snaker.snakerlib.concurrent.UncaughtExceptionThread;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.Sound;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.client.sounds.WeighedSoundEvents;
+import net.minecraft.core.*;
 import net.minecraft.resources.*;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -150,5 +156,30 @@ public class RegistryStuff
     private static String ensureNewLineSuffix(String s)
     {
         return s.endsWith("\n") ? s : s + "\n";
+    }
+
+    public static List<SoundEvent> unpackSoundHolder(Supplier<Holder.Reference<SoundEvent>> holder)
+    {
+        Supplier<SoundManager> manager = Minecraft.getInstance()::getSoundManager;
+        WeighedSoundEvents soundEvent = manager.get().getSoundEvent(holder.get().value().getLocation());
+
+        if (soundEvent != null) {
+            Sound sound = soundEvent.getSound(RandomSource.create());
+            List<SoundEvent> soundEvents = new ArrayList<>();
+
+            for (ResourceLocation ignored : manager.get().getAvailableSounds()) {
+                SoundEvent noise = SoundEvent.createVariableRangeEvent(sound.getLocation());
+
+                if (!soundEvents.contains(noise)) {
+                    soundEvents.add(noise);
+                }
+            }
+
+            return soundEvents;
+        }
+
+        UncaughtExceptionThread.createAndRun("Could not unpack sound event holder", new IllegalStateException());
+
+        return List.of();
     }
 }

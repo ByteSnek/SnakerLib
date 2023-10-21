@@ -9,11 +9,23 @@ import com.mojang.serialization.MapLike;
 
 /**
  * Created by SnakerBone on 13/10/2023
+ * <p>
+ * A delegated error reporting map codec
+ *
+ * @param <E> The element of this codec
+ * @see Codecs#newErrorReportingCodec(MapCodec, String)
+ * @see Codecs#newErrorReportingCodec(MapCodec, UnaryOperator)
  **/
-public class ErrorReportingMapCodec<E> extends DelegateMapCodec<E>
+class ErrorReportingMapCodec<E> extends DelegateMapCodec<E>
 {
+    /**
+     * The error reporting function for this codec
+     **/
     private final UnaryOperator<String> errorReporter;
 
+    /**
+     * Creates a new error reporting map codec
+     **/
     public ErrorReportingMapCodec(MapCodec<E> delegate, UnaryOperator<String> errorReporter)
     {
         super(delegate);

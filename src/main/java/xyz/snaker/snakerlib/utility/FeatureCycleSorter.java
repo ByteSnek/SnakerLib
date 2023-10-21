@@ -33,6 +33,13 @@ import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
  **/
 public class FeatureCycleSorter
 {
+    /**
+     * Creates features in the correct order
+     *
+     * @param allBiomes     The biomes to generate
+     * @param biomeFeatures The biome feature setter for each biome
+     * @return A sorted list of biome feature steps
+     **/
     public static List<FeatureSorter.StepFeatureData> createFeatures(List<Holder<Biome>> allBiomes, Function<Holder<Biome>, List<HolderSet<PlacedFeature>>> biomeFeatures)
     {
         boolean calledFromTopLevel = true;
@@ -168,6 +175,17 @@ public class FeatureCycleSorter
         return featuresPerStepData.build();
     }
 
+    /**
+     * A recursively called function for discovering generated feature data
+     *
+     * @param edges                  The feature data map for getting discoverable features
+     * @param nonCyclicalNodes       Discoverable nodes that do not need re-visiting
+     * @param pathSet                A discoverable set to track the current feature data being recursively processed
+     * @param onNonCyclicalNodeFound A non-cyclical node task
+     * @param onCyclicalNodeFound    A cyclical node task
+     * @param start                  The feature data to start at
+     * @return True if data was added to currently active feature data set
+     **/
     public static boolean depthFirstSearch(Map<FeatureData, Set<FeatureData>> edges, Set<FeatureData> nonCyclicalNodes, Set<FeatureData> pathSet, Consumer<FeatureData> onNonCyclicalNodeFound, Consumer<FeatureData> onCyclicalNodeFound, FeatureData start)
     {
         if (nonCyclicalNodes.contains(start)) {
@@ -193,21 +211,51 @@ public class FeatureCycleSorter
         }
     }
 
+    /**
+     * Gets the id for an object or increments it
+     *
+     * @return The id of the object
+     **/
     private static <T> int idFor(T object, Reference2IntMap<T> objectToIntIdMap, MutableInt nextId)
     {
         return objectToIntIdMap.computeIfAbsent(object, key -> nextId.getAndIncrement());
     }
 
+    /**
+     * A feature data record container
+     *
+     * @param featureId The feature id
+     * @param step      The feature step
+     * @param feature   A reference of a placed feature
+     * @param source    The placed features in this feature data
+     **/
     public record FeatureData(int featureId, int step, PlacedFeature feature, Holder<PlacedFeature> source)
     {
+        /**
+         * Gets the mapped name of this feature data
+         *
+         * @return The mapped name of this feature data
+         **/
         public String name()
         {
             return source.unwrap().map(e -> e.location().toString(), e -> "[Inline feature: " + feature + "]");
         }
     }
 
+    /**
+     * A biome data record container
+     *
+     * @param biomeId The biome id
+     * @param biome   A reference of a biome
+     * @param source  The biomes in this biome data
+     **/
     public record BiomeData(int biomeId, Biome biome, Holder<Biome> source)
     {
+        /**
+         * Gets the mapped name of this biome data
+         *
+         * @return The mapped name of this biome data
+         **/
         public String name()
         {
             return source.unwrap().map(e -> e.location().toString(), e -> "[Inline biome: " + biome + "]");
