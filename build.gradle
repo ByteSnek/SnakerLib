@@ -132,6 +132,12 @@ tasks.register('srcJar', Jar) {
     archiveClassifier = 'sources'
 }
 
+tasks.register('renameHashedSounds', JavaExec) {
+    mainClass = "xyz.snaker.snakerlib.internal.gradle.HashedSounds"
+    group = "snakerlib"
+    classpath sourceSets.main.runtimeClasspath
+}
+
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
