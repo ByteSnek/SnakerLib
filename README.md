@@ -71,7 +71,7 @@ dependencies {
 And define the version in a `gradle.properties` (or similar):
 
 ```properties
-sl_version=1.7.2 # Replace with your desired version (1.7.2+ is considered stabl', see https://maven.snaker.xyz for the repository)
+sl_version=1.7.6 # Replace with your desired version (1.7.6+ is considered stabl', see https://maven.snaker.xyz for the repository)
 ```
 
 If using maven in `pom.xml` (or similar):
@@ -82,8 +82,8 @@ If using maven in `pom.xml` (or similar):
     ...
     <groupId>xyz.snaker.snakerlib</groupId>
     <artifactId>SnakerLib</artifactId>
-    <!--Replace with your desired version (1.7.2+ is considered stable, see https://maven.snaker.xyz for the repository)-->
-    <version>1.7.2</version>
+    <!--Replace with your desired version (1.7.6+ is considered stable, see https://maven.snaker.xyz for the repository)-->
+    <version>1.7.6</version>
     ...
 </dependencies>
 ```
