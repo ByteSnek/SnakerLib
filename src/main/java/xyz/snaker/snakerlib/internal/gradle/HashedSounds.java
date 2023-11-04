@@ -74,7 +74,7 @@ class HashedSounds
                             String path = subFile.getAbsolutePath().replace(hash, map.get(hash));
 
                             if (subFile.renameTo(new File(path))) {
-                                SnakerLib.LOGGER.info("Renamed file to " + path);
+                                SnakerLib.LOGGER.infof("Renamed file to: []", path);
                             }
                         }
                     }
@@ -82,7 +82,7 @@ class HashedSounds
             }
 
             SnakerLib.LOGGER.info("Successfully renamed all hashed sounds");
-            SnakerLib.LOGGER.infof("Done. Elapsed time: %sms", System.currentTimeMillis() - startTime);
+            SnakerLib.LOGGER.infof("Done. Elapsed time: []ms", System.currentTimeMillis() - startTime);
 
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(objsFolder);
@@ -121,7 +121,7 @@ class HashedSounds
             if (Arrays.stream(files).anyMatch(file -> file.getName().startsWith("snkr") || file.getName().contains("snkr"))) {
                 jsonFile = Arrays.stream(files).findFirst().orElseThrow();
 
-                SnakerLib.LOGGER.info("Found prioritized JSON file starting with or containing 'snkr'. Using file: %s".formatted(jsonFile.getAbsolutePath()));
+                SnakerLib.LOGGER.infof("Found prioritized JSON file starting with or containing 'snkr'. Using file: []", jsonFile.getAbsolutePath());
 
                 return jsonFile;
             }
@@ -129,12 +129,12 @@ class HashedSounds
             if (files.length == 1) {
                 jsonFile = files[0];
 
-                SnakerLib.LOGGER.info("Found and using JSON file: %s".formatted(jsonFile.getAbsolutePath()));
+                SnakerLib.LOGGER.infof("Found and using JSON file: []", jsonFile.getAbsolutePath());
 
             } else {
                 jsonFile = Arrays.stream(files).findFirst().orElseThrow();
 
-                SnakerLib.LOGGER.info("Found multiple JSON files. Using first one thats found by file system: %s".formatted(jsonFile.getAbsolutePath()));
+                SnakerLib.LOGGER.infof("Found multiple JSON files. Using first one thats found by file system: []", jsonFile.getAbsolutePath());
                 SnakerLib.LOGGER.info("Note: JSON files can be prioritized to be found easier by starting it's name with 'snkr'");
             }
 

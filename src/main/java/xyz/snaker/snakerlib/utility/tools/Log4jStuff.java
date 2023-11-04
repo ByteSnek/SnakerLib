@@ -1,6 +1,6 @@
 package xyz.snaker.snakerlib.utility.tools;
 
-import xyz.snaker.snakerlib.internal.log4j.SnakerLogger;
+import xyz.snaker.snkr4j.SnakerLogger;
 
 import net.minecraft.resources.ResourceLocation;
 

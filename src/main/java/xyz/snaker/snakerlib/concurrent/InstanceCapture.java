@@ -19,7 +19,7 @@ public class InstanceCapture<V>
     public boolean capture(V instance)
     {
         if (isCaptured) {
-            SnakerLib.LOGGER.warnf("Class '%s' has already been captured", target);
+            SnakerLib.LOGGER.warnf("Class has already been captured: []", target);
             return false;
         } else {
             if (instance == null) {

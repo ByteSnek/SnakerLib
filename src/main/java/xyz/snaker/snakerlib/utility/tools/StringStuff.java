@@ -157,7 +157,7 @@ public class StringStuff
             String regex = ".*[a-zA-Z]+.*";
             if (!string.matches(regex)) {
                 if (notify) {
-                    SnakerLib.LOGGER.warnf("String '%s' is not a valid string", string);
+                    SnakerLib.LOGGER.warnf("Found an invalid string: []", string);
                     if (throwException) {
                         throw new RuntimeException(String.format("Invalid string: %s", string));
                     }

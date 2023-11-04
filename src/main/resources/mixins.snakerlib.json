@@ -1,27 +1,27 @@
 {
-    "required": true,
-    "minVersion": "0.8",
-    "package": "xyz.snaker.snakerlib.internal.mixin",
-    "refmap": "mixins.snakerlib.refmap.json",
-    "target": "@env(DEFAULT)",
-    "compatibilityLevel": "JAVA_17",
-    "client": [
-        "CreateWorldScreenMixin",
-        "EffectInstanceMixin",
-        "MinecraftMixin"
-    ],
-    "mixins": [
-        "BiomeGenerationSettingsAccessor",
-        "BiomeMixin",
-        "BiomeSpecialEffectsAccessor",
-        "FeatureSorterMixin",
-        "ForgeModMixin",
-        "LootTablesMixin",
-        "MinecraftServerMixin",
-        "RecipeManagerMixin",
-        "RegistryDataLoaderMixin",
-        "SinglePoolElementAccessor",
-        "SinglePoolElementMixin",
-        "StructureTemplatePoolMixin"
-    ]
+      "required": true,
+      "minVersion": "0.8",
+      "package": "xyz.snaker.snakerlib.internal.mixin",
+      "refmap": "mixins.snakerlib.refmap.json",
+      "target": "@env(DEFAULT)",
+      "compatibilityLevel": "JAVA_17",
+      "client": [
+            "CreateWorldScreenMixin",
+            "EffectInstanceMixin",
+            "MinecraftMixin"
+      ],
+      "mixins": [
+            "BiomeGenerationSettingsAccessor",
+            "BiomeMixin",
+            "BiomeSpecialEffectsAccessor",
+            "FeatureSorterMixin",
+            "ForgeModMixin",
+            "LootTablesMixin",
+            "MinecraftServerMixin",
+            "RecipeManagerMixin",
+            "RegistryDataLoaderMixin",
+            "SinglePoolElementAccessor",
+            "SinglePoolElementMixin",
+            "StructureTemplatePoolMixin"
+      ]
 }

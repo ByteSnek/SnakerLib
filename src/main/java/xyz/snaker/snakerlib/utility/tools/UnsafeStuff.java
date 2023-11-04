@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.concurrent.UncaughtExceptionThread;
+import xyz.snaker.snakerlib.utility.Platform;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -139,7 +140,7 @@ public class UnsafeStuff
             throw new RuntimeException("Field must be apart of the parent class");
         }
         if (Arrays.stream(fields).toList().isEmpty()) {
-            SnakerLib.LOGGER.warnf("No recognizable fields found in class '%s'", parent.getSimpleName());
+            SnakerLib.LOGGER.warnf("No recognizable fields found in class: []", parent.getSimpleName());
             return null;
         }
         for (Field field : fields) {
@@ -187,11 +188,11 @@ public class UnsafeStuff
             throw new NullPointerException("Field cannot be null");
         }
         if (obj.getClass() != parent) {
-            SnakerLib.LOGGER.errorf("Hint: Caller class '%s' is not apart of the parent class", parent.getSimpleName());
+            SnakerLib.LOGGER.errorf("Hint: Caller class [] is not apart of the parent class", parent.getSimpleName());
             throw new RuntimeException("Field must be apart of the parent class");
         }
         if (Arrays.stream(fields).toList().isEmpty()) {
-            SnakerLib.LOGGER.warnf("No recognizable fields found in class '%s'", parent.getSimpleName());
+            SnakerLib.LOGGER.warnf("No recognizable fields found in class: []", parent.getSimpleName());
             return null;
         }
         for (Field field : fields) {
@@ -227,6 +228,22 @@ public class UnsafeStuff
     public static void forceCrashJVM()
     {
         setMemory(0, 0, 1);
+    }
+
+    /**
+     * Calls native code to crash a windows operating system by forcing a BSOD (Blue Screen Of Death) with a <a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55">STATUS_IN_PAGE_ERROR NTSTATUS error code</a>.
+     * <p>
+     * This is similar to the <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/bug-check-0xe2--manually-initiated-crash">CrashOnCtrlScroll crash that is built into windows</a> and does not harm the OS or hardware in any way
+     **/
+    public static void forceCrashWindows()
+    {
+        Platform platform = Platform.identify();
+
+        if (platform != Platform.WINDOWS) {
+            throw new IllegalStateException("Current OS is not windows");
+        }
+
+        forceCrashWindows0();
     }
 
     /**
@@ -307,6 +324,16 @@ public class UnsafeStuff
             int offset = pointer + i;
             theUnsafe.putByte(null, offset, (byte) fill);
         }
+    }
+
+    /**
+     * Calls native code to crash a windows operating system by forcing a BSOD (Blue Screen Of Death) with a <a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55">STATUS_IN_PAGE_ERROR NTSTATUS error code</a>.
+     * <p>
+     * This is similar to the <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/bug-check-0xe2--manually-initiated-crash">CrashOnCtrlScroll crash that is built into windows</a> and does not harm the OS or hardware in any way
+     **/
+    static void forceCrashWindows0()
+    {
+        SnakerLib.NATIVES.forceCrashWindows();
     }
 
     /**

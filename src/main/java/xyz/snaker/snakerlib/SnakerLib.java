@@ -6,11 +6,10 @@ import java.util.Arrays;
 import xyz.snaker.snakerlib.command.*;
 import xyz.snaker.snakerlib.concurrent.lock.LockedValue;
 import xyz.snaker.snakerlib.config.SnakerConfig;
-import xyz.snaker.snakerlib.internal.log4j.DevLogger;
-import xyz.snaker.snakerlib.internal.log4j.SimpleLogger;
-import xyz.snaker.snakerlib.internal.log4j.SnakerLogger;
 import xyz.snaker.snakerlib.utility.tools.KeyboardStuff;
 import xyz.snaker.snakerlib.utility.tools.UnsafeStuff;
+import xyz.snaker.snkr4j.SimpleLogger;
+import xyz.snaker.snkr4j.SnakerLogger;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
@@ -23,7 +22,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -86,23 +85,27 @@ public class SnakerLib
     /**
      * SnakerLib's logger instance
      **/
-    public static final SnakerLogger LOGGER = SimpleLogger.INSTANCE.apply(SnakerLib.NAME);
+    public static final SnakerLogger LOGGER = new SimpleLogger(SnakerLib.class, true);
 
     /**
      * SnakerLib's dev logger instance
      **/
-    public static final SnakerLogger DEVLOGGER = DevLogger.INSTANCE.apply(SnakerLib.NAME);
+    public static final SnakerLogger DEVLOGGER = new SimpleLogger(SnakerLib.class, !FMLEnvironment.production);
 
     /**
      * Stack walker with class reference retention
      **/
     public static StackWalker STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
 
+    /**
+     * SnakerLib's native functions
+     **/
+    public static final SnakerLibNatives NATIVES = new SnakerLibNatives();
+
     public SnakerLib()
     {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
-        SnakerLib.inDeveloperEnvironment = !FMLLoader.isProduction() || !System.getProperties().containsKey("production");
         SnakerLib.debugKey = GLFW.GLFW_KEY_KP_ENTER;
     }
 
@@ -124,7 +127,7 @@ public class SnakerLib
             if (ResourceLocation.isValidNamespace(modId)) {
                 if (MOD.set(modId)) {
                     String name = MOD.get();
-                    SnakerLib.LOGGER.infof("Successfully initialized mod '%s' to SnakerLib", name);
+                    SnakerLib.LOGGER.infof("Successfully initialized mod to SnakerLib: []", name);
                     isInitialized = true;
                 }
             } else {
@@ -151,9 +154,9 @@ public class SnakerLib
                     if (jvmFile.getName().startsWith("hs")) {
                         String fileName = jvmFile.getName();
                         if (jvmFile.delete()) {
-                            SnakerLib.LOGGER.infof("Successfully deleted JVM crash file '%s'", fileName);
+                            SnakerLib.LOGGER.infof("Successfully deleted JVM crash file: []'", fileName);
                         } else {
-                            SnakerLib.LOGGER.infof("Could not delete JVM crash file '%s'", fileName);
+                            SnakerLib.LOGGER.infof("Could not delete JVM crash file: []", fileName);
                         }
                     }
                 }
@@ -215,9 +218,9 @@ public class SnakerLib
                 for (File crashFile : crashFiles) {
                     String fileName = crashFile.getName();
                     if (crashFile.delete()) {
-                        SnakerLib.LOGGER.infof("Successfully deleted crash file '%s'", fileName);
+                        SnakerLib.LOGGER.infof("Successfully deleted crash file: []", fileName);
                     } else {
-                        SnakerLib.LOGGER.infof("Could not delete crash file '%s'", fileName);
+                        SnakerLib.LOGGER.infof("Could not delete crash file: []", fileName);
                     }
                 }
             }
