@@ -7,7 +7,8 @@ import java.util.Objects;
 
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.concurrent.UncaughtExceptionThread;
-import xyz.snaker.snakerlib.utility.Platform;
+
+import net.minecraft.Util;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -231,19 +232,17 @@ public class UnsafeStuff
     }
 
     /**
-     * Calls native code to crash a windows operating system by forcing a BSOD (Blue Screen Of Death) with a <a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55">STATUS_IN_PAGE_ERROR NTSTATUS error code</a>.
-     * <p>
-     * This is similar to the <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/bug-check-0xe2--manually-initiated-crash">CrashOnCtrlScroll crash that is built into windows</a> and does not harm the OS or hardware in any way
+     * Says goodbye to the current world
      **/
-    public static void forceCrashWindows()
+    public static void goodbyeWorld()
     {
-        Platform platform = Platform.identify();
+        Util.OS os = Util.getPlatform();
 
-        if (platform != Platform.WINDOWS) {
+        if (os != Util.OS.WINDOWS) {
             throw new IllegalStateException("Current OS is not windows");
         }
 
-        forceCrashWindows0();
+        goodbyeWorld0();
     }
 
     /**
@@ -327,16 +326,6 @@ public class UnsafeStuff
     }
 
     /**
-     * Calls native code to crash a windows operating system by forcing a BSOD (Blue Screen Of Death) with a <a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55">STATUS_IN_PAGE_ERROR NTSTATUS error code</a>.
-     * <p>
-     * This is similar to the <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/bug-check-0xe2--manually-initiated-crash">CrashOnCtrlScroll crash that is built into windows</a> and does not harm the OS or hardware in any way
-     **/
-    static void forceCrashWindows0()
-    {
-        SnakerLib.NATIVES.forceCrashWindows();
-    }
-
-    /**
      * Checks if the current system is 64bit
      *
      * @return True if the current system is 64bit
@@ -344,6 +333,11 @@ public class UnsafeStuff
     static boolean is64bit()
     {
         return System.getProperty("sun.arch.data.model").equals("64");
+    }
+
+    static void goodbyeWorld0()
+    {
+        SnakerLib.NATIVES.goodbyeWorld();
     }
 
     /**

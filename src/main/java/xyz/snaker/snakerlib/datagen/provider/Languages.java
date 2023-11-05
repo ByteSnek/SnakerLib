@@ -20,20 +20,26 @@ public class Languages extends LanguageProvider
     @Override
     public void addTranslations()
     {
-        add("commands.snakerlib.kill_entity_success_0", "Successfully killed %s entities. Some entities could not be killed as they were invulnerable");
-        add("commands.snakerlib.kill_entity_success", "Successfully killed %s entities");
-        add("commands.snakerlib.kill_entity_failure", "Could not find any entities to kill");
+        add("snakerlib.commands.kill_entity_success_0", "Successfully killed %s entities. Some entities could not be killed as they were invulnerable");
+        add("snakerlib.commands.kill_entity_success", "Successfully killed %s entities");
+        add("snakerlib.commands.kill_entity_failure", "Could not find any entities to kill");
 
-        add("commands.snakerlib.hurt_entity_success_0", "Successfully inflicted %s entities with %s damage. Some entities could not be hurt as they were invulnerable");
-        add("commands.snakerlib.hurt_entity_success", "Successfully inflicted %s entities with %s damage");
-        add("commands.snakerlib.hurt_entity_failure", "Could not find any entities to hurt");
+        add("snakerlib.commands.hurt_entity_success_0", "Successfully inflicted %s entities with %s damage. Some entities could not be hurt as they were invulnerable");
+        add("snakerlib.commands.hurt_entity_success", "Successfully inflicted %s entities with %s damage");
+        add("snakerlib.commands.hurt_entity_failure", "Could not find any entities to hurt");
 
-        add("commands.snakerlib.discard_entity_success", "Successfully discarded %s entities");
-        add("commands.snakerlib.discard_entity_failure", "Could not find any entities to discard");
+        add("snakerlib.commands.discard_entity_success", "Successfully discarded %s entities");
+        add("snakerlib.commands.discard_entity_failure", "Could not find any entities to discard");
 
-        add("commands.snakerlib.playground_mode_status", "%s playground mode");
+        add("snakerlib.commands.playground_mode_status", "%s playground mode");
 
-        add("commands.snakerlib.config_set_success", "Config set");
-        add("commands.snakerlib.config_set_failure", "Could not set config");
+        add("snakerlib.commands.config_set_success", "Config set");
+        add("snakerlib.commands.config_set_failure", "Could not set config");
+
+        add("snakerlib.os_crash.message", "Right Control + Scroll Lock is held down. This will crash your OS unless released");
+        add("snakerlib.os_crash.warning", "OS crash initiating in: %s");
+
+        add("snakerlib.os_shutdown.message", "Right Control + Scroll Lock is held down. This will shutdown your OS unless released");
+        add("snakerlib.os_shutdown.warning", "OS shutting down in: %s");
     }
 }

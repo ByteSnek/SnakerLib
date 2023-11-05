@@ -1,10 +1,23 @@
 package xyz.snaker.snakerlib.utility.tools;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import com.ibm.icu.util.SimpleHoliday;
+
 /**
  * Created by SnakerBone on 15/08/2023
  **/
 public class TimeStuff
 {
+    /**
+     * The time right now
+     **/
+    public static final Date NOW = Date.from(Instant.now(Clock.systemDefaultZone()));
+
     /**
      * A single second in milliseconds
      **/
@@ -84,5 +97,18 @@ public class TimeStuff
     public static long toSeconds(long time)
     {
         return (long) Math.round(time * SECOND) / SECOND;
+    }
+
+    /**
+     * Checks if today is a holiday
+     *
+     * @return True if today is currently a holiday
+     **/
+    public static boolean isHoliday()
+    {
+        SimpleHoliday[] holidays = ReflectiveStuff.getFieldsInClass(SimpleHoliday.class, o -> o instanceof SimpleHoliday, SimpleHoliday[]::new);
+        List<Boolean> activeHolidays = Arrays.stream(holidays).map(holiday -> holiday.isOn(NOW)).toList();
+
+        return activeHolidays.contains(true);
     }
 }

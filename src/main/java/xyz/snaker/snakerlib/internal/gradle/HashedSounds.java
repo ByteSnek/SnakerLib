@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.utility.Link;
 
 import net.minecraft.Util;
 
@@ -149,7 +148,7 @@ class HashedSounds
         File file = Paths.get(getRoamingFolder().getAbsolutePath(), "assets", "objects").toFile();
 
         if (!file.exists()) {
-            throw new RuntimeException("Could not find objects folder for sound extraction. Please vist %s and execute the provided Node.js script to generate the objects folder and try again".formatted(Link.of("https://minecraft.fandom.com/wiki/Tutorials/Sound_directory#Extracting_Minecraft_sounds_using_Node.js")));
+            throw new RuntimeException("Could not find objects folder for sound extraction. Please vist %s and execute the provided Node.js script to generate the objects folder and try again".formatted("https://minecraft.fandom.com/wiki/Tutorials/Sound_directory#Extracting_Minecraft_sounds_using_Node.js"));
         }
 
         return file;

@@ -3,6 +3,8 @@ package xyz.snaker.snakerlib.utility.tools;
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.concurrent.UncaughtExceptionThread;
 
+import net.minecraftforge.fml.loading.FMLEnvironment;
+
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -72,7 +74,7 @@ public class KeyboardStuff
      **/
     public static boolean isDebugKeyDown()
     {
-        return isKeyDown(SnakerLib.getDebugKey()) && SnakerLib.isInDeveloperEnvironment();
+        return isKeyDown(SnakerLib.getDebugKey()) && !FMLEnvironment.production;
     }
 
     /**

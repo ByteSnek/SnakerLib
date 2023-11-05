@@ -27,7 +27,7 @@ public class LockedValue<V>
     /**
      * A stopwatch instance for timing
      **/
-    private StopWatch watch;
+    private final StopWatch watch;
 
     public LockedValue()
     {

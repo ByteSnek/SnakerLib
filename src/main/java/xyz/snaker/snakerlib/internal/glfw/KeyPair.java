@@ -102,12 +102,12 @@ public class KeyPair
      **/
     private void findOrSetWindowHandle()
     {
-        if (!FMLEnvironment.dist.isClient()) {
-            return; // Precautions; It should always be client side, just in case the caller is brain dead
-        }
-
         long glfwHandle = GLFW.glfwGetCurrentContext();
-        long mcHandle = Minecraft.getInstance().getWindow().getWindow();
+        long mcHandle = 0;
+
+        if (FMLEnvironment.dist.isClient()) {
+            mcHandle = Minecraft.getInstance().getWindow().getWindow();
+        }
 
         if (glfwHandle == 0 || glfwHandle != mcHandle) {
             if (mcHandle == 0) {

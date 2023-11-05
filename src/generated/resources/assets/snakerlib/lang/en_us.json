@@ -1,13 +1,17 @@
 {
-  "commands.snakerlib.config_set_failure": "Could not set config",
-  "commands.snakerlib.config_set_success": "Config set",
-  "commands.snakerlib.discard_entity_failure": "Could not find any entities to discard",
-  "commands.snakerlib.discard_entity_success": "Successfully discarded %s entities",
-  "commands.snakerlib.hurt_entity_failure": "Could not find any entities to hurt",
-  "commands.snakerlib.hurt_entity_success": "Successfully inflicted %s entities with %s damage",
-  "commands.snakerlib.hurt_entity_success_0": "Successfully inflicted %s entities with %s damage. Some entities could not be hurt as they were invulnerable",
-  "commands.snakerlib.kill_entity_failure": "Could not find any entities to kill",
-  "commands.snakerlib.kill_entity_success": "Successfully killed %s entities",
-  "commands.snakerlib.kill_entity_success_0": "Successfully killed %s entities. Some entities could not be killed as they were invulnerable",
-  "commands.snakerlib.playground_mode_status": "%s playground mode"
+  "snakerlib.commands.config_set_failure": "Could not set config",
+  "snakerlib.commands.config_set_success": "Config set",
+  "snakerlib.commands.discard_entity_failure": "Could not find any entities to discard",
+  "snakerlib.commands.discard_entity_success": "Successfully discarded %s entities",
+  "snakerlib.commands.hurt_entity_failure": "Could not find any entities to hurt",
+  "snakerlib.commands.hurt_entity_success": "Successfully inflicted %s entities with %s damage",
+  "snakerlib.commands.hurt_entity_success_0": "Successfully inflicted %s entities with %s damage. Some entities could not be hurt as they were invulnerable",
+  "snakerlib.commands.kill_entity_failure": "Could not find any entities to kill",
+  "snakerlib.commands.kill_entity_success": "Successfully killed %s entities",
+  "snakerlib.commands.kill_entity_success_0": "Successfully killed %s entities. Some entities could not be killed as they were invulnerable",
+  "snakerlib.commands.playground_mode_status": "%s playground mode",
+  "snakerlib.os_crash.message": "Right Control + Scroll Lock is held down. This will crash your OS unless released",
+  "snakerlib.os_crash.warning": "OS crash initiating in: %s",
+  "snakerlib.os_shutdown.message": "Right Control + Scroll Lock is held down. This will shutdown your OS unless released",
+  "snakerlib.os_shutdown.warning": "OS shutting down in: %s"
 }
