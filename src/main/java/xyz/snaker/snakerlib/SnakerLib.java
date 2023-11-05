@@ -206,7 +206,7 @@ public class SnakerLib
 
             if (level != null && player != null) {
                 if (SnakerConfig.COMMON.forceCrashOperatingSystemBindings.get()) {
-                    KeyPair pair = new KeyPair(GLFW.GLFW_KEY_RIGHT_CONTROL, GLFW.GLFW_KEY_F12);
+                    KeyPair pair = new KeyPair(GLFW.GLFW_KEY_RIGHT_CONTROL, GLFW.GLFW_KEY_SCROLL_LOCK);
 
                     Component message = Component.empty().append(Component.translatable("debug.prefix").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)).append(CommonComponents.SPACE).append(Component.translatable(windows ? "snakerlib.os_crash.message" : "snakerlib.os_shutdown.message"));
                     Component warning = Component.empty().append(Component.translatable("debug.prefix").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)).append(CommonComponents.SPACE).append(Component.translatable(windows ? "snakerlib.os_crash.warning" : "snakerlib.os_shutdown.warning", time.y / 1000));
