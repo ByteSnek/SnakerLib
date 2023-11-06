@@ -70,7 +70,7 @@ repositories {
 dependencies {
     minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
 
-    minecraftLibrary "com.github.SnakerBone:Snaker4j:1.0"
+    minecraftLibrary "com.github.SnakerBone:Snaker4j:${s4j_version}"
 
     runtimeOnly fg.deobf("curse.maven:the-one-probe-245211:4629624")
 

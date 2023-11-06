@@ -11,14 +11,14 @@ repositories {
 
 dependencies {
     implementation fg.deobf("xyz.snaker.snakerlib:SnakerLib:${sl_version}")
-    minecraftLibrary "com.github.SnakerBone:Snaker4j:{s4j_version}" 
+    minecraftLibrary "com.github.SnakerBone:Snaker4j:${s4j_version}" 
 }
 ```
 
 And define the version in a `gradle.properties` (or similar):
 
 ```properties
-sl_version=1.7.7 # Replace with your desired version (1.7.7+ is considered stabl', see https://maven.snaker.xyz for the repository)
+sl_version=1.7.7 # Replace with your desired version (1.7.7+ is considered stable, see https://maven.snaker.xyz for the repository)
 s4j_version=1.0
 ```
 
