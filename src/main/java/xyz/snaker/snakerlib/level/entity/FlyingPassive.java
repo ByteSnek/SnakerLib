@@ -2,9 +2,8 @@ package xyz.snaker.snakerlib.level.entity;
 
 import javax.annotation.Nullable;
 
-import xyz.snaker.snakerlib.data.DefaultEntityAttributes;
-import xyz.snaker.snakerlib.level.entity.ai.LookAroundGoal;
-import xyz.snaker.snakerlib.level.entity.ai.WanderGoal;
+import xyz.snaker.snakerlib.level.entity.ai.goal.LookAroundGoal;
+import xyz.snaker.snakerlib.level.entity.ai.goal.WanderGoal;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -45,7 +44,7 @@ public abstract class FlyingPassive extends Animal implements FlyingAnimal
 
     public FlyingPassive(EntityType<? extends Animal> type, Level level)
     {
-        this(type, level, DefaultEntityAttributes.CREATURE_XP_REWARD);
+        this(type, level, 8);
     }
 
     /**

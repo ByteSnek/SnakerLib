@@ -2,7 +2,7 @@ package xyz.snaker.snakerlib.codec;
 
 import java.util.Optional;
 
-import xyz.snaker.snakerlib.utility.tools.RegistryStuff;
+import xyz.snaker.snakerlib.utility.Registrys;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -68,14 +68,14 @@ record RegistryEntryCodec<E>(ResourceKey<? extends Registry<E>> registryKey, Cod
                 ResourceLocation id = result.getFirst();
                 ResourceKey<E> key = ResourceKey.create(registryKey, id);
 
-                return getter.get(key).map(DataResult::success).orElseGet(() -> RegistryStuff.appendRegistryReferenceError(DataResult.error(() -> "Missing " + registryKey.location().getPath() + ": " + key.location()), id, registryKey)).<Pair<Holder<E>, T>>map(reference -> Pair.of(reference, result.getSecond())).setLifecycle(Lifecycle.stable());
+                return getter.get(key).map(DataResult::success).orElseGet(() -> Registrys.appendRegistryReferenceError(DataResult.error(() -> "Missing " + registryKey.location().getPath() + ": " + key.location()), id, registryKey)).<Pair<Holder<E>, T>>map(reference -> Pair.of(reference, result.getSecond())).setLifecycle(Lifecycle.stable());
             }
         }
 
         DataResult<Pair<Holder<E>, T>> result = elementCodec.decode(ops, input).map(r -> r.mapFirst(Holder::direct));
 
         if (result.error().isPresent()) {
-            result = RegistryStuff.appendRegistryError(result, registryKey);
+            result = Registrys.appendRegistryError(result, registryKey);
         }
 
         return result;

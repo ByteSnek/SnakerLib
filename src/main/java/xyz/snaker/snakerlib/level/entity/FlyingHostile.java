@@ -1,10 +1,8 @@
 package xyz.snaker.snakerlib.level.entity;
 
-import xyz.snaker.snakerlib.data.DefaultEntityAttributes;
-import xyz.snaker.snakerlib.level.entity.ai.FlyController;
-import xyz.snaker.snakerlib.level.entity.ai.FlyGoal;
-import xyz.snaker.snakerlib.level.entity.ai.LookAroundGoal;
-import xyz.snaker.snakerlib.level.entity.ai.SwitchGameModeGoal;
+import xyz.snaker.snakerlib.level.entity.ai.control.FlyController;
+import xyz.snaker.snakerlib.level.entity.ai.goal.FlyGoal;
+import xyz.snaker.snakerlib.level.entity.ai.goal.LookAroundGoal;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
@@ -33,7 +31,7 @@ public abstract class FlyingHostile extends FlyingMob implements Enemy
 
     public FlyingHostile(EntityType<? extends FlyingHostile> type, Level level)
     {
-        this(type, level, DefaultEntityAttributes.MOB_XP_REWARD);
+        this(type, level, 15);
     }
 
     /**
@@ -68,7 +66,6 @@ public abstract class FlyingHostile extends FlyingMob implements Enemy
     {
         goalSelector.addGoal(4, new FlyGoal(this));
         goalSelector.addGoal(6, new LookAroundGoal(this));
-        goalSelector.addGoal(1, new SwitchGameModeGoal(this));
         goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6));
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }

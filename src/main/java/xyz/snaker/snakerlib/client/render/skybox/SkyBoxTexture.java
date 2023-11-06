@@ -3,8 +3,7 @@ package xyz.snaker.snakerlib.client.render.skybox;
 import java.util.HashMap;
 import java.util.Map;
 
-import xyz.snaker.snakerlib.internal.RegularExpressions;
-import xyz.snaker.snakerlib.utility.ResourcePath;
+import xyz.snaker.snakerlib.utility.ResourceReference;
 
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
  **/
 public class SkyBoxTexture
 {
+    private static final String FILE_EXTENSION = "[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?";
+
     /**
      * The skybox folder to look in for the textures
      **/
@@ -76,12 +77,12 @@ public class SkyBoxTexture
      * @return A new ResourcePath
      * @throws IllegalArgumentException If the path contains a file extension
      **/
-    public ResourcePath texturePath(String path)
+    public ResourceReference texturePath(String path)
     {
-        if (path.matches(RegularExpressions.FILE_EXTENSION)) {
+        if (path.matches(FILE_EXTENSION)) {
             throw new IllegalArgumentException("Texture path cannot contain file extensions");
         }
-        return new ResourcePath(SKYBOX_FOLDER + path + ".png");
+        return new ResourceReference(SKYBOX_FOLDER + path + ".png");
     }
 
     /**
@@ -93,7 +94,7 @@ public class SkyBoxTexture
      **/
     public ResourceLocation texturePath(String namesapce, String path)
     {
-        if (path.matches(RegularExpressions.FILE_EXTENSION)) {
+        if (path.matches(FILE_EXTENSION)) {
             throw new IllegalArgumentException("Texture path cannot contain file extensions");
         }
         return new ResourceLocation(namesapce, SKYBOX_FOLDER + path + ".png");

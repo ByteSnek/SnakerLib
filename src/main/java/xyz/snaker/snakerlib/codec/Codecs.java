@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import xyz.snaker.snakerlib.utility.tools.RegistryStuff;
+import xyz.snaker.snakerlib.utility.Registrys;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -81,7 +81,7 @@ public class Codecs
      **/
     public static <E> Codec<E> newErrorReportingCodec(Codec<E> codec, String at)
     {
-        return new ErrorReportingCodec<>(codec, e -> RegistryStuff.appendErrorLocation(e, '"' + at + '"'));
+        return new ErrorReportingCodec<>(codec, e -> Registrys.appendErrorLocation(e, '"' + at + '"'));
     }
 
     /**
@@ -97,7 +97,7 @@ public class Codecs
      **/
     public static <E> MapCodec<E> newErrorReportingCodec(MapCodec<E> codec, String at)
     {
-        return new ErrorReportingMapCodec<>(codec, e -> RegistryStuff.appendErrorLocation(e, '"' + at + '"'));
+        return new ErrorReportingMapCodec<>(codec, e -> Registrys.appendErrorLocation(e, '"' + at + '"'));
     }
 
     /**

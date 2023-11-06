@@ -1,7 +1,7 @@
 package xyz.snaker.snakerlib.internal.mixin;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.utility.tools.Log4jStuff;
+import xyz.snaker.snakerlib.utility.Loggers;
 
 import net.minecraft.world.level.storage.loot.LootDataManager;
 
@@ -21,6 +21,6 @@ public abstract class LootTablesMixin
     @Redirect(method = "*(Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/resources/ResourceLocation;Lcom/google/gson/JsonElement;)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;error(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", remap = false), require = 0)
     private static void simplifyLootTableErrors(Logger logger, String message, Object p0, Object p1)
     {
-        Log4jStuff.cleanLootTableError(SnakerLib.LOGGER, message, p0, p1);
+        Loggers.cleanLootTableError(SnakerLib.LOGGER, message, p0, p1);
     }
 }

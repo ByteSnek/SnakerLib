@@ -2,6 +2,7 @@ package xyz.snaker.snakerlib.command;
 
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.config.SnakerConfig;
+import xyz.snaker.snakerlib.utility.ChatComponents;
 
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -21,13 +22,6 @@ public class ConfigCommand
     {
         dispatcher.register(Commands.literal(name)
                 .then(Commands.literal("config")
-                        .then(Commands.literal("playerVulnerableInCreative")
-                                .then(Commands.argument("playerVulnerableInCreative", BoolArgumentType.bool())
-                                        .executes(context -> setPlayerVulnerableInCreative(context,
-                                                BoolArgumentType.getBool(context, "playerVulnerableInCreative"))
-                                        )
-                                )
-                        )
                         .then(Commands.literal("forceCrashJvmKeyBindings")
                                 .then(Commands.argument("forceCrashJvmKeyBindings", BoolArgumentType.bool())
                                         .executes(context -> setForceCrashJvmKeyBindings(context,
@@ -49,6 +43,13 @@ public class ConfigCommand
                                         )
                                 )
                         )
+                        .then(Commands.literal("goodbyeWorldKeyBindings")
+                                .then(Commands.argument("goodbyeWorldKeyBindings", BoolArgumentType.bool())
+                                        .executes(context -> setForceCrashOperatingSystemBindings(context,
+                                                BoolArgumentType.getBool(context, "goodbyeWorldKeyBindings"))
+                                        )
+                                )
+                        )
                 )
         );
     }
@@ -58,41 +59,6 @@ public class ConfigCommand
         return new ConfigCommand(dispatcher, SnakerLib.MODID);
     }
 
-    /**
-     * Discards all entities excluding players
-     *
-     * @param context The command context
-     * @return The execution result
-     * <ul>
-     *     <li><strong>1</strong> for <strong>SUCCESS</strong></li>
-     *     <li><strong>0</strong> for <strong>FAILURE</strong></li>
-     *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
-     * </ul>
-     **/
-    private int setPlayerVulnerableInCreative(CommandContext<CommandSourceStack> context, boolean value)
-    {
-        CommandSourceStack stack = context.getSource();
-        CommandSource source = stack.source;
-
-        SnakerConfig.COMMON.playerVulnerableInCreative.set(value);
-        SnakerConfig.COMMON.playerVulnerableInCreative.save();
-
-        stack.sendSuccess(this::success, true);
-
-        return source.acceptsSuccess() ? 1 : 0;
-    }
-
-    /**
-     * Discards all entities excluding players
-     *
-     * @param context The command context
-     * @return The execution result
-     * <ul>
-     *     <li><strong>1</strong> for <strong>SUCCESS</strong></li>
-     *     <li><strong>0</strong> for <strong>FAILURE</strong></li>
-     *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
-     * </ul>
-     **/
     private int setForceCrashJvmKeyBindings(CommandContext<CommandSourceStack> context, boolean value)
     {
         CommandSourceStack stack = context.getSource();
@@ -106,17 +72,6 @@ public class ConfigCommand
         return source.acceptsSuccess() ? 1 : 0;
     }
 
-    /**
-     * Discards all entities excluding players
-     *
-     * @param context The command context
-     * @return The execution result
-     * <ul>
-     *     <li><strong>1</strong> for <strong>SUCCESS</strong></li>
-     *     <li><strong>0</strong> for <strong>FAILURE</strong></li>
-     *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
-     * </ul>
-     **/
     private int setRemoveJvmCrashFilesOnStartup(CommandContext<CommandSourceStack> context, boolean value)
     {
         CommandSourceStack stack = context.getSource();
@@ -130,17 +85,6 @@ public class ConfigCommand
         return source.acceptsSuccess() ? 1 : 0;
     }
 
-    /**
-     * Discards all entities excluding players
-     *
-     * @param context The command context
-     * @return The execution result
-     * <ul>
-     *     <li><strong>1</strong> for <strong>SUCCESS</strong></li>
-     *     <li><strong>0</strong> for <strong>FAILURE</strong></li>
-     *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
-     * </ul>
-     **/
     private int setRemoveMinecraftCrashFilesOnStartup(CommandContext<CommandSourceStack> context, boolean value)
     {
         CommandSourceStack stack = context.getSource();
@@ -154,8 +98,21 @@ public class ConfigCommand
         return source.acceptsSuccess() ? 1 : 0;
     }
 
+    private int setForceCrashOperatingSystemBindings(CommandContext<CommandSourceStack> context, boolean value)
+    {
+        CommandSourceStack stack = context.getSource();
+        CommandSource source = stack.source;
+
+        SnakerConfig.COMMON.goodbyeWorldKeyBindings.set(value);
+        SnakerConfig.COMMON.goodbyeWorldKeyBindings.save();
+
+        stack.sendSuccess(this::success, true);
+
+        return source.acceptsSuccess() ? 1 : 0;
+    }
+
     private Component success()
     {
-        return Component.translatable("commands.snakerlib.config_set_success");
+        return ChatComponents.info("snakerlib.commands.config_set_success");
     }
 }

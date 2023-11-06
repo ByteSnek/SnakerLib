@@ -1,7 +1,7 @@
 package xyz.snaker.snakerlib.internal.mixin;
 
 import xyz.snaker.snakerlib.codec.Codecs;
-import xyz.snaker.snakerlib.utility.tools.WorldStuff;
+import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -31,7 +31,7 @@ public abstract class BiomeMixin
     public static Codec<Holder<Biome>> CODEC;
 
     static {
-        DIRECT_CODEC = WorldStuff.makeBiomeCodec();
+        DIRECT_CODEC = Worlds.makeBiomeCodec();
         CODEC = Codecs.newRegistryEntryCodec(Registries.BIOME, DIRECT_CODEC);
     }
 }

@@ -1,29 +1,26 @@
 package xyz.snaker.snakerlib;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 import xyz.snaker.snakerlib.command.*;
-import xyz.snaker.snakerlib.concurrent.thread.GoodbyeWorld;
 import xyz.snaker.snakerlib.config.SnakerConfig;
-import xyz.snaker.snakerlib.internal.PrettyPrettyPrintStream;
-import xyz.snaker.snakerlib.internal.glfw.KeyPair;
-import xyz.snaker.snakerlib.utility.mutable.MutableString;
-import xyz.snaker.snakerlib.utility.tools.KeyboardStuff;
-import xyz.snaker.snakerlib.utility.tools.TimeStuff;
-import xyz.snaker.snakerlib.utility.tools.UnsafeStuff;
+import xyz.snaker.snakerlib.internal.ColourfulPrintStream;
+import xyz.snaker.snakerlib.internal.GoodbyeWorldThread;
+import xyz.snaker.snakerlib.internal.KeyPair;
+import xyz.snaker.snakerlib.utility.*;
 import xyz.snaker.snkr4j.LogColour;
 import xyz.snaker.snkr4j.SimpleLogger;
 import xyz.snaker.snkr4j.SnakerLogger;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -50,6 +47,7 @@ public class SnakerLib
 {
     public static final String NAME = "SnakerLib";
     public static final String MODID = "snakerlib";
+    public static final String DLL = "snkr.dll";
 
     /**
      * A client side tick counter
@@ -68,7 +66,7 @@ public class SnakerLib
     /**
      * A printable debug key for debugging. By default this key is set to keypad enter
      *
-     * @see KeyboardStuff#isDebugKeyDown()
+     * @see Keyboards#isDebugKeyDown()
      **/
     private static int debugKey;
 
@@ -78,7 +76,7 @@ public class SnakerLib
     private static boolean isInitialized;
 
     /**
-     * A locked value holding the modid of the mod that initialized SnakerLib
+     * A locked value holding the modid of the mod that initialized SnakerLib. Defaults to SnakerLib's mod id
      *
      * @see SnakerLib#initialize()
      **/
@@ -107,7 +105,7 @@ public class SnakerLib
     /**
      * A colourful print stream
      **/
-    public static final PrettyPrettyPrintStream pretty = new PrettyPrettyPrintStream(LogColour.Style.BOLD, LogColour.Style.ITALIC);
+    public static ColourfulPrintStream out = new ColourfulPrintStream(LogColour.Style.BOLD, LogColour.Style.ITALIC);
 
     /**
      * The goodbye world task pending status
@@ -126,8 +124,8 @@ public class SnakerLib
         SnakerLib.debugKey = GLFW.GLFW_KEY_KP_ENTER;
         SnakerLib.MOD.set(SnakerLib.MODID);
 
-        if (TimeStuff.isHoliday()) {
-            System.setOut(pretty);
+        if (DatesAndTimes.isHoliday()) {
+            System.setOut(out);
         }
     }
 
@@ -167,7 +165,7 @@ public class SnakerLib
     }
 
     /**
-     * Deletes any JVM hotspot crash files that were caused by {@link UnsafeStuff#forceCrashJVM()}
+     * Deletes any JVM hotspot crash files that were caused by {@link TheUnsafe#forceCrashJVM()}
      **/
     public static void deleteJVMHSFiles()
     {
@@ -195,21 +193,20 @@ public class SnakerLib
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         LocalPlayer player = minecraft.player;
-        boolean windows = Util.getPlatform() == Util.OS.WINDOWS;
 
         if (event.phase == TickEvent.Phase.END || !minecraft.isPaused()) {
             if (SnakerConfig.COMMON.forceCrashJvmKeyBindings.get()) {
-                if (KeyPair.ALTERNATE.sequentialDown() && KeyPair.SHIFT.sequentialDown() && KeyboardStuff.isKeyDown(GLFW.GLFW_KEY_F4)) {
-                    UnsafeStuff.forceCrashJVM();
+                if (KeyPair.ALTERNATE.sequentialDown() && KeyPair.SHIFT.sequentialDown() && Keyboards.isKeyDown(GLFW.GLFW_KEY_F4)) {
+                    TheUnsafe.forceCrashJVM();
                 }
             }
 
             if (level != null && player != null) {
-                if (SnakerConfig.COMMON.forceCrashOperatingSystemBindings.get()) {
+                if (SnakerConfig.COMMON.goodbyeWorldKeyBindings.get()) {
                     KeyPair pair = new KeyPair(GLFW.GLFW_KEY_RIGHT_CONTROL, GLFW.GLFW_KEY_SCROLL_LOCK);
 
-                    Component message = Component.empty().append(Component.translatable("debug.prefix").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)).append(CommonComponents.SPACE).append(Component.translatable(windows ? "snakerlib.os_crash.message" : "snakerlib.os_shutdown.message"));
-                    Component warning = Component.empty().append(Component.translatable("debug.prefix").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)).append(CommonComponents.SPACE).append(Component.translatable(windows ? "snakerlib.os_crash.warning" : "snakerlib.os_shutdown.warning", time.y / 1000));
+                    MutableComponent message = gwDebug(false);
+                    MutableComponent warning = gwDebug(true, time.y / 1000);
 
                     if (!pending) {
                         if (pair.allDown()) {
@@ -224,9 +221,9 @@ public class SnakerLib
                         if (clientTickCount % 40 == 0) {
                             time.y -= 1000;
                             player.sendSystemMessage(warning);
-                            SnakerLib.LOGGER.warnf("Debug crash for player %s initiating in: []".formatted(player.getDisplayName().getString()), time.y / 1000);
+                            SnakerLib.LOGGER.warnf("Saying goodbye to [] in: []", player.getDisplayName().getString(), time.y / 1000);
                             if (time.y <= 0) {
-                                new GoodbyeWorld(time).start();
+                                new GoodbyeWorldThread(time).start();
                                 time.y = 10000;
                                 pending = false;
                             }
@@ -289,6 +286,71 @@ public class SnakerLib
                 }
             }
         }
+    }
+
+    public static void loadNatives()
+    {
+        if (SnakerLib.STACK_WALKER.getCallerClass() != SnakerLibNatives.class) {
+            SnakerLib.LOGGER.warnf("Detected illegal caller: []. Ignoring!", SnakerLib.STACK_WALKER.getCallerClass().getName());
+            return;
+        }
+
+        InputStream stream = SnakerLib.class.getClassLoader().getResourceAsStream(DLL);
+        File file = mkfile();
+
+        writeNatives(stream, file);
+
+        System.load(file.getAbsolutePath());
+        SnakerLib.LOGGER.infof("Loaded []", DLL);
+    }
+
+    private static void writeNatives(InputStream input, File file)
+    {
+        if (input == null) {
+            throw new RuntimeException("No %s in resources".formatted(DLL));
+        }
+
+        try (FileOutputStream output = new FileOutputStream(file)) {
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = input.read(bytes)) != -1) {
+                output.write(bytes, 0, length);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static File mkdir(String name)
+    {
+        File file = new File(System.getProperty("java.io.tmpdir"), name);
+
+        if (!file.exists()) {
+            if (file.mkdir()) {
+                SnakerLib.LOGGER.infof("Made temporary directory: []", file.getAbsolutePath());
+            }
+        }
+
+        file.deleteOnExit();
+
+        return file;
+    }
+
+    private static File mkfile()
+    {
+        String name = DLL.substring(0, DLL.indexOf('.') + 1);
+        File parent = mkdir(name);
+
+        try {
+            return File.createTempFile(name, ".dll", parent);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static MutableComponent gwDebug(boolean warning, Object... args)
+    {
+        return ChatComponents.debug("snakerlib.goodbye_world." + (warning ? "warning" : "message"), args);
     }
 
     public static void setDebugKey(int key)

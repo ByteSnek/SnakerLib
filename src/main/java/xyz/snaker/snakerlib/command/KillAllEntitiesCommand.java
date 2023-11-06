@@ -5,7 +5,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.utility.tools.WorldStuff;
+import xyz.snaker.snakerlib.utility.ChatComponents;
+import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -54,7 +55,7 @@ public class KillAllEntitiesCommand
 
         if (player != null) {
             Level level = player.level();
-            List<Entity> entities = level.getEntitiesOfClass(Entity.class, WorldStuff.getWorldBoundingBox(player), predicate);
+            List<Entity> entities = level.getEntitiesOfClass(Entity.class, Worlds.getWorldBoundingBox(player), predicate);
 
             boolean immune = false;
 
@@ -83,16 +84,16 @@ public class KillAllEntitiesCommand
 
     private Supplier<Component> success0(int size)
     {
-        return () -> Component.translatable("commands.snakerlib.kill_entity_success_0", size);
+        return () -> ChatComponents.info("snakerlib.commands.kill_entity_success_0", size);
     }
 
     private Supplier<Component> success(int size)
     {
-        return () -> Component.translatable("commands.snakerlib.kill_entity_success", size);
+        return () -> ChatComponents.info("snakerlib.commands.kill_entity_success", size);
     }
 
     private Component failure()
     {
-        return Component.translatable("commands.snakerlib.kill_entity_failure");
+        return ChatComponents.info("snakerlib.commands.kill_entity_failure");
     }
 }

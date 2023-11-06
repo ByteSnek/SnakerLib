@@ -3,8 +3,6 @@ package xyz.snaker.snakerlib.utility;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import xyz.snaker.snakerlib.utility.tools.AestheticStuff;
-
 /**
  * Created by SnakerBone on 20/10/2023
  **/
@@ -13,18 +11,7 @@ public class Suppliers
     /**
      * An empty supplier instance
      **/
-    public static final Supplier<?> EMPTY = AestheticStuff.nullSupplier();
-
-    /**
-     * Stores an object into a supplier
-     *
-     * @param obj The object to store
-     * @return The supplier with the stored object
-     **/
-    public static <T> Supplier<T> store(T obj)
-    {
-        return () -> obj;
-    }
+    public static final Supplier<?> EMPTY = () -> null;
 
     /**
      * Retrieves an object in a supplier

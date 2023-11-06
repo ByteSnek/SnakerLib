@@ -5,7 +5,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.utility.tools.WorldStuff;
+import xyz.snaker.snakerlib.utility.ChatComponents;
+import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -59,7 +60,7 @@ public class HurtAllEntitiesCommand
 
         if (player != null) {
             Level level = player.level();
-            List<Entity> entities = level.getEntitiesOfClass(Entity.class, WorldStuff.getWorldBoundingBox(player), predicate);
+            List<Entity> entities = level.getEntitiesOfClass(Entity.class, Worlds.getWorldBoundingBox(player), predicate);
 
             boolean immune = false;
 
@@ -88,16 +89,16 @@ public class HurtAllEntitiesCommand
 
     private Supplier<Component> success0(int size, float amount)
     {
-        return () -> Component.translatable("commands.snakerlib.hurt_entity_success_0", size, amount);
+        return () -> ChatComponents.info("snakerlib.commands.hurt_entity_success_0", size, amount);
     }
 
     private Supplier<Component> success(int size, float amount)
     {
-        return () -> Component.translatable("commands.snakerlib.hurt_entity_success", size, amount);
+        return () -> ChatComponents.info("snakerlib.commands.hurt_entity_success", size, amount);
     }
 
     private Component failure()
     {
-        return Component.translatable("commands.snakerlib.hurt_entity_failure");
+        return ChatComponents.info("snakerlib.commands.hurt_entity_failure");
     }
 }

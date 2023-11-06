@@ -2,8 +2,8 @@ package xyz.snaker.snakerlib.internal.mixin;
 
 import java.util.function.Consumer;
 
-import xyz.snaker.snakerlib.utility.tools.UnsafeStuff;
-import xyz.snaker.snakerlib.utility.tools.WorldStuff;
+import xyz.snaker.snakerlib.utility.TheUnsafe;
+import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 
@@ -24,6 +24,6 @@ public abstract class CreateWorldScreenMixin
     @Redirect(method = "*(Lnet/minecraft/server/WorldLoader$DataLoadContext;)Lnet/minecraft/server/WorldLoader$DataLoadOutput;", at = @At(value = "INVOKE", target = "Lcom/mojang/serialization/DataResult;getOrThrow(ZLjava/util/function/Consumer;)Ljava/lang/Object;", remap = false))
     private <E> E resolveErrorMessages(DataResult<E> result, boolean allowPartial, Consumer<String> onError)
     {
-        return UnsafeStuff.cast(WorldStuff.printWorldGenSettingsError(UnsafeStuff.cast(result)));
+        return TheUnsafe.cast(Worlds.printWorldGenSettingsError(TheUnsafe.cast(result)));
     }
 }

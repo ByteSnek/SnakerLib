@@ -2,7 +2,7 @@ package xyz.snaker.snakerlib.internal.mixin;
 
 import java.util.List;
 
-import xyz.snaker.snakerlib.utility.tools.RegistryStuff;
+import xyz.snaker.snakerlib.utility.Registrys;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;
@@ -22,6 +22,6 @@ public abstract class RegistryDataLoaderMixin
     @Inject(method = "load", at = @At("HEAD"), cancellable = true)
     private static void loadAndReportErrors(ResourceManager resourceManager, RegistryAccess registryAccess, List<RegistryDataLoader.RegistryData<?>> registryData, CallbackInfoReturnable<RegistryAccess.Frozen> cir)
     {
-        cir.setReturnValue(RegistryStuff.loadAllRegistryData(resourceManager, registryAccess, registryData));
+        cir.setReturnValue(Registrys.loadAllRegistryData(resourceManager, registryAccess, registryData));
     }
 }

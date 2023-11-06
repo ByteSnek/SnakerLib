@@ -67,9 +67,11 @@ public class Shader extends ShaderInstance
     {
         Uniform uniform = getUniform("Time");
         Preconditions.checkNotNull(uniform, "[%s]: Could not find 'Time' uniform in the shader program", SnakerLib.NAME);
+
         if (apply) {
             enqueueTask(() -> uniform.set((SnakerLib.getClientTickCount() + Minecraft.getInstance().getFrameTime()) / offset));
         }
+
         return uniform;
     }
 
@@ -571,6 +573,7 @@ public class Shader extends ShaderInstance
         for (Runnable task : tasks) {
             task.run();
         }
+
         super.apply();
     }
 }

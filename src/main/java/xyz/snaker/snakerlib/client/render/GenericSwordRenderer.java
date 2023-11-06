@@ -10,12 +10,12 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by SnakerBone on 28/06/2023
@@ -58,16 +58,19 @@ public abstract class GenericSwordRenderer<M extends GenericSwordModel> extends 
     public void renderByItem(@NotNull ItemStack itemStack, @NotNull ItemDisplayContext context, @NotNull PoseStack stack, @NotNull MultiBufferSource source, int packedLight, int packedOverlay)
     {
         VertexConsumer consumer = source.getBuffer(renderType);
+
         if (context == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
             stack.mulPose(Axis.XP.rotationDegrees(32.5F));
             stack.translate(0.175, 0.2, -0.35);
             stack.scale(0.85F, 0.85F, 0.85F);
         }
+
         if (context == ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
             stack.mulPose(Axis.XP.rotationDegrees(32.5F));
             stack.translate(0, 0.2, -0.35);
             stack.scale(0.85F, 0.85F, 0.85F);
         }
+
         if (context == ItemDisplayContext.GUI) {
             stack.mulPose(Axis.YP.rotationDegrees(90));
             stack.mulPose(Axis.XP.rotationDegrees(55));
@@ -81,6 +84,7 @@ public abstract class GenericSwordRenderer<M extends GenericSwordModel> extends 
             float scale = 1.1F;
             stack.scale(scale, scale, scale);
         }
+
         if (context == ItemDisplayContext.FIXED) {
             stack.rotateAround(Axis.YP.rotationDegrees(180), 0.5F, 0, 0.5F);
             stack.mulPose(Axis.YP.rotationDegrees(90));
@@ -95,6 +99,7 @@ public abstract class GenericSwordRenderer<M extends GenericSwordModel> extends 
             float scale = 1.2F;
             stack.scale(scale, scale, scale);
         }
+
         Lighting.setupForFlatItems();
         model.renderToBuffer(stack, consumer, packedLight, packedOverlay, 1, 1, 1, 1);
     }

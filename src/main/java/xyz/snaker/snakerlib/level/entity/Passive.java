@@ -1,7 +1,5 @@
 package xyz.snaker.snakerlib.level.entity;
 
-import xyz.snaker.snakerlib.data.DefaultEntityAttributes;
-
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -38,7 +36,7 @@ public abstract class Passive extends Animal
 
     public Passive(EntityType<? extends Animal> type, Level level, @Nullable Passive offspring)
     {
-        this(type, level, offspring, DefaultEntityAttributes.CREATURE_XP_REWARD);
+        this(type, level, offspring, 8);
     }
 
     /**

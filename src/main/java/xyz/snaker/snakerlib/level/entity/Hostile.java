@@ -1,8 +1,5 @@
 package xyz.snaker.snakerlib.level.entity;
 
-import xyz.snaker.snakerlib.data.DefaultEntityAttributes;
-import xyz.snaker.snakerlib.level.entity.ai.SwitchGameModeGoal;
-
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -24,7 +21,7 @@ public abstract class Hostile extends Monster
 
     public Hostile(EntityType<? extends Monster> type, Level level)
     {
-        this(type, level, DefaultEntityAttributes.MOB_XP_REWARD);
+        this(type, level, 15);
     }
 
     /**
@@ -40,7 +37,6 @@ public abstract class Hostile extends Monster
     @Override
     public void registerGoals()
     {
-        goalSelector.addGoal(1, new SwitchGameModeGoal(this));
         goalSelector.addGoal(6, new RandomStrollGoal(this, 1));
         goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.3, false));
         goalSelector.addGoal(0, new FloatGoal(this));

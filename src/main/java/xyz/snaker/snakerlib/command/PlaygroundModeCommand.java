@@ -5,7 +5,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.utility.tools.WorldStuff;
+import xyz.snaker.snakerlib.utility.ChatComponents;
+import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -66,7 +67,7 @@ public class PlaygroundModeCommand
             Level level = player.level();
 
             if (server != null) {
-                List<Entity> entities = level.getEntitiesOfClass(Entity.class, WorldStuff.getWorldBoundingBox(player), predicate);
+                List<Entity> entities = level.getEntitiesOfClass(Entity.class, Worlds.getWorldBoundingBox(player), predicate);
 
                 for (Entity entity : entities) {
                     entity.discard();
@@ -110,6 +111,6 @@ public class PlaygroundModeCommand
 
     private Supplier<Component> success(boolean value)
     {
-        return () -> Component.translatable("commands.snakerlib.playground_mode_status", value ? Component.translatable("addServer.resourcePack.enabled").getString() : Component.translatable("addServer.resourcePack.disabled").getString());
+        return () -> ChatComponents.info("snakerlib.commands.playground_mode_status", value ? ChatComponents.ENABLED.getString() : ChatComponents.DISABLED.getString());
     }
 }

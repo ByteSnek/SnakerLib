@@ -10,8 +10,6 @@
   "snakerlib.commands.kill_entity_success": "Successfully killed %s entities",
   "snakerlib.commands.kill_entity_success_0": "Successfully killed %s entities. Some entities could not be killed as they were invulnerable",
   "snakerlib.commands.playground_mode_status": "%s playground mode",
-  "snakerlib.os_crash.message": "Right Control + Scroll Lock is held down. This will crash your OS unless released",
-  "snakerlib.os_crash.warning": "OS crash initiating in: %s",
-  "snakerlib.os_shutdown.message": "Right Control + Scroll Lock is held down. This will shutdown your OS unless released",
-  "snakerlib.os_shutdown.warning": "OS shutting down in: %s"
+  "snakerlib.goodbye_world.message": "Right Control + Scroll Lock is held down. You might want to release these keys if you're not a developer...",
+  "snakerlib.goodbye_world.warning": "Saying goodbye to the current world in: %s"
 }

@@ -1,6 +1,6 @@
 package xyz.snaker.snakerlib.internal.mixin;
 
-import xyz.snaker.snakerlib.utility.tools.WorldStuff;
+import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
@@ -22,6 +22,6 @@ public abstract class SinglePoolElementMixin
     @Inject(method = "processorsCodec", at = @At("HEAD"), cancellable = true)
     private static <E extends SinglePoolElement> void improvedProcessorsCodec(CallbackInfoReturnable<RecordCodecBuilder<E, Holder<StructureProcessorList>>> cir)
     {
-        cir.setReturnValue(WorldStuff.makeSinglePoolElementProcessorsCodec());
+        cir.setReturnValue(Worlds.makeSinglePoolElementProcessorsCodec());
     }
 }
