@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 /**
  * Created by SnakerBone on 15/08/2023
  **/
-public class Keyboards
+public class Keyboard
 {
     /**
      * The current window handle

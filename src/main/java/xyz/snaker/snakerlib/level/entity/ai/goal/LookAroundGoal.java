@@ -2,7 +2,7 @@ package xyz.snaker.snakerlib.level.entity.ai.goal;
 
 import java.util.EnumSet;
 
-import xyz.snaker.snakerlib.utility.Maths;
+import xyz.snaker.snakerlib.math.Maths;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

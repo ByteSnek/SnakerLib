@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.utility;
+package xyz.snaker.snakerlib.utility.unsafe;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

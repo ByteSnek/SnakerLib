@@ -1,4 +1,6 @@
-package xyz.snaker.snakerlib.utility;
+package xyz.snaker.snakerlib.event;
+
+import xyz.snaker.snakerlib.utility.unsafe.Reflection;
 
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingStage;

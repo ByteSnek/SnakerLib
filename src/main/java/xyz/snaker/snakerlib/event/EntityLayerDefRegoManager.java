@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.utility;
+package xyz.snaker.snakerlib.event;
 
 import java.util.function.Supplier;
 

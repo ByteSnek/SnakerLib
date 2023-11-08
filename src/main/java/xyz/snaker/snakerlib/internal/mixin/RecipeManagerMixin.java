@@ -3,7 +3,7 @@ package xyz.snaker.snakerlib.internal.mixin;
 import java.util.Map;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.utility.Loggers;
+import xyz.snaker.snakerlib.utility.Logging;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
@@ -30,7 +30,7 @@ public abstract class RecipeManagerMixin
     @Redirect(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;error(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", remap = false))
     private void simplifyRecipeErrors(Logger logger, String message, Object p0, Object p1)
     {
-        Loggers.cleanRecipeError(SnakerLib.LOGGER, message, p0, p1);
+        Logging.cleanRecipeError(SnakerLib.LOGGER, message, p0, p1);
     }
 
     @Redirect(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At(value = "INVOKE", target = "Ljava/util/Map;size()I", remap = false))

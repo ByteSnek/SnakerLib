@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.utility;
+package xyz.snaker.snakerlib.utility.unsafe;
 
 import java.lang.reflect.Field;
 import java.nio.ByteOrder;
@@ -14,6 +14,9 @@ import org.jetbrains.annotations.NotNull;
 
 import sun.misc.Unsafe;
 
+/**
+ * Created by SnakerBone on 3/07/2023
+ **/
 public class TheUnsafe
 {
     private static Unsafe theUnsafe;

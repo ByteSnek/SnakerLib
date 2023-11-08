@@ -3,8 +3,8 @@ package xyz.snaker.snakerlib.internal;
 import java.util.Arrays;
 import java.util.List;
 
-import xyz.snaker.snakerlib.utility.Keyboards;
-import xyz.snaker.snakerlib.utility.Reflection;
+import xyz.snaker.snakerlib.utility.Keyboard;
+import xyz.snaker.snakerlib.utility.unsafe.Reflection;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -151,7 +151,7 @@ public class KeyPair
      **/
     private boolean isDown(int key)
     {
-        return Keyboards.isKeyDown(handle, key);
+        return Keyboard.isKeyDown(handle, key);
     }
 
     /**
@@ -162,7 +162,7 @@ public class KeyPair
      **/
     private boolean isUp(int key)
     {
-        return Keyboards.isKeyUp(handle, key);
+        return Keyboard.isKeyUp(handle, key);
     }
 
     /**

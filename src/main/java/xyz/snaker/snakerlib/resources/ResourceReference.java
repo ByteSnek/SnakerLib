@@ -1,6 +1,7 @@
-package xyz.snaker.snakerlib.utility;
+package xyz.snaker.snakerlib.resources;
 
 import xyz.snaker.snakerlib.SnakerLib;
+import xyz.snaker.snakerlib.utility.Strings;
 
 import net.minecraft.resources.ResourceLocation;
 

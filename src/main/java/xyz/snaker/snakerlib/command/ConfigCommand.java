@@ -2,7 +2,7 @@ package xyz.snaker.snakerlib.command;
 
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.config.SnakerConfig;
-import xyz.snaker.snakerlib.utility.ChatComponents;
+import xyz.snaker.snakerlib.chat.ChatComponents;
 
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;

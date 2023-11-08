@@ -53,7 +53,12 @@ public class DataGenerators
             add("snakerlib.commands.config_set_failure", "Could not set config");
 
             add("snakerlib.goodbye_world.message", "Right Control + Scroll Lock is held down. If you're not familiar with this key combination or you're not a developer that knows what their doing then you should probably release these keys right now");
-            add("snakerlib.goodbye_world.warning", "Saying goodbye to the current world in: %s");
+            add("snakerlib.goodbye_world.warning", "Saying goodbye to the current context in: %s");
+
+            add("snakerlib.info", "Info");
+            add("snakerlib.debug", "Debug");
+            add("snakerlib.hello", "Hello%s");
+            add("snakerlib.goodbye", "Goodbye%s");
         }
     }
 }

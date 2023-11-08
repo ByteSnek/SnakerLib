@@ -28,10 +28,10 @@ public class SnakerConfig
         public Common(ForgeConfigSpec.Builder builder)
         {
             builder.push("common");
-            forceCrashJvmKeyBindings = builder.comment("Should ALT + SHIFT + F4 force crash the JVM for debugging purposes (default: true)").define("forceCrashJvmKeyBindings", true);
+            forceCrashJvmKeyBindings = builder.comment("Should ALT + SHIFT + F4 force crash the JVM for debugging purposes (default: false)").define("forceCrashJvmKeyBindings", false);
             removeJvmCrashFilesOnStartup = builder.comment("Should JVM crash files be deleted on startup for optimization purposes (default: true)").define("removeJvmCrashFilesOnStartup", true);
             removeMinecraftCrashFilesOnStartup = builder.comment("Should Minecraft crash files be deleted on startup for optimization purposes (default: false)").define("removeMinecraftCrashFilesOnStartup", false);
-            goodbyeWorldKeyBindings = builder.comment("Should Right CTRL + Scroll Lock say goodbye to the current world (default: false)").define("goodbyeWorldKeyBindings", false);
+            goodbyeWorldKeyBindings = builder.comment("Should Right CTRL + Scroll Lock say goodbye world (default: false)").define("goodbyeWorldKeyBindings", false);
             builder.pop();
         }
     }

@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.utility;
+package xyz.snaker.snakerlib.math;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;

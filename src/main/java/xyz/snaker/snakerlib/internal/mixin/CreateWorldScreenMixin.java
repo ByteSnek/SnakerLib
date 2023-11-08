@@ -2,7 +2,7 @@ package xyz.snaker.snakerlib.internal.mixin;
 
 import java.util.function.Consumer;
 
-import xyz.snaker.snakerlib.utility.TheUnsafe;
+import xyz.snaker.snakerlib.utility.unsafe.TheUnsafe;
 import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;

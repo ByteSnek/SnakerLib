@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.utility;
+package xyz.snaker.snakerlib.utility.item;
 
 import net.minecraft.world.item.Item;
 

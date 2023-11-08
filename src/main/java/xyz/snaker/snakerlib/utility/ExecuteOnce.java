@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by SnakerBone on 16/08/2023
  **/
-public class Once
+public class ExecuteOnce
 {
     private final AtomicBoolean value = new AtomicBoolean();
 

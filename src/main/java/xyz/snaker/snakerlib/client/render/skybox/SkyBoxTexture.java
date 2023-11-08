@@ -3,7 +3,7 @@ package xyz.snaker.snakerlib.client.render.skybox;
 import java.util.HashMap;
 import java.util.Map;
 
-import xyz.snaker.snakerlib.utility.ResourceReference;
+import xyz.snaker.snakerlib.resources.ResourceReference;
 
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;

@@ -1,5 +1,7 @@
 package xyz.snaker.snakerlib.utility;
 
+import xyz.snaker.snakerlib.math.Maths;
+
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;

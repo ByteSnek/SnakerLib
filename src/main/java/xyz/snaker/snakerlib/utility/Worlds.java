@@ -10,6 +10,7 @@ import xyz.snaker.snakerlib.codec.ShapedCodec;
 import xyz.snaker.snakerlib.internal.mixin.BiomeGenerationSettingsAccessor;
 import xyz.snaker.snakerlib.internal.mixin.BiomeSpecialEffectsAccessor;
 import xyz.snaker.snakerlib.internal.mixin.SinglePoolElementAccessor;
+import xyz.snaker.snakerlib.math.Maths;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

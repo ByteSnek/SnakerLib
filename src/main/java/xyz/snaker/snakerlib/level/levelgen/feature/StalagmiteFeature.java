@@ -3,7 +3,7 @@ package xyz.snaker.snakerlib.level.levelgen.feature;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.snaker.snakerlib.utility.Maths;
+import xyz.snaker.snakerlib.math.Maths;
 import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.Util;

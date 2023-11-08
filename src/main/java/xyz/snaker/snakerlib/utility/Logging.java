@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * Created by SnakerBone on 10/13/2023
  **/
-public class Loggers
+public class Logging
 {
     public static void cleanLootTableError(SnakerLogger logger, String message, Object p0, Object p1)
     {

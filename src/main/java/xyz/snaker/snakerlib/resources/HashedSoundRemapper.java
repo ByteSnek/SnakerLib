@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.utility;
+package xyz.snaker.snakerlib.resources;
 
 import java.awt.*;
 import java.io.File;
@@ -25,7 +25,7 @@ import com.google.gson.JsonPrimitive;
  * <p>
  * Currently only works on Windows
  **/
-class HashedSounds
+class HashedSoundRemapper
 {
     public static void main(String[] args)
     {

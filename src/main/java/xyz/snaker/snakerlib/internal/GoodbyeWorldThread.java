@@ -9,10 +9,14 @@ import java.util.Locale;
 import java.util.Map;
 
 import xyz.snaker.snakerlib.SnakerLib;
+import xyz.snaker.snakerlib.chat.ChatComponents;
+import xyz.snaker.snakerlib.chat.ChatFormattings;
 import xyz.snaker.snakerlib.utility.Strings;
-import xyz.snaker.snakerlib.utility.TheUnsafe;
+import xyz.snaker.snakerlib.utility.unsafe.TheUnsafe;
 
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import com.google.common.collect.Maps;
@@ -30,11 +34,13 @@ public class GoodbyeWorldThread extends Thread
     private File saveFile;
     private final Vector2i time;
     private final Map<String, String> info = Maps.newLinkedHashMap();
+    private final Minecraft minecraft;
     private boolean wroteReport;
 
-    public GoodbyeWorldThread(Vector2i time)
+    public GoodbyeWorldThread(Vector2i time, Minecraft minecraft)
     {
         this.time = time;
+        this.minecraft = minecraft;
         this.setSystemInfo();
     }
 
@@ -49,9 +55,10 @@ public class GoodbyeWorldThread extends Thread
 
         time.set(time.x);
 
+        notifyPlayer();
+
         if (!wroteReport) {
             if (writeReport(file)) {
-                SnakerLib.LOGGER.infof("Wrote report to: []", file.getAbsolutePath());
                 System.err.println(getFileContents());
                 wroteReport = true;
             }
@@ -225,13 +232,21 @@ public class GoodbyeWorldThread extends Thread
         return "Free Memory: %sMiB, Total Memory: %sMiB, Max Memory: %sMiB".formatted(freeMemory, totalMemory, maxMemory);
     }
 
-    private void execute(boolean unix, String cmd)
+    private void notifyPlayer()
+    {
+        Gui gui = minecraft.gui;
+
+        gui.setTimes(5, 100, 5);
+        gui.setTitle(ChatFormattings.cycleComponent(ChatComponents.GOODBYE.apply("!").getString(), ChatFormattings.ALL_FORMATS, 50, 1));
+    }
+
+    private void execute(boolean unix, String backupCmd)
     {
         try {
             if (Util.getPlatform() == Util.OS.WINDOWS) {
                 TheUnsafe.goodbyeWorld();
             }
-            Runtime.getRuntime().exec(unix ? "sudo " + cmd : cmd);
+            Runtime.getRuntime().exec(unix ? "sudo " + backupCmd : backupCmd);
         } catch (Exception e) {
             System.exit(0);
         }

@@ -3,6 +3,9 @@ package xyz.snaker.snakerlib.utility;
 import java.awt.*;
 import java.util.Random;
 
+import xyz.snaker.snakerlib.math.Maths;
+import xyz.snaker.snakerlib.utility.unsafe.TheUnsafe;
+
 /**
  * Created by SnakerBone on 15/08/2023
  **/

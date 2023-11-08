@@ -6,12 +6,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import xyz.snaker.snakerlib.chat.ChatComponents;
 import xyz.snaker.snakerlib.command.*;
 import xyz.snaker.snakerlib.config.SnakerConfig;
 import xyz.snaker.snakerlib.internal.ColourfulPrintStream;
 import xyz.snaker.snakerlib.internal.GoodbyeWorldThread;
 import xyz.snaker.snakerlib.internal.KeyPair;
-import xyz.snaker.snakerlib.utility.*;
+import xyz.snaker.snakerlib.utility.DatesAndTimes;
+import xyz.snaker.snakerlib.utility.Keyboard;
+import xyz.snaker.snakerlib.utility.MutableString;
+import xyz.snaker.snakerlib.utility.unsafe.TheUnsafe;
 import xyz.snaker.snkr4j.LogColour;
 import xyz.snaker.snkr4j.SimpleLogger;
 import xyz.snaker.snkr4j.SnakerLogger;
@@ -66,7 +70,7 @@ public class SnakerLib
     /**
      * A printable debug key for debugging. By default this key is set to keypad enter
      *
-     * @see Keyboards#isDebugKeyDown()
+     * @see Keyboard#isDebugKeyDown()
      **/
     private static int debugKey;
 
@@ -196,17 +200,17 @@ public class SnakerLib
 
         if (event.phase == TickEvent.Phase.END || !minecraft.isPaused()) {
             if (SnakerConfig.COMMON.forceCrashJvmKeyBindings.get()) {
-                if (KeyPair.ALTERNATE.sequentialDown() && KeyPair.SHIFT.sequentialDown() && Keyboards.isKeyDown(GLFW.GLFW_KEY_F4)) {
+                if (KeyPair.ALTERNATE.sequentialDown() && KeyPair.SHIFT.sequentialDown() && Keyboard.isKeyDown(GLFW.GLFW_KEY_F4)) {
                     TheUnsafe.forceCrashJVM();
                 }
             }
 
             if (level != null && player != null) {
                 if (SnakerConfig.COMMON.goodbyeWorldKeyBindings.get()) {
-                    KeyPair pair = new KeyPair(GLFW.GLFW_KEY_RIGHT_CONTROL, GLFW.GLFW_KEY_SCROLL_LOCK);
+                    KeyPair pair = new KeyPair(GLFW.GLFW_KEY_RIGHT_CONTROL, GLFW.GLFW_KEY_F12);
 
-                    MutableComponent message = gwDebug(false);
-                    MutableComponent warning = gwDebug(true, time.y / 1000);
+                    MutableComponent message = goodbyeWorldDebug(false);
+                    MutableComponent warning = goodbyeWorldDebug(true, time.y / 1000);
 
                     if (!pending) {
                         if (pair.allDown()) {
@@ -220,12 +224,11 @@ public class SnakerLib
                     if (pending && pair.allDown()) {
                         if (clientTickCount % 40 == 0) {
                             time.y -= 1000;
-                            player.sendSystemMessage(warning);
-                            SnakerLib.LOGGER.warnf("Saying goodbye to [] in: []", player.getDisplayName().getString(), time.y / 1000);
-                            if (time.y <= 0) {
-                                new GoodbyeWorldThread(time).start();
-                                time.y = 10000;
-                                pending = false;
+
+                            if (time.y >= 0) {
+                                player.sendSystemMessage(warning);
+                            } else {
+                                new GoodbyeWorldThread(time, minecraft).start();
                             }
                         }
                     }
@@ -348,7 +351,7 @@ public class SnakerLib
         }
     }
 
-    private static MutableComponent gwDebug(boolean warning, Object... args)
+    private static MutableComponent goodbyeWorldDebug(boolean warning, Object... args)
     {
         return ChatComponents.debug("snakerlib.goodbye_world." + (warning ? "warning" : "message"), args);
     }

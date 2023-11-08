@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.utility.ChatComponents;
+import xyz.snaker.snakerlib.chat.ChatComponents;
 import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.commands.CommandSourceStack;
@@ -37,17 +37,6 @@ public class DiscardAllEntitiesCommand
         return new DiscardAllEntitiesCommand(dispatcher, SnakerLib.MODID);
     }
 
-    /**
-     * Discards all entities excluding players
-     *
-     * @param context The command context
-     * @return The execution result
-     * <ul>
-     *     <li><strong>1</strong> for <strong>SUCCESS</strong></li>
-     *     <li><strong>0</strong> for <strong>FAILURE</strong></li>
-     *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
-     * </ul>
-     **/
     private int execute(CommandContext<CommandSourceStack> context)
     {
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);

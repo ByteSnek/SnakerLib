@@ -2,7 +2,7 @@ package xyz.snaker.snakerlib.level.entity.ai.goal;
 
 import javax.annotation.Nullable;
 
-import xyz.snaker.snakerlib.utility.Maths;
+import xyz.snaker.snakerlib.math.Maths;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;

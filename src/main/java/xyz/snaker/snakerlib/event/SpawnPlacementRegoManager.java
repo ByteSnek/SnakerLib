@@ -1,6 +1,8 @@
-package xyz.snaker.snakerlib.utility;
+package xyz.snaker.snakerlib.event;
 
 import java.util.function.Supplier;
+
+import xyz.snaker.snakerlib.event.AbstractEventManager;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

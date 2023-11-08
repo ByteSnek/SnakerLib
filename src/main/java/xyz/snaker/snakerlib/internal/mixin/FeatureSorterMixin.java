@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import xyz.snaker.snakerlib.level.levelgen.featurecycle.FeatureCycleSorter;
-import xyz.snaker.snakerlib.utility.TheUnsafe;
+import xyz.snaker.snakerlib.utility.unsafe.TheUnsafe;
 
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.biome.FeatureSorter;

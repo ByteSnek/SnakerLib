@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.utility.ChatComponents;
+import xyz.snaker.snakerlib.chat.ChatComponents;
 import xyz.snaker.snakerlib.utility.Worlds;
 
 import net.minecraft.commands.CommandSourceStack;
@@ -46,17 +46,6 @@ public class PlaygroundModeCommand
         return new PlaygroundModeCommand(dispatcher, SnakerLib.MODID);
     }
 
-    /**
-     * Discard all entities excluding players, toggles daylight cycle, toggles mob spawning and toggles weather cycle
-     *
-     * @param context The command context
-     * @return The execution result
-     * <ul>
-     *     <li><strong>1</strong> for <strong>SUCCESS</strong></li>
-     *     <li><strong>0</strong> for <strong>FAILURE</strong></li>
-     *     <li><strong>-1</strong> for <strong>ERROR</strong></li>
-     * </ul>
-     **/
     private int execute(CommandContext<CommandSourceStack> context, boolean value)
     {
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);
@@ -88,12 +77,6 @@ public class PlaygroundModeCommand
         return 0;
     }
 
-    /**
-     * Modified level data for debugging found in the MinecraftServer class
-     *
-     * @param server The Minecraft Server
-     * @see MinecraftServer#setupDebugLevel(WorldData)
-     **/
     private void setPlaygroundMode(MinecraftServer server, boolean value)
     {
         WorldData worldData = server.getWorldData();
