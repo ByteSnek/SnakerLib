@@ -3,6 +3,7 @@ package xyz.snaker.snakerlib.utility;
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.internal.UncaughtExceptionThread;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import org.lwjgl.glfw.GLFW;
@@ -82,11 +83,26 @@ public class Keyboard
      **/
     static void initialize()
     {
-        if (GLFW.glfwGetCurrentContext() == 0) {
-            IllegalStateException exception = new IllegalStateException("Could not find main window found for checking key states");
-            UncaughtExceptionThread.createAndRun(exception);
-        } else {
-            handle = GLFW.glfwGetCurrentContext();
+        long glfwHandle = GLFW.glfwGetCurrentContext();
+        long mcHandle = 0;
+
+        if (FMLEnvironment.dist.isClient()) {
+            mcHandle = Minecraft.getInstance().getWindow().getWindow();
         }
+
+        if (glfwHandle == 0 || glfwHandle != mcHandle) {
+            if (mcHandle == 0) {
+                IllegalStateException exception = new IllegalStateException("No valid window could be found. Key state checking will be unavailable");
+                UncaughtExceptionThread.createAndRun(exception);
+
+                return;
+            }
+
+            handle = mcHandle;
+
+            return;
+        }
+
+        handle = glfwHandle;
     }
 }
