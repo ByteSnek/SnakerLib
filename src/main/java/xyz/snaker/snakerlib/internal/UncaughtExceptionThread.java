@@ -12,28 +12,26 @@ public class UncaughtExceptionThread extends Thread
 
     public UncaughtExceptionThread(Exception cause)
     {
-        this.message = "Uncaught excpetion detected";
-        this.handler = (thread, throwable) -> SnakerLib.LOGGER.error(cause);
+        this.message = cause.getMessage();
+        this.handler = (thread, throwable) -> SnakerLib.LOGGER.errorf("[]: []", cause.getClass().getName(), message);
     }
 
     public UncaughtExceptionThread(String message, Exception cause)
     {
         this.message = message;
-        this.handler = (thread, throwable) -> SnakerLib.LOGGER.error(cause);
+        this.handler = (thread, throwable) -> SnakerLib.LOGGER.errorf("[]: []", cause.getClass().getName(), message);
     }
 
-    public static UncaughtExceptionThread createAndRun(Exception cause)
+    public static void createAndRun(Exception cause)
     {
         UncaughtExceptionThread thread = new UncaughtExceptionThread(cause);
         thread.start();
-        return thread;
     }
 
-    public static UncaughtExceptionThread createAndRun(String message, Exception cause)
+    public static void createAndRun(String message, Exception cause)
     {
         UncaughtExceptionThread thread = new UncaughtExceptionThread(message, cause);
         thread.start();
-        return thread;
     }
 
     @Override
