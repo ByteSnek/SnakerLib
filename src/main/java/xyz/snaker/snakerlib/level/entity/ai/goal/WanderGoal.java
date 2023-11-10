@@ -21,6 +21,11 @@ public class WanderGoal extends Goal
      **/
     private final Animal owner;
 
+    /**
+     * Constructs a new WanderGoal instance
+     *
+     * @param owner The owner of this goal
+     **/
     public WanderGoal(Animal owner)
     {
         this.owner = owner;
@@ -32,16 +37,25 @@ public class WanderGoal extends Goal
         return owner.getNavigation().isDone() && owner.getRandom().nextInt(10) == 0;
     }
 
+    /**
+     * Checks if the owner can currently use this goal while it is being used
+     *
+     * @return True if the owner can currently use this goal while it is being used
+     **/
     @Override
     public boolean canContinueToUse()
     {
         return owner.getNavigation().isInProgress();
     }
 
+    /**
+     * Tasks to do when this goal starts being used
+     **/
     @Override
     public void start()
     {
         Vec3 pos = this.findPos();
+
         if (pos != null) {
             owner.getNavigation().moveTo(owner.getNavigation().createPath(BlockPos.containing(pos), 1), 1.0D);
         }

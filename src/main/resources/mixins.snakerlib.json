@@ -10,16 +10,16 @@
             "EffectInstanceMixin"
       ],
       "mixins": [
-            "BiomeGenerationSettingsAccessor",
             "BiomeMixin",
-            "BiomeSpecialEffectsAccessor",
             "FeatureSorterMixin",
             "ForgeModMixin",
             "LootTablesMixin",
             "RecipeManagerMixin",
             "RegistryDataLoaderMixin",
-            "SinglePoolElementAccessor",
             "SinglePoolElementMixin",
-            "StructureTemplatePoolMixin"
+            "StructureTemplatePoolMixin",
+            "accessor.BiomeGenerationSettingsAccessor",
+            "accessor.BiomeSpecialEffectsAccessor",
+            "accessor.SinglePoolElementAccessor"
       ]
 }

@@ -16,14 +16,44 @@ import net.minecraft.network.chat.MutableComponent;
  **/
 public class ChatComponents
 {
+    /**
+     * The initialized mod id as a literal component
+     **/
     public static final MutableComponent MOD = Component.literal(Strings.i18nt(SnakerLib.MOD.get()));
+
+    /**
+     * ":" as a literal component
+     **/
     public static final MutableComponent COLON = Component.literal(":");
+
+    /**
+     * "Enabled" as a translatable component
+     **/
     public static final MutableComponent ENABLED = Component.translatable("addServer.resourcePack.enabled");
+
+    /**
+     * "Disabled" as a translatable component
+     **/
     public static final MutableComponent DISABLED = Component.translatable("addServer.resourcePack.disabled");
+
+    /**
+     * "Debug" as a translatable component
+     **/
     public static final MutableComponent DEBUG = Component.translatable("snakerlib.debug");
+
+    /**
+     * "Info" as a translatable component
+     **/
     public static final MutableComponent INFO = Component.translatable("snakerlib.info");
 
+    /**
+     * "Hello%s" as a translatable component with the ability to add a optional prefix
+     **/
     public static final Function<String, MutableComponent> HELLO = punctuation -> Component.translatable("snakerlib.hello", punctuation);
+
+    /**
+     * "Goodbye%s" as a translatable component with the ability to add a optional prefix
+     **/
     public static final Function<String, MutableComponent> GOODBYE = punctuation -> Component.translatable("snakerlib.goodbye", punctuation);
 
     public static MutableComponent info(String key, Object... args)

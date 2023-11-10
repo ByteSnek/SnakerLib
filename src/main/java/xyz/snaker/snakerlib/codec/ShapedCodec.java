@@ -4,17 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 
-/**
- * Created by SnakerBone on 13/10/2023
- **/
 public interface ShapedCodec<A> extends Codec<A>
 {
-    /**
-     * Creates a new shaped codec with a number element
-     **/
-    static <A> ShapedCodec<A> ofNumber(Codec<A> codec)
+    static <A> ShapedCodec<A> likeNumber(Codec<A> codec)
     {
-        return new CodecShape<>(codec)
+        return new Impl<>(codec)
         {
             @Override
             public <T> DataResult<?> decodeShape(DynamicOps<T> ops, T input)
@@ -24,12 +18,9 @@ public interface ShapedCodec<A> extends Codec<A>
         };
     }
 
-    /**
-     * Creates a new shaped codec with a string element
-     **/
-    static <A> ShapedCodec<A> ofString(Codec<A> codec)
+    static <A> ShapedCodec<A> likeString(Codec<A> codec)
     {
-        return new CodecShape<>(codec)
+        return new Impl<>(codec)
         {
             @Override
             public <T> DataResult<?> decodeShape(DynamicOps<T> ops, T input)
@@ -39,12 +30,9 @@ public interface ShapedCodec<A> extends Codec<A>
         };
     }
 
-    /**
-     * Creates a new shaped codec with a map element
-     **/
-    static <A> ShapedCodec<A> ofMap(Codec<A> codec)
+    static <A> ShapedCodec<A> likeMap(Codec<A> codec)
     {
-        return new CodecShape<>(codec)
+        return new Impl<>(codec)
         {
             @Override
             public <T> DataResult<?> decodeShape(DynamicOps<T> ops, T input)
@@ -54,12 +42,9 @@ public interface ShapedCodec<A> extends Codec<A>
         };
     }
 
-    /**
-     * Creates a new shaped codec with a list element
-     **/
-    static <A> ShapedCodec<A> ofList(Codec<A> codec)
+    static <A> ShapedCodec<A> likeList(Codec<A> codec)
     {
-        return new CodecShape<>(codec)
+        return new Impl<>(codec)
         {
             @Override
             public <T> DataResult<?> decodeShape(DynamicOps<T> ops, T input)
@@ -69,12 +54,9 @@ public interface ShapedCodec<A> extends Codec<A>
         };
     }
 
-    /**
-     * Creates a new shaped codec
-     **/
-    static <A> ShapedCodec<A> of(Codec<A> codec)
+    static <A> ShapedCodec<A> likeAny(Codec<A> codec)
     {
-        return new CodecShape<>(codec)
+        return new Impl<>(codec)
         {
             @Override
             public <T> DataResult<?> decodeShape(DynamicOps<T> ops, T input)
@@ -85,24 +67,17 @@ public interface ShapedCodec<A> extends Codec<A>
     }
 
     /**
-     * Decodes this codec
-     **/
+     * Decode the shape of the input.
+     * If the input is of the expected input, return DataResult.success().
+     * Otherwise, return a meta-error about the shape of the input.
+     */
     <T> DataResult<?> decodeShape(DynamicOps<T> ops, T input);
 
-    /**
-     * A codec shape implementation
-     **/
-    abstract class CodecShape<A> implements DelegateCodec<A>, ShapedCodec<A>
+    abstract class Impl<A> implements DelegateCodec<A>, ShapedCodec<A>
     {
-        /**
-         * The internal codec
-         **/
         private final Codec<A> codec;
 
-        /**
-         * Creates a new codec shape
-         **/
-        CodecShape(Codec<A> codec)
+        Impl(Codec<A> codec)
         {
             this.codec = codec;
         }

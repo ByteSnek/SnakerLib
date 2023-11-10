@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.internal.mixin;
+package xyz.snaker.snakerlib.internal.mixin.accessor;
 
 import java.util.Optional;
 
@@ -13,14 +13,11 @@ import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-/**
- * Created by SnakerBone on 13/10/2023
- **/
 @Mixin(BiomeSpecialEffects.class)
 public interface BiomeSpecialEffectsAccessor
 {
     @Invoker("<init>")
-    static BiomeSpecialEffects snakerlib$new(int fogColor, int waterColor, int waterFogColor, int skyColor, Optional<Integer> foliageColorOverride_, Optional<Integer> grassColorOverride, BiomeSpecialEffects.GrassColorModifier grassColorModifier, Optional<AmbientParticleSettings> ambientParticleSettings, Optional<Holder<SoundEvent>> ambientLoopSoundEvent, Optional<AmbientMoodSettings> ambientMoodSettings, Optional<AmbientAdditionsSettings> ambientAdditionsSettings, Optional<Music> backgroundMusic)
+    static BiomeSpecialEffects cyanide$new(int fogColor, int waterColor, int waterFogColor, int skyColor, Optional<Integer> foliageColorOverride_, Optional<Integer> grassColorOverride, BiomeSpecialEffects.GrassColorModifier grassColorModifier, Optional<AmbientParticleSettings> ambientParticleSettings, Optional<Holder<SoundEvent>> ambientLoopSoundEvent, Optional<AmbientMoodSettings> ambientMoodSettings, Optional<AmbientAdditionsSettings> ambientAdditionsSettings, Optional<Music> backgroundMusic)
     {
         throw new AssertionError();
     }

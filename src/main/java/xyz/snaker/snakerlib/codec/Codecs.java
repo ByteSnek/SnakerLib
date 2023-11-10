@@ -6,8 +6,6 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import xyz.snaker.snakerlib.utility.Registrys;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -21,121 +19,85 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 
-/**
- * Created by SnakerBone on 13/10/2023
- * <p>
- * Custom misc codecs
- **/
-public class Codecs
+public final class Codecs
 {
     /**
-     * Creates a new either codec
-     **/
-    public static <F, S> Codec<Either<F, S>> newEitherCodec(Codec<F> first, Codec<S> second)
+     * Improvements for {@link Codec#either(Codec, Codec)} that use shaped codecs where possible and have improved error retention.
+     */
+    public static <F, S> Codec<Either<F, S>> either(Codec<F> first, Codec<S> second)
     {
-        return new EitherCodec<>(ShapedCodec.of(first), ShapedCodec.of(second));
+        return new ImprovedEitherCodec<>(ShapedCodec.likeAny(first), ShapedCodec.likeAny(second));
+    }
+
+    public static <F, S> Codec<Either<F, S>> either(ShapedCodec<F> first, Codec<S> second)
+    {
+        return new ImprovedEitherCodec<>(first, ShapedCodec.likeAny(second));
+    }
+
+    public static <F, S> Codec<Either<F, S>> either(Codec<F> first, ShapedCodec<S> second)
+    {
+        return new ImprovedEitherCodec<>(ShapedCodec.likeAny(first), second);
+    }
+
+    public static <F, S> Codec<Either<F, S>> either(ShapedCodec<F> first, ShapedCodec<S> second)
+    {
+        return new ImprovedEitherCodec<>(first, second);
+    }
+
+    public static <E> Codec<List<E>> list(Codec<E> elementCodec)
+    {
+        return new ImprovedListCodec<>(elementCodec, (e, i) -> e + " at index " + i);
+    }
+
+    public static <E> Codec<List<E>> list(Codec<E> elementCodec, ImprovedListCodec.Reporter indexReporter)
+    {
+        return new ImprovedListCodec<>(elementCodec, indexReporter);
+    }
+
+    public static <E> Codec<E> reporting(Codec<E> codec, String at)
+    {
+        return new ReportingCodec<>(codec, e -> MixinHooks.appendErrorLocation(e, '"' + at + '"'));
+    }
+
+    public static <E> Codec<E> reporting(Codec<E> codec, UnaryOperator<String> errorReporter)
+    {
+        return new ReportingCodec<>(codec, errorReporter);
+    }
+
+    public static <E> MapCodec<E> reporting(MapCodec<E> codec, String at)
+    {
+        return new ReportingMapCodec<>(codec, e -> MixinHooks.appendErrorLocation(e, '"' + at + '"'));
+    }
+
+    public static <E> MapCodec<E> reporting(MapCodec<E> codec, UnaryOperator<String> errorReporter)
+    {
+        return new ReportingMapCodec<>(codec, errorReporter);
+    }
+
+    public static <E> MapCodec<E> optionalFieldOf(Codec<E> codec, String name, E defaultValue)
+    {
+        return optionalFieldOf(codec, name).xmap(
+                o -> o.orElse(defaultValue),
+                a -> Objects.equals(a, defaultValue) ? Optional.empty() : Optional.of(a)
+        );
+    }
+
+    public static <F> MapCodec<Optional<F>> optionalFieldOf(Codec<F> elementCodec, String name)
+    {
+        return new ImprovedOptionalCodec<>(name, elementCodec);
     }
 
     /**
-     * Creates a new either codec
-     **/
-    public static <F, S> Codec<Either<F, S>> newEitherCodec(ShapedCodec<F> first, Codec<S> second)
+     * Like {@link StringRepresentable#fromEnum(Supplier)} but with named errors, and also doesn't evaluate the enum values immediately.
+     */
+    public static <E extends Enum<E> & StringRepresentable> Codec<E> fromEnum(String id, Supplier<E[]> enumValues)
     {
-        return new EitherCodec<>(first, ShapedCodec.of(second));
-    }
-
-    /**
-     * Creates a new either codec
-     **/
-    public static <F, S> Codec<Either<F, S>> newEitherCodec(Codec<F> first, ShapedCodec<S> second)
-    {
-        return new EitherCodec<>(ShapedCodec.of(first), second);
-    }
-
-    /**
-     * Creates a new shaped either codec
-     **/
-    public static <F, S> Codec<Either<F, S>> newShapedEitherCodec(ShapedCodec<F> first, ShapedCodec<S> second)
-    {
-        return new EitherCodec<>(first, second);
-    }
-
-    /**
-     * Creates a new list codec
-     **/
-    public static <E> Codec<List<E>> newListCodec(Codec<E> elementCodec)
-    {
-        return new ListCodec<>(elementCodec, (e, i) -> e + " at index " + i);
-    }
-
-    /**
-     * Creates a new list codec
-     **/
-    public static <E> Codec<List<E>> newListCodec(Codec<E> elementCodec, ListCodec.Reporter indexReporter)
-    {
-        return new ListCodec<>(elementCodec, indexReporter);
-    }
-
-    /**
-     * Creates a new error reporting codec
-     **/
-    public static <E> Codec<E> newErrorReportingCodec(Codec<E> codec, String at)
-    {
-        return new ErrorReportingCodec<>(codec, e -> Registrys.appendErrorLocation(e, '"' + at + '"'));
-    }
-
-    /**
-     * Creates a new error reporting codec
-     **/
-    public static <E> Codec<E> newErrorReportingCodec(Codec<E> codec, UnaryOperator<String> errorReporter)
-    {
-        return new ErrorReportingCodec<>(codec, errorReporter);
-    }
-
-    /**
-     * Creates a new error reporting codec
-     **/
-    public static <E> MapCodec<E> newErrorReportingCodec(MapCodec<E> codec, String at)
-    {
-        return new ErrorReportingMapCodec<>(codec, e -> Registrys.appendErrorLocation(e, '"' + at + '"'));
-    }
-
-    /**
-     * Creates a new error reporting codec
-     **/
-    public static <E> MapCodec<E> newErrorReportingCodec(MapCodec<E> codec, UnaryOperator<String> errorReporter)
-    {
-        return new ErrorReportingMapCodec<>(codec, errorReporter);
-    }
-
-    /**
-     * Creates a new optional codec
-     **/
-    public static <E> MapCodec<E> newOptionalFieldOfCodec(Codec<E> codec, String name, E defaultValue)
-    {
-        return newOptionalFieldOfCodec(codec, name).xmap(o -> o.orElse(defaultValue), a -> Objects.equals(a, defaultValue) ? Optional.empty() : Optional.of(a));
-    }
-
-    /**
-     * Creates a new optional codec
-     **/
-    public static <F> MapCodec<Optional<F>> newOptionalFieldOfCodec(Codec<F> elementCodec, String name)
-    {
-        return new OptionalCodec<>(name, elementCodec);
-    }
-
-    /**
-     * Creates a new enum codec
-     **/
-    public static <E extends Enum<E> & StringRepresentable> Codec<E> newEnumCodec(String id, Supplier<E[]> enumValues)
-    {
-        Supplier<E[]> values = Suppliers.memoize(enumValues::get);
-        Supplier<Function<String, E>> nameResolver = Suppliers.memoize(() ->
+        final Supplier<E[]> values = Suppliers.memoize(enumValues::get);
+        final Supplier<Function<String, E>> nameResolver = Suppliers.memoize(() ->
         {
-            Map<String, E> map = Arrays.stream(values.get()).collect(Collectors.toMap(StringRepresentable::getSerializedName, Function.identity()));
+            final Map<String, E> map = Arrays.stream(values.get()).collect(Collectors.toMap(StringRepresentable::getSerializedName, Function.identity()));
             return map::get;
         });
-
         return ExtraCodecs.orCompressed(
                 Codec.STRING.flatXmap(
                         name -> Optional.ofNullable(nameResolver.get().apply(name))
@@ -149,18 +111,18 @@ public class Codecs
     }
 
     /**
-     * Creates a new registry entry codec
-     **/
-    public static <E> Codec<Holder<E>> newRegistryEntryCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec)
+     * Replacement for {@link net.minecraft.resources.RegistryFileCodec#create(ResourceKey, Codec)}
+     */
+    public static <E> Codec<Holder<E>> registryEntryCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec)
     {
         return new RegistryEntryCodec<>(registryKey, elementCodec);
     }
 
     /**
-     * Creates a new registry entry list codec
-     **/
-    public static <E> Codec<HolderSet<E>> newRegistryEntryListCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec)
+     * Note this is <strong>not</strong> a homogeneous list, and rather accepts mixed lists, prioritizing the registry name.
+     */
+    public static <E> Codec<HolderSet<E>> registryEntryListCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec)
     {
-        return new RegistryListCodec<>(registryKey, newRegistryEntryCodec(registryKey, elementCodec), false);
+        return new RegistryListCodec<>(registryKey, registryEntryCodec(registryKey, elementCodec), false);
     }
 }

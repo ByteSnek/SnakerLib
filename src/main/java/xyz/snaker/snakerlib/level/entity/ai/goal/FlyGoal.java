@@ -17,12 +17,22 @@ public class FlyGoal extends Goal
      **/
     private final Mob owner;
 
+    /**
+     * Constructs a new FlyGoal instance
+     *
+     * @param owner The owner of this goal
+     **/
     public FlyGoal(Mob owner)
     {
         this.owner = owner;
         setFlags(EnumSet.of(Flag.MOVE));
     }
 
+    /**
+     * Checks if the owner can currently use this goal
+     *
+     * @return True if the owner can currently use this goal
+     **/
     @Override
     public boolean canUse()
     {
@@ -41,12 +51,20 @@ public class FlyGoal extends Goal
         }
     }
 
+    /**
+     * Checks if the owner can currently use this goal while it is being used
+     *
+     * @return True if the owner can currently use this goal while it is being used
+     **/
     @Override
     public boolean canContinueToUse()
     {
         return false;
     }
 
+    /**
+     * Tasks to do when this goal starts being used
+     **/
     @Override
     public void start()
     {

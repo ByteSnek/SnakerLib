@@ -1,7 +1,7 @@
 package xyz.snaker.snakerlib.internal.mixin;
 
 import xyz.snaker.snakerlib.codec.Codecs;
-import xyz.snaker.snakerlib.utility.Worlds;
+import xyz.snaker.snakerlib.codec.MixinHooks;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -14,9 +14,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
-/**
- * Created by SnakerBone on 13/10/2023
- **/
 @Mixin(Biome.class)
 public abstract class BiomeMixin
 {
@@ -24,14 +21,13 @@ public abstract class BiomeMixin
     @Final
     @Mutable
     public static Codec<Biome> DIRECT_CODEC;
-
     @Shadow
     @Final
     @Mutable
     public static Codec<Holder<Biome>> CODEC;
 
     static {
-        DIRECT_CODEC = Worlds.makeBiomeCodec();
-        CODEC = Codecs.newRegistryEntryCodec(Registries.BIOME, DIRECT_CODEC);
+        DIRECT_CODEC = MixinHooks.makeBiomeCodec();
+        CODEC = Codecs.registryEntryCodec(Registries.BIOME, DIRECT_CODEC);
     }
 }

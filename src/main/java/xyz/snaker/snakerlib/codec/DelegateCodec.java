@@ -5,18 +5,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 
-/**
- * Created by SnakerBone on 13/10/2023
- * <p>
- * A delegated codec interface
- *
- * @param <A> The type for this codec
- **/
 public interface DelegateCodec<A> extends Codec<A>
 {
-    /**
-     * The delegate of this codec
-     **/
     Codec<A> delegate();
 
     @Override

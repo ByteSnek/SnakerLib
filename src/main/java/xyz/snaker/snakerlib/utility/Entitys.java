@@ -6,6 +6,9 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -179,5 +182,38 @@ public class Entitys
     public static <T extends Entity> boolean isEntityMovingYZ(@NotNull T entity)
     {
         return entity.getY() != entity.yo || entity.getZ() != entity.zo;
+    }
+
+    /**
+     * Checks if an entity has a specific goal or not regardless of whether it is currently executing or not
+     *
+     * @param entity    The entity
+     * @param goalClass The class of the goal to check
+     * @return True if the entity has the specified goal
+     **/
+    public static <T extends Mob> boolean hasGoal(@NotNull T entity, Class<? extends Goal> goalClass)
+    {
+        return entity.goalSelector.getAvailableGoals()
+                .stream()
+                .map(WrappedGoal::getGoal)
+                .map(Object::getClass)
+                .toList()
+                .contains(goalClass);
+    }
+
+    /**
+     * Checks if an entity is currently executing a specific goal
+     *
+     * @param entity    The entity
+     * @param goalClass The class of the goal to check
+     * @return True if the entity is currently executing the specified goal
+     **/
+    public static <T extends Mob> boolean hasActiveGoal(@NotNull T entity, Class<? extends Goal> goalClass)
+    {
+        return entity.goalSelector.getRunningGoals()
+                .map(WrappedGoal::getGoal)
+                .map(Object::getClass)
+                .toList()
+                .contains(goalClass);
     }
 }

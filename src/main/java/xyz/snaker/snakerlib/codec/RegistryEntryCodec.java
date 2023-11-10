@@ -2,12 +2,11 @@ package xyz.snaker.snakerlib.codec;
 
 import java.util.Optional;
 
-import xyz.snaker.snakerlib.utility.Registrys;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderOwner;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -19,34 +18,27 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.Lifecycle;
 
 /**
- * Created by SnakerBone on 13/10/2023
- * <p>
- * A registry entry codec
- *
- * @param registryKey  The resource key for this codec
- * @param elementCodec The delegate codec
- * @param <E>          The element of this codec
- * @see Codecs#newRegistryEntryCodec(ResourceKey, Codec)
- **/
-record RegistryEntryCodec<E>(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec) implements Codec<Holder<E>>
+ * Based on {@link RegistryFileCodec}
+ */
+public record RegistryEntryCodec<E>(ResourceKey<? extends Registry<E>> registryKey, Codec<E> elementCodec) implements Codec<Holder<E>>
 {
     @Override
     public <T> DataResult<T> encode(Holder<E> input, DynamicOps<T> ops, T prefix)
     {
         if (ops instanceof RegistryOps<T> registryOps) {
-            Optional<HolderOwner<E>> optionalOwner = registryOps.owner(registryKey);
-
+            final Optional<HolderOwner<E>> optionalOwner = registryOps.owner(registryKey);
             if (optionalOwner.isPresent()) {
-                HolderOwner<E> owner = optionalOwner.get();
-
+                final HolderOwner<E> owner = optionalOwner.get();
                 if (!input.canSerializeIn(owner)) {
                     return DataResult.error(() -> "Element - " + input + " - not valid in current registry " + registryKey.location());
                 }
 
-                return input.unwrap().map(key -> ResourceLocation.CODEC.encode(key.location(), ops, prefix), e -> this.elementCodec.encode(e, ops, prefix));
+                return input.unwrap().map(
+                        key -> ResourceLocation.CODEC.encode(key.location(), ops, prefix),
+                        e -> this.elementCodec.encode(e, ops, prefix)
+                );
             }
         }
-
         return this.elementCodec.encode(input.value(), ops, prefix);
     }
 
@@ -54,34 +46,32 @@ record RegistryEntryCodec<E>(ResourceKey<? extends Registry<E>> registryKey, Cod
     public <T> DataResult<Pair<Holder<E>, T>> decode(DynamicOps<T> ops, T input)
     {
         if (ops instanceof RegistryOps<T> registryOps) {
-            Optional<HolderGetter<E>> optionalGetter = registryOps.getter(registryKey);
-
+            final Optional<HolderGetter<E>> optionalGetter = registryOps.getter(registryKey);
             if (optionalGetter.isEmpty()) {
                 return DataResult.error(() -> "Unknown registry " + registryKey);
             }
 
-            HolderGetter<E> getter = optionalGetter.get();
-            DataResult<Pair<ResourceLocation, T>> optionalResult = ResourceLocation.CODEC.decode(ops, input);
-
+            final HolderGetter<E> getter = optionalGetter.get();
+            final DataResult<Pair<ResourceLocation, T>> optionalResult = ResourceLocation.CODEC.decode(ops, input);
             if (optionalResult.result().isPresent()) {
-                Pair<ResourceLocation, T> result = optionalResult.result().get();
-                ResourceLocation id = result.getFirst();
-                ResourceKey<E> key = ResourceKey.create(registryKey, id);
+                final Pair<ResourceLocation, T> result = optionalResult.result().get();
+                final ResourceLocation id = result.getFirst();
+                final ResourceKey<E> key = ResourceKey.create(registryKey, id);
 
-                return getter.get(key).map(DataResult::success).orElseGet(() -> Registrys.appendRegistryReferenceError(DataResult.error(() -> "Missing " + registryKey.location().getPath() + ": " + key.location()), id, registryKey)).<Pair<Holder<E>, T>>map(reference -> Pair.of(reference, result.getSecond())).setLifecycle(Lifecycle.stable());
+                return getter.get(key)
+                        .map(DataResult::success)
+                        .orElseGet(() -> MixinHooks.appendRegistryReferenceError(DataResult.error(() -> "Missing " + registryKey.location().getPath() + ": " + key.location()), id, registryKey))
+                        .<Pair<Holder<E>, T>>map(reference -> Pair.of(reference, result.getSecond()))
+                        .setLifecycle(Lifecycle.stable());
             }
         }
-
         DataResult<Pair<Holder<E>, T>> result = elementCodec.decode(ops, input).map(r -> r.mapFirst(Holder::direct));
-
         if (result.error().isPresent()) {
-            result = Registrys.appendRegistryError(result, registryKey);
+            result = MixinHooks.appendRegistryError(result, registryKey);
         }
-
         return result;
     }
 
-    @Override
     public String toString()
     {
         return "RegistryEntryCodec[" + registryKey + ']';

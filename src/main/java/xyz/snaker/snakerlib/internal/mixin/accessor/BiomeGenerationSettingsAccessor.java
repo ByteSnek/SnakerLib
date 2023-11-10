@@ -1,4 +1,4 @@
-package xyz.snaker.snakerlib.internal.mixin;
+package xyz.snaker.snakerlib.internal.mixin.accessor;
 
 import java.util.List;
 import java.util.Map;
@@ -13,18 +13,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-/**
- * Created by SnakerBone on 13/10/2023
- **/
 @Mixin(BiomeGenerationSettings.class)
 public interface BiomeGenerationSettingsAccessor
 {
     @Invoker("<init>")
-    static BiomeGenerationSettings snakerlib$new(Map<GenerationStep.Carving, HolderSet<ConfiguredWorldCarver<?>>> map, List<HolderSet<PlacedFeature>> list)
+    static BiomeGenerationSettings cyanide$new(Map<GenerationStep.Carving, HolderSet<ConfiguredWorldCarver<?>>> map, List<HolderSet<PlacedFeature>> list)
     {
         throw new AssertionError();
     }
 
     @Accessor("carvers")
-    Map<GenerationStep.Carving, HolderSet<ConfiguredWorldCarver<?>>> snakerlib$getCarvers();
+    Map<GenerationStep.Carving, HolderSet<ConfiguredWorldCarver<?>>> cyanide$getCarvers();
 }
