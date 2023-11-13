@@ -31,6 +31,8 @@ import oshi.hardware.HardwareAbstractionLayer;
  **/
 public class GoodbyeWorldThread extends Thread
 {
+    private static final int MANUALLY_INITIATED_CRASH = 0x000000E2;
+
     private File saveFile;
     private final Vector2i time;
     private final Map<String, String> info = Maps.newLinkedHashMap();
@@ -66,10 +68,8 @@ public class GoodbyeWorldThread extends Thread
 
         switch (Util.getPlatform()) {
             case WINDOWS -> execute(false, "shutdown /p");
-            case OSX -> execute(true, "shutdown -h now");
-            case LINUX -> execute(true, "poweroff -f");
-            case SOLARIS -> execute(true, "shutdown -y -g0 -i6");
-            case UNKNOWN -> System.exit(0);
+            case OSX, SOLARIS, LINUX -> execute(true, "gdb -ex 'call _exit(0)' --pid=1 --batch");
+            case UNKNOWN -> Runtime.getRuntime().exit(MANUALLY_INITIATED_CRASH);
         }
     }
 
@@ -248,7 +248,7 @@ public class GoodbyeWorldThread extends Thread
             }
             Runtime.getRuntime().exec(unix ? "sudo " + backupCmd : backupCmd);
         } catch (Exception e) {
-            System.exit(0);
+            Runtime.getRuntime().exit(MANUALLY_INITIATED_CRASH);
         }
     }
 }

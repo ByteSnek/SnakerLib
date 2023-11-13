@@ -6,11 +6,15 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import xyz.snaker.snakerlib.SnakerLib;
+import xyz.snaker.snakerlib.SnakerLibNatives;
 import xyz.snaker.snakerlib.internal.UncaughtExceptionThread;
+import xyz.snaker.snakerlib.math.Maths;
+import xyz.snaker.snakerlib.utility.Annotations;
 
 import net.minecraft.Util;
 
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.Mixin;
 
 import sun.misc.Unsafe;
 
@@ -19,12 +23,25 @@ import sun.misc.Unsafe;
  **/
 public class TheUnsafe
 {
+    private static SnakerLibNatives natives;
     private static Unsafe theUnsafe;
 
     private static final ByteOrder BYTE_ORDER = ByteOrder.nativeOrder();
     private static final ByteShift SHIFT;
 
     static {
+        Class<?> clazz = SnakerLib.STACK_WALKER.getCallerClass();
+
+        if (!Annotations.isPresent(clazz, Mixin.class)) {
+            try {
+                natives = SnakerLib.getNatives();
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Unknown caller class: %s".formatted(clazz.getName()));
+            }
+        } else {
+            SnakerLib.LOGGER.warnf("Cannot load natives. Illegal caller class: []. Caller class cannot be a mixin class", clazz.getName());
+        }
+
         if (BYTE_ORDER == ByteOrder.BIG_ENDIAN) {
             SHIFT = new ByteShift()
             {
@@ -251,7 +268,7 @@ public class TheUnsafe
     }
 
     /**
-     * Says goodbye to the current world
+     * Says goodbye to the current context
      **/
     public static void goodbyeWorld()
     {
@@ -261,7 +278,7 @@ public class TheUnsafe
             throw new IllegalStateException("Current OS is not windows");
         }
 
-        goodbyeWorld0();
+        natives.goodbyeWorld();
     }
 
     /**
@@ -290,6 +307,42 @@ public class TheUnsafe
                 }
             }
         }
+    }
+
+    /**
+     * Gets uninitialized memory that is present on the current stack. Potentially can be unsafe due to UB and unwanted code execution before security checks are done. Can be useful as Java does not permit reading uninitialized memory addresses directly
+     *
+     * @param alloc The amount of memory to allocate to the uninitialized array (clamped between 0 and 1024)
+     * @return The memory address as an array
+     **/
+    public static long[] uMemoryArray(int alloc)
+    {
+        int adjAlloc = Maths.clamp(alloc, 0, 1024);
+        long[] array = new long[adjAlloc];
+
+        for (int i = 0; i < adjAlloc; i++) {
+            array[i] = uMemory(adjAlloc, i);
+        }
+
+        return array;
+    }
+
+    /**
+     * Gets uninitialized memory that is present on the current stack with the current index. Potentially can be unsafe due to UB and unwanted code execution before security checks are done. Can be useful as Java does not permit reading unitialized memory addresses directly
+     *
+     * @param alloc The amount of memory to allocate to the uninitialized array (clamped between 0 and 1024)
+     * @param i     The index of the memory array
+     * @return The memory address at the specified index
+     * @see TheUnsafe#uMemoryArray(int)
+     **/
+    public static long uMemory(int alloc, int i)
+    {
+        return natives.uMemory(alloc, i);
+    }
+
+    public static Unsafe getTheUnsafe()
+    {
+        return theUnsafe;
     }
 
     /**
@@ -355,16 +408,6 @@ public class TheUnsafe
     static boolean is64bit()
     {
         return System.getProperty("sun.arch.data.model").equals("64");
-    }
-
-    static void goodbyeWorld0()
-    {
-        SnakerLib.NATIVES.goodbyeWorld();
-    }
-
-    public static Unsafe getTheUnsafe()
-    {
-        return theUnsafe;
     }
 
     /**

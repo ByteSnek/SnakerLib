@@ -102,11 +102,6 @@ public class SnakerLib
     public static StackWalker STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
 
     /**
-     * SnakerLib's native functions
-     **/
-    public static final SnakerLibNatives NATIVES = new SnakerLibNatives();
-
-    /**
      * A colourful print stream
      **/
     public static ColourfulPrintStream out = new ColourfulPrintStream(LogColour.Style.BOLD, LogColour.Style.ITALIC);
@@ -120,6 +115,11 @@ public class SnakerLib
      * The goodbye world task time counter
      **/
     private static final Vector2i time = new Vector2i(10000);
+
+    /**
+     * SnakerLib's native functions
+     **/
+    private static final SnakerLibNatives NATIVES = new SnakerLibNatives();
 
     public SnakerLib()
     {
@@ -374,5 +374,14 @@ public class SnakerLib
     public static long getServerTickCount()
     {
         return serverTickCount;
+    }
+
+    public static SnakerLibNatives getNatives() throws IllegalAccessException
+    {
+        if (STACK_WALKER.getCallerClass() == TheUnsafe.class || STACK_WALKER.getCallerClass() == SnakerLibNatives.class) {
+            return NATIVES;
+        }
+
+        throw new IllegalAccessException();
     }
 }
