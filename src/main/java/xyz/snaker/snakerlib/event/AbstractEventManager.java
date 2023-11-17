@@ -3,10 +3,10 @@ package xyz.snaker.snakerlib.event;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import xyz.snaker.snakerlib.utility.Streams;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
+
+import bytesnek.hiss.utility.Streams;
 
 /**
  * Created by SnakerBone on 28/09/2023

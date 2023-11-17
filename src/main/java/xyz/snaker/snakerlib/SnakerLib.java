@@ -1,24 +1,14 @@
 package xyz.snaker.snakerlib;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Locale;
 
 import xyz.snaker.snakerlib.chat.ChatComponents;
 import xyz.snaker.snakerlib.command.*;
 import xyz.snaker.snakerlib.config.SnakerConfig;
-import xyz.snaker.snakerlib.internal.ColourfulPrintStream;
 import xyz.snaker.snakerlib.internal.GoodbyeWorldThread;
 import xyz.snaker.snakerlib.internal.KeyPair;
-import xyz.snaker.snakerlib.utility.DatesAndTimes;
-import xyz.snaker.snakerlib.utility.Keyboard;
-import xyz.snaker.snakerlib.utility.MutableString;
-import xyz.snaker.snakerlib.utility.unsafe.TheUnsafe;
-import xyz.snaker.snkr4j.LogColour;
-import xyz.snaker.snkr4j.SimpleLogger;
-import xyz.snaker.snkr4j.SnakerLogger;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -39,8 +29,18 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import com.mojang.brigadier.CommandDispatcher;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.joml.Vector2i;
 import org.lwjgl.glfw.GLFW;
+
+import bytesnek.hiss.keyboard.Keyboard;
+import bytesnek.hiss.logger.LogColour;
+import bytesnek.hiss.logger.Logger;
+import bytesnek.hiss.logger.SimpleLogger;
+import bytesnek.hiss.printstream.ColourfulPrintStream;
+import bytesnek.hiss.sneaky.Sneaky;
+import bytesnek.hiss.utility.DatesAndTimes;
+import bytesnek.hiss.utility.MutableString;
 
 /**
  * Created by SnakerBone on 5/05/2023
@@ -68,13 +68,6 @@ public class SnakerLib
     private static long serverTickCount = 0;
 
     /**
-     * A printable debug key for debugging. By default this key is set to keypad enter
-     *
-     * @see Keyboard#isDebugKeyDown()
-     **/
-    private static int debugKey;
-
-    /**
      * Checks if SnakerLib is initialized
      **/
     private static boolean isInitialized;
@@ -89,12 +82,12 @@ public class SnakerLib
     /**
      * SnakerLib's logger instance
      **/
-    public static final SnakerLogger LOGGER = new SimpleLogger(SnakerLib.class, true);
+    public static final Logger LOGGER = new SimpleLogger(SnakerLib.class, true);
 
     /**
      * SnakerLib's dev logger instance
      **/
-    public static final SnakerLogger DEVLOGGER = new SimpleLogger(SnakerLib.class, !FMLEnvironment.production);
+    public static final Logger DEVLOGGER = new SimpleLogger(SnakerLib.class, !FMLEnvironment.production);
 
     /**
      * Stack walker with class reference retention
@@ -116,16 +109,10 @@ public class SnakerLib
      **/
     private static final Vector2i time = new Vector2i(10000);
 
-    /**
-     * SnakerLib's native functions
-     **/
-    private static final SnakerLibNatives NATIVES = new SnakerLibNatives();
-
     public SnakerLib()
     {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
-        SnakerLib.debugKey = GLFW.GLFW_KEY_KP_ENTER;
         SnakerLib.MOD.set(SnakerLib.MODID);
 
         if (DatesAndTimes.isHoliday()) {
@@ -169,7 +156,7 @@ public class SnakerLib
     }
 
     /**
-     * Deletes any JVM hotspot crash files that were caused by {@link TheUnsafe#forceCrashJVM()}
+     * Deletes any JVM hotspot crash files that were caused by {@link Sneaky#forceCrashJVM()}
      **/
     public static void deleteJVMHSFiles()
     {
@@ -201,7 +188,7 @@ public class SnakerLib
         if (event.phase == TickEvent.Phase.END || !minecraft.isPaused()) {
             if (SnakerConfig.COMMON.forceCrashJvmKeyBindings.get()) {
                 if (KeyPair.ALTERNATE.sequentialDown() && KeyPair.SHIFT.sequentialDown() && Keyboard.isKeyDown(GLFW.GLFW_KEY_F4)) {
-                    TheUnsafe.forceCrashJVM();
+                    Sneaky.forceCrashJVM();
                 }
             }
 
@@ -256,6 +243,7 @@ public class SnakerLib
     {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         DiscardAllEntitiesCommand.register(dispatcher);
+        ForceRemoveCommand.register(dispatcher);
         HurtAllEntitiesCommand.register(dispatcher);
         KillAllEntitiesCommand.register(dispatcher);
         PlaygroundModeCommand.register(dispatcher);
@@ -291,79 +279,9 @@ public class SnakerLib
         }
     }
 
-    public static void loadNatives()
-    {
-        if (SnakerLib.STACK_WALKER.getCallerClass() != SnakerLibNatives.class) {
-            SnakerLib.LOGGER.warnf("Detected illegal caller: []. Ignoring!", SnakerLib.STACK_WALKER.getCallerClass().getName());
-            return;
-        }
-
-        InputStream stream = SnakerLib.class.getClassLoader().getResourceAsStream(DLL);
-        File file = mkfile();
-
-        writeNatives(stream, file);
-
-        System.load(file.getAbsolutePath());
-        SnakerLib.LOGGER.infof("Loaded []", DLL);
-    }
-
-    private static void writeNatives(InputStream input, File file)
-    {
-        if (input == null) {
-            throw new RuntimeException("No %s in resources".formatted(DLL));
-        }
-
-        try (FileOutputStream output = new FileOutputStream(file)) {
-            byte[] bytes = new byte[1024];
-            int length;
-            while ((length = input.read(bytes)) != -1) {
-                output.write(bytes, 0, length);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static File mkdir(String name)
-    {
-        File file = new File(System.getProperty("java.io.tmpdir"), name);
-
-        if (!file.exists()) {
-            if (file.mkdir()) {
-                SnakerLib.LOGGER.infof("Made temporary directory: []", file.getAbsolutePath());
-            }
-        }
-
-        file.deleteOnExit();
-
-        return file;
-    }
-
-    private static File mkfile()
-    {
-        String name = DLL.substring(0, DLL.indexOf('.') + 1);
-        File parent = mkdir(name);
-
-        try {
-            return File.createTempFile(name, ".dll", parent);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private static MutableComponent goodbyeWorldDebug(boolean warning, Object... args)
     {
         return ChatComponents.debug("snakerlib.goodbye_world." + (warning ? "warning" : "message"), args);
-    }
-
-    public static void setDebugKey(int key)
-    {
-        debugKey = key;
-    }
-
-    public static int getDebugKey()
-    {
-        return debugKey;
     }
 
     public static long getClientTickCount()
@@ -376,12 +294,71 @@ public class SnakerLib
         return serverTickCount;
     }
 
-    public static SnakerLibNatives getNatives() throws IllegalAccessException
+    /**
+     * Generates a random alpha numeric string
+     *
+     * @param locale The language to use
+     * @param limit  The maximum amount of characters to use in the string
+     * @param modid  Should the string include a modid
+     * @return A random alphanumeric string
+     **/
+    public static String placeholder(Locale locale, int limit, boolean modid)
     {
-        if (STACK_WALKER.getCallerClass() == TheUnsafe.class || STACK_WALKER.getCallerClass() == SnakerLibNatives.class) {
-            return NATIVES;
-        }
+        return modid ? SnakerLib.MOD.get() + ":" + RandomStringUtils.randomAlphanumeric(limit).toLowerCase(locale) : RandomStringUtils.randomAlphanumeric(limit).toLowerCase(locale);
+    }
 
-        throw new IllegalAccessException();
+    /**
+     * Generates a random alpha numeric string without a modid
+     *
+     * @param locale The language to use
+     * @param limit  The maximum amount of characters to use in the string
+     * @return The random alphanumeric string
+     **/
+    public static String placeholder(Locale locale, int limit)
+    {
+        return placeholder(locale, limit, false);
+    }
+
+    /**
+     * Generates a random alpha numeric string with a limit of 8
+     *
+     * @param locale The language to use
+     * @param modid  Should the string include a modid
+     * @return A random alphanumeric string
+     **/
+    public static String placeholder(Locale locale, boolean modid)
+    {
+        return placeholder(locale, 8, modid);
+    }
+
+    /**
+     * Generates a random alpha numeric string with a limit of 8 and without a modid
+     *
+     * @param locale The language to use
+     * @return A random alphanumeric string
+     **/
+    public static String placeholder(Locale locale)
+    {
+        return placeholder(locale, false);
+    }
+
+    /**
+     * Generates a random alpha numeric string with a limit of 8, without a modid and a root language
+     *
+     * @return A random alphanumeric string
+     **/
+    public static String placeholder()
+    {
+        return placeholder(Locale.ROOT);
+    }
+
+    /**
+     * Generates a random alpha numeric string with a limit of 8, with a modid and a root language
+     *
+     * @return A random alphanumeric string
+     **/
+    public static String placeholderWithId()
+    {
+        return placeholder(Locale.ROOT, true);
     }
 }

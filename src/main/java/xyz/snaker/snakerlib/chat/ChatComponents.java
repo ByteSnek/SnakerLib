@@ -3,13 +3,14 @@ package xyz.snaker.snakerlib.chat;
 import java.util.function.Function;
 
 import xyz.snaker.snakerlib.SnakerLib;
-import xyz.snaker.snakerlib.utility.Strings;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.MutableComponent;
+
+import bytesnek.hiss.utility.Strings;
 
 /**
  * Created by SnakerBone on 17/06/2023
@@ -39,22 +40,22 @@ public class ChatComponents
     /**
      * "Debug" as a translatable component
      **/
-    public static final MutableComponent DEBUG = Component.translatable("snakerlib.debug");
+    public static final MutableComponent DEBUG = Component.translatable("chat.snakerlib.debug");
 
     /**
      * "Info" as a translatable component
      **/
-    public static final MutableComponent INFO = Component.translatable("snakerlib.info");
+    public static final MutableComponent INFO = Component.translatable("chat.snakerlib.info");
 
     /**
      * "Hello%s" as a translatable component with the ability to add a optional prefix
      **/
-    public static final Function<String, MutableComponent> HELLO = punctuation -> Component.translatable("snakerlib.hello", punctuation);
+    public static final Function<String, MutableComponent> HELLO = punctuation -> Component.translatable("chat.snakerlib.hello", punctuation);
 
     /**
      * "Goodbye%s" as a translatable component with the ability to add a optional prefix
      **/
-    public static final Function<String, MutableComponent> GOODBYE = punctuation -> Component.translatable("snakerlib.goodbye", punctuation);
+    public static final Function<String, MutableComponent> GOODBYE = punctuation -> Component.translatable("chat.snakerlib.goodbye", punctuation);
 
     public static MutableComponent info(String key, Object... args)
     {

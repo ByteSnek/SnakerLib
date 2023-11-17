@@ -3,7 +3,7 @@ package xyz.snaker.snakerlib.client.render;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-import xyz.snaker.snakerlib.utility.Strings;
+import xyz.snaker.snakerlib.SnakerLib;
 
 import net.minecraft.client.renderer.RenderType;
 
@@ -25,6 +25,6 @@ public interface SRTP extends RTP
     @Override
     default RenderType create(@Nullable String name, Pair<VertexFormat, RenderType.CompositeState> pair)
     {
-        return RenderType.create(Objects.requireNonNullElse(name, Strings.placeholderWithId()), pair.getFirst(), VertexFormat.Mode.QUADS, RenderType.TRANSIENT_BUFFER_SIZE, pair.getSecond());
+        return RenderType.create(Objects.requireNonNullElse(name, SnakerLib.placeholderWithId()), pair.getFirst(), VertexFormat.Mode.QUADS, RenderType.TRANSIENT_BUFFER_SIZE, pair.getSecond());
     }
 }

@@ -10,16 +10,16 @@ repositories {
 }
 
 dependencies {
-    implementation fg.deobf("xyz.snaker.snakerlib:SnakerLib:${sl_version}")
-    minecraftLibrary "com.github.SnakerBone:Snaker4j:${s4j_version}" 
+    implementation fg.deobf("xyz.snaker.snakerlib:SnakerLib:${snakerlib_version}")
+    minecraftLibrary "com.github.ByteSnek:Hiss:${hiss_version}" 
 }
 ```
 
 And define the version in a `gradle.properties` (or similar):
 
 ```properties
-sl_version=1.7.7 # Replace with your desired version (1.7.7+ is considered stable, see https://maven.snaker.xyz for the repository)
-s4j_version=1.0
+snakerlib_version=1.7.8 # Replace with your desired version (1.7.8+ is considered stable, see https://maven.snaker.xyz for the repository)
+hiss_version=1.0
 ```
 
 If using maven in `pom.xml` (or similar):
@@ -30,11 +30,11 @@ If using maven in `pom.xml` (or similar):
     ...
     <groupId>xyz.snaker.snakerlib</groupId>
     <artifactId>SnakerLib</artifactId>
-    <!--Replace with your desired version (1.7.7+ is considered stable, see https://maven.snaker.xyz for the repository)-->
-    <version>1.7.7</version>
+    <!--Replace with your desired version (1.7.8+ is considered stable, see https://maven.snaker.xyz for the repository)-->
+    <version>1.7.8</version>
     ...
-    <groupId>com.github.SnakerBone</groupId>
-    <artifactId>Snaker4j</artifactId>
+    <groupId>com.github.ByteSnek</groupId>
+    <artifactId>Hiss</artifactId>
     <version>1.0</version>
     ...
 </dependencies>

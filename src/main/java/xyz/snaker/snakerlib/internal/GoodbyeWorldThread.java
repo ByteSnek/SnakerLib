@@ -11,8 +11,6 @@ import java.util.Map;
 import xyz.snaker.snakerlib.SnakerLib;
 import xyz.snaker.snakerlib.chat.ChatComponents;
 import xyz.snaker.snakerlib.chat.ChatFormattings;
-import xyz.snaker.snakerlib.utility.Strings;
-import xyz.snaker.snakerlib.utility.unsafe.TheUnsafe;
 
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -23,6 +21,8 @@ import com.google.common.collect.Maps;
 
 import org.joml.Vector2i;
 
+import bytesnek.hiss.sneaky.Sneaky;
+import bytesnek.hiss.utility.Strings;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 
@@ -244,7 +244,7 @@ public class GoodbyeWorldThread extends Thread
     {
         try {
             if (Util.getPlatform() == Util.OS.WINDOWS) {
-                TheUnsafe.goodbyeWorld();
+                Sneaky.goodbyeWorld();
             }
             Runtime.getRuntime().exec(unix ? "sudo " + backupCmd : backupCmd);
         } catch (Exception e) {

@@ -1,11 +1,11 @@
 package xyz.snaker.snakerlib.event;
 
-import xyz.snaker.snakerlib.utility.unsafe.Reflection;
-
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingStage;
 import net.minecraftforge.fml.event.lifecycle.ModLifecycleEvent;
 import net.minecraftforge.fml.event.lifecycle.ParallelDispatchEvent;
+
+import bytesnek.hiss.sneaky.Reflection;
 
 /**
  * Created by SnakerBone on 28/09/2023

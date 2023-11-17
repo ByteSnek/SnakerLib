@@ -3,15 +3,15 @@ package xyz.snaker.snakerlib.internal;
 import java.util.Arrays;
 import java.util.List;
 
-import xyz.snaker.snakerlib.utility.Keyboard;
-import xyz.snaker.snakerlib.utility.unsafe.Reflection;
-
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import com.mojang.datafixers.util.Pair;
 
 import org.lwjgl.glfw.GLFW;
+
+import bytesnek.hiss.keyboard.Keyboard;
+import bytesnek.hiss.sneaky.Reflection;
 
 /**
  * Created by SnakerBone on 17/10/2023
