@@ -133,17 +133,19 @@ def commonManifest = {
 
 jar.enabled = false
 
-shadowJar {
-    finalizedBy 'reobfShadowJar'
-    archiveClassifier = 'universal'
-    manifest commonManifest
-    configurations = [project.configurations.shadow]
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
-tasks.register('srcJar', Jar) {
-    build.dependsOn it
-    from sourceSets.main.allSource
-    archiveClassifier = 'sources'
+shadowJar {
+    finalizedBy 'reobfShadowJar'
+    setArchiveClassifier('')
+    manifest commonManifest
+
+    configurations = [project.configurations.shadow]
+
+    from sourceSets.main.allJava
 }
 
 tasks.register('renameHashedSounds', JavaExec) {
@@ -155,8 +157,7 @@ tasks.register('renameHashedSounds', JavaExec) {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifact shadowJar
-            artifact srcJar
+            artifacts = [shadowJar, sourcesJar, javadocJar]
 
             pom {
                 name = project.name
