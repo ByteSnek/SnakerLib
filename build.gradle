@@ -149,7 +149,7 @@ shadowJar {
 }
 
 tasks.register('renameHashedSounds', JavaExec) {
-    mainClass = "xyz.snaker.snakerlib.internal.gradle.HashedSounds"
+    mainClass = "bytesnek.snakerlib.resources.HashedSoundsRemapper"
     group = "snakerlib"
     classpath sourceSets.main.runtimeClasspath
 }
@@ -161,19 +161,19 @@ publishing {
 
             pom {
                 name = project.name
-                description = 'Modding Library'
-                url = 'https://github.com/SnakerBone/SnakerLib'
+                description = 'A Modding Library'
+                url = 'https://github.com/ByteSnek/SnakerLib'
 
                 scm {
-                    url = 'https://github.com/SnakerBone/SnakerLib'
-                    connection = 'scm:git:git://github.com/SnakerBone/SnakerLib.git'
-                    developerConnection = 'scm:git:git@github.com:SnakerBone/SnakerLib.git'
+                    url = 'https://github.com/ByteSnek/SnakerLib'
+                    connection = 'scm:git:git://github.com/ByteSnek/SnakerLib.git'
+                    developerConnection = 'scm:git:git@github.com:ByteSnek/SnakerLib.git'
                 }
 
                 licenses {
                     license {
-                        name = 'GPLv3'
-                        url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
+                        name = 'MIT'
+                        url = 'https://github.com/ByteSnek/SnakerLib/LICENSE'
                     }
                 }
             }
