@@ -2,8 +2,6 @@ package bytesnek.snakerlib.utility;
 
 import javax.annotation.Nullable;
 
-import bytesnek.snakerlib.math.Maths;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
@@ -115,7 +113,7 @@ public class Worlds
 
     public static <T extends Entity> AABB getWorldBoundingBox(T entity)
     {
-        return new AABB(entity.blockPosition()).inflate(Maths.LEVEL_AABB_RADIUS);
+        return new AABB(entity.blockPosition()).inflate(0x989680);
     }
 
     public static Direction getRandomHorizontalDirection(RandomSource random)

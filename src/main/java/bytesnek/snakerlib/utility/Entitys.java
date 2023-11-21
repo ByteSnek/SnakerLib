@@ -1,7 +1,5 @@
 package bytesnek.snakerlib.utility;
 
-import bytesnek.snakerlib.math.Maths;
-
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -12,6 +10,8 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import bytesnek.hiss.math.Maths;
 
 /**
  * Created by SnakerBone on 15/08/2023

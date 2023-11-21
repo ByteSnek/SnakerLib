@@ -27,6 +27,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.joml.Vector2i;
 import org.lwjgl.glfw.GLFW;
 
+import bytesnek.hiss.keyboard.KeyPair;
 import bytesnek.hiss.keyboard.Keyboard;
 import bytesnek.hiss.logger.LogColour;
 import bytesnek.hiss.logger.Logger;
@@ -39,7 +40,6 @@ import bytesnek.snakerlib.chat.ChatComponents;
 import bytesnek.snakerlib.command.*;
 import bytesnek.snakerlib.config.SnakerConfig;
 import bytesnek.snakerlib.internal.GoodbyeWorldThread;
-import bytesnek.snakerlib.internal.KeyPair;
 
 /**
  * Created by SnakerBone on 5/05/2023
@@ -50,7 +50,6 @@ public class SnakerLib
 {
     public static final String NAME = "SnakerLib";
     public static final String MODID = "snakerlib";
-    public static final String DLL = "snkr.dll";
 
     /**
      * A client side tick counter

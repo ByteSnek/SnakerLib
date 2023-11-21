@@ -2,12 +2,12 @@ package bytesnek.snakerlib.level.entity.ai.goal;
 
 import java.util.EnumSet;
 
-import bytesnek.snakerlib.math.Maths;
-
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
+
+import bytesnek.hiss.math.Maths;
 
 /**
  * Created by SnakerBone on 2/01/2023

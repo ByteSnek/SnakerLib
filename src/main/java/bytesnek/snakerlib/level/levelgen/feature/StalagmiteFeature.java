@@ -3,9 +3,6 @@ package bytesnek.snakerlib.level.levelgen.feature;
 import java.util.ArrayList;
 import java.util.List;
 
-import bytesnek.snakerlib.math.Maths;
-import bytesnek.snakerlib.utility.Worlds;
-
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,6 +18,9 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 
 import org.jetbrains.annotations.NotNull;
+
+import bytesnek.hiss.math.Maths;
+import bytesnek.snakerlib.utility.Worlds;
 
 /**
  * Created by SnakerBone on 30/08/2023
