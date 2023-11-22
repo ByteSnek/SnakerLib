@@ -184,7 +184,7 @@ publishing {
             def mavenPass = System.getenv("MVN_PASS")
 
             if (mavenPass == null) {
-                printerr("No maven password found on the current system")
+                println("No maven password found on the current system")
             } else {
                 println("Using maven password: " + mavenPass)
             }
@@ -203,10 +203,4 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.deprecation(false)
     options.warnings(false)
-}
-
-void printerr(Object value) {
-    println("\u001B[31m")
-    println(value)
-    print("\u001B[0m")
 }
