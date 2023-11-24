@@ -1,9 +1,5 @@
 package bytesnek.snakerlib.command;
 
-import bytesnek.snakerlib.SnakerLib;
-import bytesnek.snakerlib.config.SnakerConfig;
-import bytesnek.snakerlib.chat.ChatComponents;
-
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -12,6 +8,10 @@ import net.minecraft.network.chat.Component;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+
+import bytesnek.snakerlib.SnakerLib;
+import bytesnek.snakerlib.chat.ChatComponents;
+import bytesnek.snakerlib.config.SnakerConfig;
 
 /**
  * Created by SnakerBone on 18/10/2023
@@ -113,6 +113,6 @@ public class ConfigCommand
 
     private Component success()
     {
-        return ChatComponents.info("snakerlib.commands.config_set_success");
+        return ChatComponents.info("command.snakerlib.config_set_success");
     }
 }

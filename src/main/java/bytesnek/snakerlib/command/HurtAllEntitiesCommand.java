@@ -4,10 +4,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import bytesnek.snakerlib.SnakerLib;
-import bytesnek.snakerlib.chat.ChatComponents;
-import bytesnek.snakerlib.utility.Worlds;
-
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -18,6 +14,10 @@ import net.minecraft.world.level.Level;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+
+import bytesnek.snakerlib.SnakerLib;
+import bytesnek.snakerlib.chat.ChatComponents;
+import bytesnek.snakerlib.utility.Worlds;
 
 /**
  * Created by SnakerBone on 31/08/2023
@@ -78,16 +78,16 @@ public class HurtAllEntitiesCommand
 
     private Supplier<Component> success0(int size, float amount)
     {
-        return () -> ChatComponents.info("snakerlib.commands.hurt_entity_success_0", size, amount);
+        return () -> ChatComponents.info("command.snakerlib.hurt_entity_success_0", size, amount);
     }
 
     private Supplier<Component> success(int size, float amount)
     {
-        return () -> ChatComponents.info("snakerlib.commands.hurt_entity_success", size, amount);
+        return () -> ChatComponents.info("command.snakerlib.hurt_entity_success", size, amount);
     }
 
     private Component failure()
     {
-        return ChatComponents.info("snakerlib.commands.hurt_entity_failure");
+        return ChatComponents.info("command.snakerlib.hurt_entity_failure");
     }
 }

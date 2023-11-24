@@ -4,10 +4,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import bytesnek.snakerlib.SnakerLib;
-import bytesnek.snakerlib.chat.ChatComponents;
-import bytesnek.snakerlib.utility.Worlds;
-
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -17,6 +13,10 @@ import net.minecraft.world.level.Level;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+
+import bytesnek.snakerlib.SnakerLib;
+import bytesnek.snakerlib.chat.ChatComponents;
+import bytesnek.snakerlib.utility.Worlds;
 
 /**
  * Created by SnakerBone on 31/08/2023
@@ -64,11 +64,11 @@ public class DiscardAllEntitiesCommand
 
     private Supplier<Component> success(int size)
     {
-        return () -> ChatComponents.info("snakerlib.commands.discard_entity_success", size);
+        return () -> ChatComponents.info("command.snakerlib.discard_entity_success", size);
     }
 
     private Component failure()
     {
-        return ChatComponents.info("snakerlib.commands.discard_entity_failure");
+        return ChatComponents.info("command.snakerlib.discard_entity_failure");
     }
 }

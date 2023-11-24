@@ -4,10 +4,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import bytesnek.snakerlib.SnakerLib;
-import bytesnek.snakerlib.chat.ChatComponents;
-import bytesnek.snakerlib.utility.Worlds;
-
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -24,10 +20,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
+import bytesnek.snakerlib.SnakerLib;
+import bytesnek.snakerlib.chat.ChatComponents;
+import bytesnek.snakerlib.utility.Worlds;
+
 /**
  * Created by SnakerBone on 22/08/2023
  **/
-@SuppressWarnings("JavadocReference")
 public class PlaygroundModeCommand
 {
     PlaygroundModeCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
@@ -94,6 +93,6 @@ public class PlaygroundModeCommand
 
     private Supplier<Component> success(boolean value)
     {
-        return () -> ChatComponents.info("snakerlib.commands.playground_mode_status", value ? ChatComponents.ENABLED.getString() : ChatComponents.DISABLED.getString());
+        return () -> ChatComponents.info("command.snakerlib.playground_mode_status", value ? ChatComponents.ENABLED.getString() : ChatComponents.DISABLED.getString());
     }
 }

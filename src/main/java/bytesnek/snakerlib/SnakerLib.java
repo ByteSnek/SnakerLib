@@ -279,7 +279,7 @@ public class SnakerLib
 
     private static MutableComponent goodbyeWorldDebug(boolean warning, Object... args)
     {
-        return ChatComponents.debug("snakerlib.goodbye_world." + (warning ? "warning" : "message"), args);
+        return ChatComponents.debug("goodbye_world.snakerlib." + (warning ? "warning" : "message"), args);
     }
 
     public static long getClientTickCount()
