@@ -7,7 +7,7 @@ package bytesnek.snakerlib.math;
  * @author Stefan Gustavson, Linkping University, Sweden (stegu at itn dot liu
  * dot se)
  * <p>
- * Slight optimizations &amp restructuring by
+ * Slight optimizations &amp; restructuring by
  * @author Karsten Schmidt (info at toxi dot co dot uk)
  **/
 public class SimplexNoise
