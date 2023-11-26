@@ -1,11 +1,11 @@
 plugins {
+    id 'java-library'
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
+    id 'net.neoforged.gradle.userdev' version '7.0.45'
+    id 'net.neoforged.gradle.mixin' version '7.0.45'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
-    id 'org.spongepowered.mixin' version '0.7.+'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 version = minecraft_version + '-' + mod_version
@@ -17,41 +17,31 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
+minecraft.accessTransformers.file('src/main/resources/META-INF/accesstransformer.cfg')
 
-    copyIdeResources = true
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+        systemProperty 'mixin.env.remapRefMap', 'true'
+        systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
-    runs {
-        configureEach {
-            workingDirectory project.file("run/${it.name}")
+        modSource project.sourceSets.main
+    }
 
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', mod_id
+    }
 
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', mod_id
+    }
 
-        client {
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
-
-        server {
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
-
-        data {
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
+    data {
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
+
 
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
@@ -74,25 +64,12 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
-
+    implementation "net.neoforged:neoforge:${neo_version}"
     shadow "com.github.ByteSnek:Hiss:${hiss_version}"
-
-    runtimeOnly fg.deobf("curse.maven:the-one-probe-245211:4629624")
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-}
-
-reobf {
-    shadowJar {}
-    jar {
-        enabled = false
-    }
 }
 
 mixin {
-    add sourceSets.main, mixinRefmap
-    config mixinConfig
+    configs = [mixinConfig]
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -109,29 +86,21 @@ tasks.withType(ProcessResources).configureEach {
             mod_authors            : mod_authors,
             mod_description        : mod_description,
             pack_format_number     : pack_format_number,
-            logo_file_name         : mod_id,
-            issue_tracker_url      : issue_tracker_url
+            issue_tracker_url      : issue_tracker_url,
+            logo_file_name         : logo_file_name
     ]
     inputs.properties replaceProperties
+
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
         expand replaceProperties + [project: project]
     }
 }
 
-def commonManifest = {
-    attributes 'Specification-Title': mod_name
-    attributes 'Specification-Vendor': mod_authors
-    attributes 'Specification-Version': mod_version
-    attributes 'Implementation-Title': mod_name
-    attributes 'Implementation-Version': mod_version
-    attributes 'Implementation-Vendor': mod_authors
-    attributes 'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-    attributes 'TweakClass': mixinTweaker
-    attributes 'MixinConfigs': mixinConfig
-    attributes 'FMLCorePluginContainsFMLMod': 'true'
-}
-
 jar.enabled = false
+
+build {
+    dependsOn("shadowJar")
+}
 
 java {
     withJavadocJar()
@@ -139,19 +108,13 @@ java {
 }
 
 shadowJar {
-    finalizedBy 'reobfShadowJar'
+    filesMatching("*.mixin.json") {
+        expand "refmap_target": "${mod_id}."
+    }
+    
     setArchiveClassifier('')
-    manifest commonManifest
-
     configurations = [project.configurations.shadow]
-
     from sourceSets.main.allJava
-}
-
-tasks.register('renameHashedSounds', JavaExec) {
-    mainClass = "bytesnek.snakerlib.resources.HashedSoundsRemapper"
-    group = "snakerlib"
-    classpath sourceSets.main.runtimeClasspath
 }
 
 publishing {
@@ -179,15 +142,24 @@ publishing {
             }
         }
     }
+
     repositories {
         maven {
             def mavenPass = System.getenv("MVN_PASS")
+            def notify = true;
 
-            if (mavenPass == null) {
-                println("No maven password found on the current system")
-            } else {
-                println("Using maven password: " + mavenPass)
-            }
+            project.gradle.startParameter.taskNames.forEach(task -> {
+                if (task.contains("publish")) {
+                    if (notify) {
+                        notify = false;
+                        if (mavenPass == null) {
+                            println("\u001b[38;5;208No maven password found on the current system\u001b[38;5;250")
+                        } else {
+                            println("\u001b[38;5;200Using maven password: " + mavenPass + "\u001b[38;5;250")
+                        }
+                    }
+                }
+            })
 
             url "https://s01.oss.sonatype.org/content/repositories/releases"
 
@@ -201,6 +173,4 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.deprecation(false)
-    options.warnings(false)
 }

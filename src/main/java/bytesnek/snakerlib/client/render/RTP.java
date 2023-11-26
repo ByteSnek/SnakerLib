@@ -2,7 +2,8 @@ package bytesnek.snakerlib.client.render;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
-
+import net.minecraft.client.renderer.RenderStateShard.MultiTextureStateShard;
+import net.minecraft.client.renderer.RenderStateShard.ShaderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;

@@ -18,7 +18,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
  * Created by SnakerBone on 4/06/2023
@@ -36,7 +36,7 @@ public class Worlds
      * @param maxCount The maximum mob count of each spawn
      * @return The builder
      **/
-    public static <T extends LivingEntity> MobSpawnSettings.Builder addBiomeSpawn(MobSpawnSettings.Builder builder, MobCategory category, RegistryObject<EntityType<T>> entity, int weight, int minCount, int maxCount)
+    public static <T extends LivingEntity> MobSpawnSettings.Builder addBiomeSpawn(MobSpawnSettings.Builder builder, MobCategory category, DeferredHolder<EntityType<T>, ?> entity, int weight, int minCount, int maxCount)
     {
         return builder.addSpawn(category, new MobSpawnSettings.SpawnerData(entity.get(), weight, minCount, maxCount));
     }

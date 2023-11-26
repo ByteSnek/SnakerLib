@@ -9,6 +9,17 @@
             "EffectInstanceMixin"
       ],
       "mixins": [
-            "ForgeModMixin"
+            "BiomeMixin",
+            "CreateWorldScreenMixin",
+            "FeatureSorterMixin",
+            "LootTablesMixin",
+            "RealmsClientMixin",
+            "RecipeManagerMixin",
+            "RegistryDataLoaderMixin",
+            "SinglePoolElementMixin",
+            "StructureTemplatePoolMixin",
+            "accessor.BiomeGenerationSettingsAccessor",
+            "accessor.BiomeSpecialEffectsAccessor",
+            "accessor.SinglePoolElementAccessor"
       ]
 }

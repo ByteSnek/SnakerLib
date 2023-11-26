@@ -8,14 +8,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Map;
 
-import bytesnek.snakerlib.SnakerLib;
-import bytesnek.snakerlib.chat.ChatComponents;
-import bytesnek.snakerlib.chat.ChatFormattings;
-
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.fml.loading.FMLPaths;
 
 import com.google.common.collect.Maps;
 
@@ -23,6 +19,9 @@ import org.joml.Vector2i;
 
 import bytesnek.hiss.sneaky.Sneaky;
 import bytesnek.hiss.utility.Strings;
+import bytesnek.snakerlib.SnakerLib;
+import bytesnek.snakerlib.chat.ChatComponents;
+import bytesnek.snakerlib.chat.ChatFormattings;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 

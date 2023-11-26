@@ -5,8 +5,8 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
  * Created by SnakerBone on 18/09/2023
@@ -39,7 +39,7 @@ public class RegistryStreams
      * @return A new stream of {@link T}
      * @throws RuntimeException If the deferred register contains no entries
      **/
-    public static <T> Stream<T> getDeferredRegistries(DeferredRegister<T> registrar, Function<RegistryObject<T>, ?> mapper, IntFunction<T[]> function)
+    public static <T> Stream<T> getDeferredRegistries(DeferredRegister<T> registrar, Function<DeferredHolder<T, ?>, ?> mapper, IntFunction<T[]> function)
     {
         var entries = registrar.getEntries();
         if (entries.isEmpty()) {
@@ -63,7 +63,7 @@ public class RegistryStreams
             throw new RuntimeException("No registry objects found in registrar");
         }
         try {
-            return Arrays.stream(entries.stream().map(RegistryObject::get).toArray(function));
+            return Arrays.stream(entries.stream().map(DeferredHolder::get).toArray(function));
         } catch (NullPointerException e) {
             throw new RuntimeException("Could not get object(s) from registry object(s). Make sure you're calling CollectionStuff.mapDeferredRegistries at the correct time", e);
         }

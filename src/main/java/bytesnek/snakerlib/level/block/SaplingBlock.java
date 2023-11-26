@@ -95,7 +95,7 @@ public class SaplingBlock extends PlantBlock implements BonemealableBlock
     }
 
     @Override
-    public boolean isValidBonemealTarget(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state)
     {
         return true;
     }
@@ -107,7 +107,7 @@ public class SaplingBlock extends PlantBlock implements BonemealableBlock
     }
 
     @Override
-    public void performBonemeal(@NotNull ServerLevel level, @NotNull RandomSource random, @NotNull BlockPos pos, BlockState state)
+    public void performBonemeal(@NotNull ServerLevel level, @NotNull RandomSource random, @NotNull BlockPos pos, @NotNull BlockState state)
     {
         advanceTree(level, pos, state, random);
     }

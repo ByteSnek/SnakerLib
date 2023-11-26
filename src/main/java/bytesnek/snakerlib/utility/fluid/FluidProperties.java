@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import net.neoforged.neoforge.fluids.FluidType;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
@@ -17,19 +17,19 @@ import org.apache.commons.lang3.tuple.Triple;
 @FunctionalInterface
 public interface FluidProperties
 {
-    FluidProperties LAVA = (fluids, blockAndBucket) -> new ForgeFlowingFluid.Properties(fluids.getLeft(), fluids.getMiddle(), fluids.getRight())
+    FluidProperties LAVA = (fluids, blockAndBucket) -> new BaseFlowingFluid.Properties(fluids.getLeft(), fluids.getMiddle(), fluids.getRight())
             .block(blockAndBucket.getLeft())
             .bucket(blockAndBucket.getRight())
             .slopeFindDistance(4)
             .levelDecreasePerBlock(1)
             .tickRate(10);
 
-    FluidProperties WATER = (fluids, blockAndBucket) -> new ForgeFlowingFluid.Properties(fluids.getLeft(), fluids.getMiddle(), fluids.getRight())
+    FluidProperties WATER = (fluids, blockAndBucket) -> new BaseFlowingFluid.Properties(fluids.getLeft(), fluids.getMiddle(), fluids.getRight())
             .block(blockAndBucket.getLeft())
             .bucket(blockAndBucket.getRight())
             .slopeFindDistance(4)
             .levelDecreasePerBlock(1)
             .tickRate(5);
 
-    ForgeFlowingFluid.Properties apply(Triple<Supplier<? extends FluidType>, Supplier<? extends Fluid>, Supplier<? extends Fluid>> fluids, Pair<Supplier<? extends LiquidBlock>, Supplier<? extends Item>> blockAndBucket);
+    BaseFlowingFluid.Properties apply(Triple<Supplier<? extends FluidType>, Supplier<? extends Fluid>, Supplier<? extends Fluid>> fluids, Pair<Supplier<? extends LiquidBlock>, Supplier<? extends Item>> blockAndBucket);
 }

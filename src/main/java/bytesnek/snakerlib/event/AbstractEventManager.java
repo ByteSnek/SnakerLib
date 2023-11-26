@@ -3,8 +3,8 @@ package bytesnek.snakerlib.event;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
+import net.neoforged.neoforge.common.NeoForge;
 
 import bytesnek.hiss.utility.Streams;
 
@@ -56,28 +56,13 @@ public abstract class AbstractEventManager<E extends Event>
     }
 
     /**
-     * Registers task(s) to MinecraftForge
+     * Registers task(s) to NeoForge
      *
      * @param targets The task(s) to execute
      **/
     public void registerToForge(Object... targets)
     {
-        Arrays.stream(targets).forEach(MinecraftForge.EVENT_BUS::register);
-    }
-
-    /**
-     * Cancels the current event
-     *
-     * @param cancel The cancellation flag
-     * @throws RuntimeException If the current event cannot be cancelled
-     **/
-    public void setCanceled(boolean cancel)
-    {
-        if (!event.isCancelable() ^ cancel) {
-            throw new RuntimeException("Current event cannot be cancelled");
-        }
-
-        this.cancel = cancel;
+        Arrays.stream(targets).forEach(NeoForge.EVENT_BUS::register);
     }
 
     /**
@@ -106,10 +91,6 @@ public abstract class AbstractEventManager<E extends Event>
             throw new RuntimeException("Task(s) for event '%s' have already been executed".formatted(event.getClass().getSimpleName()));
         } else {
             Streams.newCollectionStream(taskQueue, Runnable[]::new).forEach(Runnable::run);
-
-            if (event.isCancelable()) {
-                event.setCanceled(cancel);
-            }
 
             if (event.hasResult()) {
                 if (result != null) {
