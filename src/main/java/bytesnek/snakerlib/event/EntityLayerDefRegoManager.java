@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 /**
  * Created by SnakerBone on 28/09/2023

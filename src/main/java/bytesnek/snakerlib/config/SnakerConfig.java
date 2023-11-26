@@ -1,6 +1,6 @@
 package bytesnek.snakerlib.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -9,23 +9,23 @@ import org.apache.commons.lang3.tuple.Pair;
  **/
 public class SnakerConfig
 {
-    public static final ForgeConfigSpec COMMON_SPEC;
+    public static final ModConfigSpec COMMON_SPEC;
     public static final Common COMMON;
 
     static {
-        Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+        Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
         COMMON = specPair.getLeft();
         COMMON_SPEC = specPair.getRight();
     }
 
     public static class Common
     {
-        public final ForgeConfigSpec.BooleanValue forceCrashJvmKeyBindings;
-        public final ForgeConfigSpec.BooleanValue removeJvmCrashFilesOnStartup;
-        public final ForgeConfigSpec.BooleanValue removeMinecraftCrashFilesOnStartup;
-        public final ForgeConfigSpec.BooleanValue goodbyeWorldKeyBindings;
+        public final ModConfigSpec.BooleanValue forceCrashJvmKeyBindings;
+        public final ModConfigSpec.BooleanValue removeJvmCrashFilesOnStartup;
+        public final ModConfigSpec.BooleanValue removeMinecraftCrashFilesOnStartup;
+        public final ModConfigSpec.BooleanValue goodbyeWorldKeyBindings;
 
-        public Common(ForgeConfigSpec.Builder builder)
+        public Common(ModConfigSpec.Builder builder)
         {
             builder.push("common");
 

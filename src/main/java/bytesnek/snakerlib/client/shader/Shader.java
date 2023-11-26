@@ -4,21 +4,21 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import bytesnek.snakerlib.SnakerLib;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ChainedJsonException;
 import net.minecraft.server.packs.resources.ResourceProvider;
-import net.minecraftforge.client.event.RegisterShadersEvent;
-
-import org.jetbrains.annotations.ApiStatus;
-import org.joml.*;
+import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.vertex.VertexFormat;
+
+import org.jetbrains.annotations.ApiStatus;
+import org.joml.*;
+
+import bytesnek.snakerlib.SnakerLib;
 
 /**
  * Created by SnakerBone on 9/06/2023

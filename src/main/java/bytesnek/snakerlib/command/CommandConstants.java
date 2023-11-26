@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 /**
  * Created by SnakerBone on 25/11/2023

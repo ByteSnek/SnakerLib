@@ -2,8 +2,8 @@ package bytesnek.snakerlib.utility.fluid;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraftforge.common.SoundActions;
-import net.minecraftforge.fluids.FluidType;
+import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.fluids.FluidType;
 
 /**
  * Created by SnakerBone on 22/11/2023

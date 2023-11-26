@@ -12,14 +12,14 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.IForgeShearable;
+import net.neoforged.neoforge.common.IShearable;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by SnakerBone on 19/08/2023
  **/
-public class TallPlantBlock extends PlantBlock implements BonemealableBlock, IForgeShearable
+public class TallPlantBlock extends PlantBlock implements BonemealableBlock, IShearable
 {
     /**
      * The voxel shape of this block
@@ -32,7 +32,7 @@ public class TallPlantBlock extends PlantBlock implements BonemealableBlock, IFo
     }
 
     @Override
-    public boolean isValidBonemealTarget(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state)
     {
         return true;
     }
