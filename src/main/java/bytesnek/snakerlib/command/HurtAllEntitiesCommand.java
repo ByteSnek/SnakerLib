@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -15,7 +16,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
-import bytesnek.snakerlib.SnakerLib;
 import bytesnek.snakerlib.chat.ChatComponents;
 import bytesnek.snakerlib.utility.Worlds;
 
@@ -24,14 +24,13 @@ import bytesnek.snakerlib.utility.Worlds;
  **/
 public class HurtAllEntitiesCommand
 {
-    HurtAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
+    HurtAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        dispatcher.register(Commands.literal(name)
-                .then(Commands.literal("hurtAllEntities")
-                        .then(Commands.argument("DamageAmount", FloatArgumentType.floatArg())
-                                .executes(context -> execute(context,
-                                        FloatArgumentType.getFloat(context, "DamageAmount"))
-                                )
+        dispatcher.register(Commands.literal("hurtAllEntities")
+                .requires(CommandConstants.require(CommandLevel.ADMIN))
+                .then(Commands.argument("DamageAmount", FloatArgumentType.floatArg())
+                        .executes(context -> execute(context,
+                                FloatArgumentType.getFloat(context, "DamageAmount"))
                         )
                 )
         );
@@ -39,11 +38,14 @@ public class HurtAllEntitiesCommand
 
     public static HurtAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new HurtAllEntitiesCommand(dispatcher, SnakerLib.MODID);
+        return new HurtAllEntitiesCommand(dispatcher);
     }
 
     private int execute(CommandContext<CommandSourceStack> context, float amount)
     {
+        CommandSourceStack stack = context.getSource();
+        CommandSource source = stack.source;
+
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);
         ServerPlayer player = context.getSource().getPlayer();
 
@@ -63,10 +65,10 @@ public class HurtAllEntitiesCommand
 
             if (!entities.isEmpty() && immune) {
                 context.getSource().sendSuccess(success0(entities.size(), amount), true);
-                return 1;
+                return CommandConstants.getExecutionResult(source);
             } else if (!entities.isEmpty()) {
                 context.getSource().sendSuccess(success(entities.size(), amount), true);
-                return 1;
+                return CommandConstants.getExecutionResult(source);
             } else {
                 context.getSource().sendFailure(failure());
                 return 0;

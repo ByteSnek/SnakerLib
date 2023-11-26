@@ -1,7 +1,5 @@
 package bytesnek.snakerlib.command;
 
-import bytesnek.snakerlib.SnakerLib;
-
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -18,18 +16,17 @@ public class ForceRemoveCommand
 {
     private final Component success = Component.translatable("command.snakerlib.force_removal_success");
 
-    ForceRemoveCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
+    ForceRemoveCommand(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        dispatcher.register(Commands.literal(name)
-                .then(Commands.literal("forceRemove")
-                        .executes(this::execute)
-                )
+        dispatcher.register(Commands.literal("forceRemove")
+                .requires(CommandConstants.require(CommandLevel.NONE))
+                .executes(this::execute)
         );
     }
 
     public static ForceRemoveCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new ForceRemoveCommand(dispatcher, SnakerLib.MODID);
+        return new ForceRemoveCommand(dispatcher);
     }
 
     private int execute(CommandContext<CommandSourceStack> context)
@@ -44,6 +41,6 @@ public class ForceRemoveCommand
             player.connection.disconnect(success);
         }
 
-        return source.acceptsSuccess() ? 1 : 0;
+        return CommandConstants.getExecutionResult(source);
     }
 }

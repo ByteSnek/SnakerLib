@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -14,7 +15,6 @@ import net.minecraft.world.level.Level;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 
-import bytesnek.snakerlib.SnakerLib;
 import bytesnek.snakerlib.chat.ChatComponents;
 import bytesnek.snakerlib.utility.Worlds;
 
@@ -23,22 +23,24 @@ import bytesnek.snakerlib.utility.Worlds;
  **/
 public class DiscardAllEntitiesCommand
 {
-    DiscardAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
+    DiscardAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        dispatcher.register(Commands.literal(name)
-                .then(Commands.literal("discardAllEntities")
-                        .executes(this::execute)
-                )
+        dispatcher.register(Commands.literal("discardAllEntities")
+                .requires(CommandConstants.require(CommandLevel.ADMIN))
+                .executes(this::execute)
         );
     }
 
     public static DiscardAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new DiscardAllEntitiesCommand(dispatcher, SnakerLib.MODID);
+        return new DiscardAllEntitiesCommand(dispatcher);
     }
 
     private int execute(CommandContext<CommandSourceStack> context)
     {
+        CommandSourceStack stack = context.getSource();
+        CommandSource source = stack.source;
+
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);
         ServerPlayer player = context.getSource().getPlayer();
 
@@ -52,7 +54,7 @@ public class DiscardAllEntitiesCommand
 
             if (!entities.isEmpty()) {
                 context.getSource().sendSuccess(success(entities.size()), player.isCreative());
-                return 1;
+                return CommandConstants.getExecutionResult(source);
             } else {
                 context.getSource().sendFailure(failure());
                 return 0;

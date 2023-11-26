@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -14,7 +15,6 @@ import net.minecraft.world.level.Level;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 
-import bytesnek.snakerlib.SnakerLib;
 import bytesnek.snakerlib.chat.ChatComponents;
 import bytesnek.snakerlib.utility.Worlds;
 
@@ -23,22 +23,24 @@ import bytesnek.snakerlib.utility.Worlds;
  **/
 public class KillAllEntitiesCommand
 {
-    KillAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
+    KillAllEntitiesCommand(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        dispatcher.register(Commands.literal(name)
-                .then(Commands.literal("killAllEntities")
-                        .executes(this::execute)
-                )
+        dispatcher.register(Commands.literal("killAllEntities")
+                .requires(CommandConstants.require(CommandLevel.ADMIN))
+                .executes(this::execute)
         );
     }
 
     public static KillAllEntitiesCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new KillAllEntitiesCommand(dispatcher, SnakerLib.MODID);
+        return new KillAllEntitiesCommand(dispatcher);
     }
 
     private int execute(CommandContext<CommandSourceStack> context)
     {
+        CommandSourceStack stack = context.getSource();
+        CommandSource source = stack.source;
+
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);
         ServerPlayer player = context.getSource().getPlayer();
 
@@ -58,10 +60,10 @@ public class KillAllEntitiesCommand
 
             if (!entities.isEmpty() && immune) {
                 context.getSource().sendSuccess(success0(entities.size()), player.isCreative());
-                return 1;
+                return CommandConstants.getExecutionResult(source);
             } else if (!entities.isEmpty()) {
                 context.getSource().sendSuccess(success(entities.size()), player.isCreative());
-                return 1;
+                return CommandConstants.getExecutionResult(source);
             } else {
                 context.getSource().sendFailure(failure());
                 return 0;

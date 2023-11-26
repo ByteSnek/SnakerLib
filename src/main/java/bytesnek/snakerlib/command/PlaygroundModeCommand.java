@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -20,7 +21,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
-import bytesnek.snakerlib.SnakerLib;
 import bytesnek.snakerlib.chat.ChatComponents;
 import bytesnek.snakerlib.utility.Worlds;
 
@@ -29,24 +29,26 @@ import bytesnek.snakerlib.utility.Worlds;
  **/
 public class PlaygroundModeCommand
 {
-    PlaygroundModeCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
+    PlaygroundModeCommand(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        dispatcher.register(Commands.literal(name)
-                .then(Commands.literal("playgroundMode")
-                        .then(Commands.argument("playgroundMode", BoolArgumentType.bool())
-                                .executes(context -> execute(context, BoolArgumentType.getBool(context, "playgroundMode")))
-                        )
+        dispatcher.register(Commands.literal("playgroundMode")
+                .requires(CommandConstants.require(CommandLevel.ADMIN))
+                .then(Commands.argument("playgroundMode", BoolArgumentType.bool())
+                        .executes(context -> execute(context, BoolArgumentType.getBool(context, "playgroundMode")))
                 )
         );
     }
 
     public static PlaygroundModeCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new PlaygroundModeCommand(dispatcher, SnakerLib.MODID);
+        return new PlaygroundModeCommand(dispatcher);
     }
 
     private int execute(CommandContext<CommandSourceStack> context, boolean value)
     {
+        CommandSourceStack stack = context.getSource();
+        CommandSource source = stack.source;
+
         Predicate<Entity> predicate = entity -> !(entity instanceof ServerPlayer);
         ServerPlayer player = context.getSource().getPlayer();
 
@@ -69,7 +71,7 @@ public class PlaygroundModeCommand
 
                 context.getSource().sendSuccess(success(value), true);
 
-                return 1;
+                return CommandConstants.getExecutionResult(source);
             }
         }
 

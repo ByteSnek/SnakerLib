@@ -240,6 +240,7 @@ public class SnakerLib
     static void onCommandRego(RegisterCommandsEvent event)
     {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        DebugRandomTeleportCommand.register(dispatcher);
         DiscardAllEntitiesCommand.register(dispatcher);
         ForceRemoveCommand.register(dispatcher);
         HurtAllEntitiesCommand.register(dispatcher);

@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:water",
+    "minecraft:lava",
+    {
+      "id": "tq:comasote",
+      "required": false
+    }
+  ]
+}

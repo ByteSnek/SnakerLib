@@ -9,7 +9,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
-import bytesnek.snakerlib.SnakerLib;
 import bytesnek.snakerlib.chat.ChatComponents;
 import bytesnek.snakerlib.config.SnakerConfig;
 
@@ -18,35 +17,38 @@ import bytesnek.snakerlib.config.SnakerConfig;
  **/
 public class ConfigCommand
 {
-    ConfigCommand(CommandDispatcher<CommandSourceStack> dispatcher, String name)
+    ConfigCommand(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        dispatcher.register(Commands.literal(name)
-                .then(Commands.literal("config")
-                        .then(Commands.literal("forceCrashJvmKeyBindings")
-                                .then(Commands.argument("forceCrashJvmKeyBindings", BoolArgumentType.bool())
-                                        .executes(context -> setForceCrashJvmKeyBindings(context,
-                                                BoolArgumentType.getBool(context, "forceCrashJvmKeyBindings"))
+        dispatcher.register(Commands.literal("slconfig")
+                .requires(CommandConstants.require(CommandLevel.NONE))
+                .then(Commands.literal("forceCrashJvmKeyBindings")
+                        .then(Commands.argument("forceCrashJvmKeyBindings", BoolArgumentType.bool())
+                                .executes(context -> setForceCrashJvmKeyBindings(context,
+                                                BoolArgumentType.getBool(context, "forceCrashJvmKeyBindings")
                                         )
                                 )
                         )
-                        .then(Commands.literal("removeJvmCrashFilesOnStartup")
-                                .then(Commands.argument("removeJvmCrashFilesOnStartup", BoolArgumentType.bool())
-                                        .executes(context -> setRemoveJvmCrashFilesOnStartup(context,
-                                                BoolArgumentType.getBool(context, "removeJvmCrashFilesOnStartup"))
+                )
+                .then(Commands.literal("removeJvmCrashFilesOnStartup")
+                        .then(Commands.argument("removeJvmCrashFilesOnStartup", BoolArgumentType.bool())
+                                .executes(context -> setRemoveJvmCrashFilesOnStartup(context,
+                                                BoolArgumentType.getBool(context, "removeJvmCrashFilesOnStartup")
                                         )
                                 )
                         )
-                        .then(Commands.literal("removeMinecraftCrashFilesOnStartup")
-                                .then(Commands.argument("removeMinecraftCrashFilesOnStartup", BoolArgumentType.bool())
-                                        .executes(context -> setRemoveMinecraftCrashFilesOnStartup(context,
-                                                BoolArgumentType.getBool(context, "removeMinecraftCrashFilesOnStartup"))
+                )
+                .then(Commands.literal("removeMinecraftCrashFilesOnStartup")
+                        .then(Commands.argument("removeMinecraftCrashFilesOnStartup", BoolArgumentType.bool())
+                                .executes(context -> setRemoveMinecraftCrashFilesOnStartup(context,
+                                                BoolArgumentType.getBool(context, "removeMinecraftCrashFilesOnStartup")
                                         )
                                 )
                         )
-                        .then(Commands.literal("goodbyeWorldKeyBindings")
-                                .then(Commands.argument("goodbyeWorldKeyBindings", BoolArgumentType.bool())
-                                        .executes(context -> setForceCrashOperatingSystemBindings(context,
-                                                BoolArgumentType.getBool(context, "goodbyeWorldKeyBindings"))
+                )
+                .then(Commands.literal("goodbyeWorldKeyBindings")
+                        .then(Commands.argument("goodbyeWorldKeyBindings", BoolArgumentType.bool())
+                                .executes(context -> setGoodbyeWorldKeyBindings(context,
+                                                BoolArgumentType.getBool(context, "goodbyeWorldKeyBindings")
                                         )
                                 )
                         )
@@ -56,7 +58,7 @@ public class ConfigCommand
 
     public static ConfigCommand register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
-        return new ConfigCommand(dispatcher, SnakerLib.MODID);
+        return new ConfigCommand(dispatcher);
     }
 
     private int setForceCrashJvmKeyBindings(CommandContext<CommandSourceStack> context, boolean value)
@@ -69,7 +71,7 @@ public class ConfigCommand
 
         stack.sendSuccess(this::success, true);
 
-        return source.acceptsSuccess() ? 1 : 0;
+        return CommandConstants.getExecutionResult(source);
     }
 
     private int setRemoveJvmCrashFilesOnStartup(CommandContext<CommandSourceStack> context, boolean value)
@@ -82,7 +84,7 @@ public class ConfigCommand
 
         stack.sendSuccess(this::success, true);
 
-        return source.acceptsSuccess() ? 1 : 0;
+        return CommandConstants.getExecutionResult(source);
     }
 
     private int setRemoveMinecraftCrashFilesOnStartup(CommandContext<CommandSourceStack> context, boolean value)
@@ -95,10 +97,10 @@ public class ConfigCommand
 
         stack.sendSuccess(this::success, true);
 
-        return source.acceptsSuccess() ? 1 : 0;
+        return CommandConstants.getExecutionResult(source);
     }
 
-    private int setForceCrashOperatingSystemBindings(CommandContext<CommandSourceStack> context, boolean value)
+    private int setGoodbyeWorldKeyBindings(CommandContext<CommandSourceStack> context, boolean value)
     {
         CommandSourceStack stack = context.getSource();
         CommandSource source = stack.source;
@@ -108,7 +110,7 @@ public class ConfigCommand
 
         stack.sendSuccess(this::success, true);
 
-        return source.acceptsSuccess() ? 1 : 0;
+        return CommandConstants.getExecutionResult(source);
     }
 
     private Component success()

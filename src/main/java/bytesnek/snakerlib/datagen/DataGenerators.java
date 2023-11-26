@@ -1,19 +1,25 @@
 package bytesnek.snakerlib.datagen;
 
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
-import bytesnek.snakerlib.SnakerLib;
-
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.data.BlockTagsProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import bytesnek.hiss.utility.Translations;
+import bytesnek.snakerlib.SnakerLib;
+import bytesnek.snakerlib.utility.TagKeys;
 
 /**
  * Created by SnakerBone on 18/10/2023
@@ -24,10 +30,29 @@ public class DataGenerators
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event)
     {
-        DataGenerator generator = event.getGenerator();
-        PackOutput output = generator.getPackOutput();
+        var generator = event.getGenerator();
+        var output = generator.getPackOutput();
+        var provider = event.getLookupProvider();
+        var helper = event.getExistingFileHelper();
 
         generator.addProvider(true, new Languages(output));
+        generator.addProvider(true, new BlockTags(output, provider, helper));
+    }
+
+    static class BlockTags extends BlockTagsProvider
+    {
+        public BlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper helper)
+        {
+            super(output, provider, SnakerLib.MODID, helper);
+        }
+
+        @Override
+        public void addTags(@NotNull HolderLookup.Provider provider)
+        {
+            tag(TagKeys.IS_FLUID)
+                    .add(Blocks.WATER, Blocks.LAVA)
+                    .addOptional(new ResourceLocation("tq:comasote"));
+        }
     }
 
     static class Languages extends LanguageProvider
