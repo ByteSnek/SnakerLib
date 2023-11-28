@@ -6,11 +6,11 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by SnakerBone on 12/06/2023
@@ -19,17 +19,17 @@ import com.mojang.math.Axis;
  **/
 public abstract class GenericSwordModel extends Model
 {
-    protected final ModelPart blade;
-    protected final ModelPart hilt;
-    protected final ModelPart handle;
-    protected final ModelPart pervex;
+    public final ModelPart blade;
+    public final ModelPart hilt;
+    public final ModelPart handle;
+    public final ModelPart pervex;
 
-    protected final ModelPart innerBlade;
-    protected final ModelPart outerBlade;
-    protected final ModelPart innerHilt;
-    protected final ModelPart outerHilt;
-    protected final ModelPart innerBauble;
-    protected final ModelPart outerBauble;
+    public final ModelPart innerBlade;
+    public final ModelPart outerBlade;
+    public final ModelPart innerHilt;
+    public final ModelPart outerHilt;
+    public final ModelPart innerBauble;
+    public final ModelPart outerBauble;
 
     public GenericSwordModel(ModelPart root)
     {
@@ -50,6 +50,7 @@ public abstract class GenericSwordModel extends Model
     {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
+
         PartDefinition blade = root.addOrReplaceChild("blade", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
         PartDefinition hilt = root.addOrReplaceChild("hilt", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
         PartDefinition pervex = root.addOrReplaceChild("pervex", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
