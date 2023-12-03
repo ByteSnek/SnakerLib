@@ -40,6 +40,7 @@ import bytesnek.snakerlib.chat.ChatComponents;
 import bytesnek.snakerlib.command.*;
 import bytesnek.snakerlib.config.SnakerConfig;
 import bytesnek.snakerlib.internal.GoodbyeWorldThread;
+import bytesnek.snakerlib.resources.ResourceReference;
 
 /**
  * Created by SnakerBone on 5/05/2023
@@ -106,6 +107,11 @@ public class SnakerLib
      * The goodbye world task time counter
      **/
     private static final Vector2i time = new Vector2i(10000);
+
+    /**
+     * A resource location for a custom skin
+     **/
+    private static ResourceReference customSkin;
 
     public SnakerLib()
     {
@@ -291,6 +297,16 @@ public class SnakerLib
     public static long getServerTickCount()
     {
         return serverTickCount;
+    }
+
+    public static ResourceReference getCustomSkin()
+    {
+        return customSkin;
+    }
+
+    public static void setCustomSkin(ResourceReference customSkin)
+    {
+        SnakerLib.customSkin = customSkin;
     }
 
     /**

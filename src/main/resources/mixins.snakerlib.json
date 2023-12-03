@@ -9,6 +9,7 @@
             "EffectInstanceMixin"
       ],
       "mixins": [
+            "AbstractClientPlayerMixin",
             "BiomeMixin",
             "CreateWorldScreenMixin",
             "FeatureSorterMixin",
