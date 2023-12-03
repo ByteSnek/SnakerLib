@@ -42,7 +42,7 @@ runs {
     }
 }
 
-sourceSets.main.java.srcDirs = ['src/main/java', System.getenv('JAVA_PROJECTS') + 'Hiss/src/main/java']
+sourceSets.main.java.srcDirs = ['src/main/java', System.getenv('JAVA_PROJECTS') + 'Hiss/src/main/java'] // Include sources for shadowed JARs as well
 
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
@@ -97,12 +97,12 @@ tasks.withType(ProcessResources).configureEach {
     }
 }
 
-jar.enabled = false
+jar.enabled = false // Disable JAR. Use shadowJar instead
 
 build.dependsOn shadowJar
 
 java {
-    withSourcesJar()
+    withSourcesJar() // Include sources
 }
 
 shadowJar {
@@ -110,8 +110,8 @@ shadowJar {
         expand "refmap_target": "${mod_id}."
     }
 
-    setArchiveClassifier('')
-    configurations = [project.configurations.shadow]
+    setArchiveClassifier('') // No archive classifier
+    configurations = [project.configurations.shadow] // Only include shadowed dependencies in JAR
     from sourceSets.main.java
 }
 
@@ -147,7 +147,7 @@ publishing {
             def notify = true;
 
             project.gradle.startParameter.taskNames.forEach(task -> {
-                if (task.contains("publish")) {
+                if (task.contains("publish")) { // Only print line if the current task has 'publish' in it's name
                     if (notify) {
                         notify = false;
                         if (mavenPass == null) {
@@ -159,7 +159,7 @@ publishing {
                 }
             })
 
-            url "https://s01.oss.sonatype.org/content/repositories/releases"
+            url "https://s01.oss.sonatype.org/content/repositories/releases" // Publish to maven central
 
             credentials {
                 username 'snaker'
