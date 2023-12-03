@@ -31,7 +31,7 @@ import bytesnek.hiss.keyboard.KeyPair;
 import bytesnek.hiss.keyboard.Keyboard;
 import bytesnek.hiss.logger.LogColour;
 import bytesnek.hiss.logger.Logger;
-import bytesnek.hiss.logger.SimpleLogger;
+import bytesnek.hiss.logger.Loggers;
 import bytesnek.hiss.printstream.ColourfulPrintStream;
 import bytesnek.hiss.sneaky.Sneaky;
 import bytesnek.hiss.utility.DatesAndTimes;
@@ -79,19 +79,19 @@ public class SnakerLib
     public static final MutableString MOD = new MutableString();
 
     /**
+     * Stack walker with class reference retention
+     **/
+    public static StackWalker STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+
+    /**
      * SnakerLib's logger instance
      **/
-    public static final Logger LOGGER = new SimpleLogger(SnakerLib.class, true);
+    public static final Logger LOGGER = Loggers.getLogger(SnakerLib.STACK_WALKER.getCallerClass());
 
     /**
      * SnakerLib's dev logger instance
      **/
-    public static final Logger DEVLOGGER = new SimpleLogger(SnakerLib.class, !FMLEnvironment.production);
-
-    /**
-     * Stack walker with class reference retention
-     **/
-    public static StackWalker STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+    public static final Logger DEVLOGGER = Loggers.newSimpleLogger(SnakerLib.STACK_WALKER.getCallerClass(), !FMLEnvironment.production);
 
     /**
      * A colourful print stream

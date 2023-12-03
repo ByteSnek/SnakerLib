@@ -42,6 +42,7 @@ runs {
     }
 }
 
+sourceSets.main.java.srcDirs = ['src/main/java', System.getenv('JAVA_PROJECTS') + 'Hiss/src/main/java']
 
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
@@ -65,7 +66,7 @@ repositories {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
-    shadow "com.github.ByteSnek:Hiss:${hiss_version}"
+    shadow "com.github.ByteSnek:Hiss:${hiss_version}" setChanging(true)
 }
 
 mixin {
@@ -98,12 +99,9 @@ tasks.withType(ProcessResources).configureEach {
 
 jar.enabled = false
 
-build {
-    dependsOn("shadowJar")
-}
+build.dependsOn shadowJar
 
 java {
-    withJavadocJar()
     withSourcesJar()
 }
 
@@ -111,16 +109,16 @@ shadowJar {
     filesMatching("*.mixin.json") {
         expand "refmap_target": "${mod_id}."
     }
-    
+
     setArchiveClassifier('')
     configurations = [project.configurations.shadow]
-    from sourceSets.main.allJava
+    from sourceSets.main.java
 }
 
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifacts = [shadowJar, sourcesJar, javadocJar]
+            artifacts = [shadowJar, sourcesJar]
 
             pom {
                 name = project.name
