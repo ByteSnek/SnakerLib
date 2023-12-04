@@ -1,7 +1,7 @@
 {
       "required": true,
       "minVersion": "0.8",
-      "package": "bytesnek.snakerlib.internal.mixin",
+      "package": "xyz.snaker.snakerlib.internal.mixin",
       "refmap": "mixins.snakerlib.refmap.json",
       "target": "@env(DEFAULT)",
       "compatibilityLevel": "JAVA_17",

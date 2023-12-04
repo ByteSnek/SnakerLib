@@ -42,8 +42,6 @@ runs {
     }
 }
 
-sourceSets.main.java.srcDirs = ['src/main/java', System.getenv('JAVA_PROJECTS') + 'Hiss/src/main/java'] // Include sources for shadowed JARs as well
-
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
 }
@@ -117,7 +115,7 @@ shadowJar {
 
 publishing {
     publications {
-        register('mavenJava', MavenPublication) {
+        register('pub', MavenPublication) {
             artifacts = [shadowJar, sourcesJar]
 
             pom {
@@ -143,27 +141,11 @@ publishing {
 
     repositories {
         maven {
-            def mavenPass = System.getenv("MVN_PASS")
-            def notify = true;
-
-            project.gradle.startParameter.taskNames.forEach(task -> {
-                if (task.contains("publish")) { // Only print line if the current task has 'publish' in it's name
-                    if (notify) {
-                        notify = false;
-                        if (mavenPass == null) {
-                            println("\u001b[38;5;208No maven password found on the current system\u001b[38;5;250")
-                        } else {
-                            println("\u001b[38;5;200Using maven password: " + mavenPass + "\u001b[38;5;250")
-                        }
-                    }
-                }
-            })
-
             url "https://s01.oss.sonatype.org/content/repositories/releases" // Publish to maven central
 
             credentials {
                 username 'snaker'
-                password mavenPass
+                password System.getenv("MVN_PASS")
             }
         }
     }
@@ -171,4 +153,17 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+gradle.startParameter.taskNames.forEach {
+    if (it.contains('publish')) {
+        // Include sources for shadowed JARs
+        sourceSets.main.java.srcDirs = ['src/main/java', System.getenv('JAVA_PROJECTS') + 'Hiss/src/main/java']
+        // Only print line if the current task has 'publish' in it's name
+        if (System.getenv("MVN_PASS") == null) {
+            println("No maven password found on the current system")
+        } else {
+            println("Using maven password: " + System.getenv("MVN_PASS"))
+        }
+    }
 }
