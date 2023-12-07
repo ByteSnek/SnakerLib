@@ -6,12 +6,9 @@ import java.util.Locale;
 
 import xyz.snaker.hiss.keyboard.KeyPair;
 import xyz.snaker.hiss.keyboard.Keyboard;
-import xyz.snaker.hiss.logger.LogColour;
 import xyz.snaker.hiss.logger.Logger;
 import xyz.snaker.hiss.logger.Loggers;
-import xyz.snaker.hiss.printstream.ColourfulPrintStream;
 import xyz.snaker.hiss.sneaky.Sneaky;
-import xyz.snaker.hiss.utility.DatesAndTimes;
 import xyz.snaker.hiss.utility.MutableString;
 import xyz.snaker.snakerlib.chat.ChatComponents;
 import xyz.snaker.snakerlib.command.*;
@@ -36,6 +33,7 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.TickEvent;
 
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.brigadier.CommandDispatcher;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -94,11 +92,6 @@ public class SnakerLib
     public static final Logger DEVLOGGER = Loggers.newSimpleLogger(SnakerLib.STACK_WALKER.getCallerClass(), !FMLEnvironment.production);
 
     /**
-     * A colourful print stream
-     **/
-    public static ColourfulPrintStream out = new ColourfulPrintStream(LogColour.Style.BOLD, LogColour.Style.ITALIC);
-
-    /**
      * The goodbye world task pending status
      **/
     private static boolean pending;
@@ -118,10 +111,6 @@ public class SnakerLib
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SnakerConfig.COMMON_SPEC, "snakerlib-common.toml");
         SnakerLib.MOD.set(SnakerLib.MODID);
-
-        if (DatesAndTimes.isHoliday()) {
-            System.setOut(out);
-        }
     }
 
     /**
@@ -188,17 +177,19 @@ public class SnakerLib
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         LocalPlayer player = minecraft.player;
+        Window window = minecraft.getWindow();
+        long handle = window.getWindow();
 
         if (event.phase == TickEvent.Phase.END || !minecraft.isPaused()) {
             if (SnakerConfig.COMMON.forceCrashJvmKeyBindings.get()) {
-                if (KeyPair.ALTERNATE.sequentialDown() && KeyPair.SHIFT.sequentialDown() && Keyboard.isKeyDown(GLFW.GLFW_KEY_F4)) {
+                if (KeyPair.ALTERNATE.apply(handle).sequentialDown() && KeyPair.SHIFT.apply(handle).sequentialDown() && Keyboard.isKeyDown(handle, GLFW.GLFW_KEY_F4)) {
                     Sneaky.forceCrashJVM();
                 }
             }
 
             if (level != null && player != null) {
                 if (SnakerConfig.COMMON.goodbyeWorldKeyBindings.get()) {
-                    KeyPair pair = new KeyPair(GLFW.GLFW_KEY_RIGHT_CONTROL, GLFW.GLFW_KEY_F12);
+                    KeyPair pair = new KeyPair(handle, GLFW.GLFW_KEY_RIGHT_CONTROL, GLFW.GLFW_KEY_F12);
 
                     MutableComponent message = goodbyeWorldDebug(false);
                     MutableComponent warning = goodbyeWorldDebug(true, time.y / 1000);
